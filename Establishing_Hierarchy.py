@@ -711,7 +711,10 @@ class Player_Character:
     self.WRI = [] # should this be a dictionary so I can identify the source of a WRI so it can be removed if needed?
 
     self.Attacks = 1
-
+    self.Usable_Attack_Score = {
+      'Non-Magical': [Str_Score,Dex_Score],
+      'Magical': [Str_Score,Dex_Score],
+    }
     self.Crit = [20]
     
     self.Location = ()
@@ -796,7 +799,7 @@ class Player_Character:
 
 
 class Monster:
-  def __init__(self,Monster_ID,Name,Book,HP,AC,Type,Size,CR,XP,Prof_Bonus,Saving_Throws,Skill_Profs,Str_Score,Dex_Score,Con_Score,Int_Score,Wis_Score,Cha_Score,Effects,Spellcasting_Prepared,Spell_Save_DC,Attunement_Slots,Attunement_Slots_Filled,Languages,Features,WRI,Spawn_Inventory):
+  def __init__(self,Monster_ID,Name,Book,HP,AC,Type,Size,CR,XP,Prof_Bonus,Saving_Throws,Skill_Profs,Str_Score,Dex_Score,Con_Score,Int_Score,Wis_Score,Cha_Score,Effects,Spellcasting_Prepared,Spell_Save_DC,Attunement_Slots,Attunement_Slots_Filled,Long_Rest_Options,Short_Rest_Options,Resources,Speeds,Languages,Features,WRI,Spawn_Inventory):
     self.Monster_ID = Monster_ID
     self.Name = Name
     self.Book = Book
@@ -835,6 +838,15 @@ class Monster:
     self.Spell_Save_DC = Spell_Save_DC
     self.Attunement_Slots = 3
     self.Attunement_Slots_Filled = 0
+
+    self.Long_Rest_Options = {
+      
+    }
+    self.Short_Rest_Options = {
+      'Unlimited': [Roll_Hit_Dice],
+      'Charges': {}
+    }
+    self.Resources = {}
     self.Speed = {
         'Walking': 30,
         'Flying': 0,

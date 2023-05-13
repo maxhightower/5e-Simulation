@@ -753,15 +753,14 @@ def Battle_Smith_Spells(Player_Character):
     Player_Character.Spellcasting_Prepared = {
       'Artificer': [Spells.Spells_Dict["Shield"],Spells.Spells_Dict["Thunderwave"],Spells.Spells_Dict["Scorching Ray"],Spells.Spells_Dict["Shatter"],Spells.Spells_Dict["Fireball"],Spells.Spells_Dict["Wind Wall"],Spells.Spells_Dict["Wall of Ice"],Spells.Spells_Dict["Wall of Fire"],Spells.Spells_Dict["Cone of Cold"],Spells.Spells_Dict["Wall of Force"]]
     }
-  
-  #print(Player_Character.Spellcasting_Prepared)
+
+
 
 
 #Battle_Ready
 def Battle_Ready(Player_Character):
-  Player_Character.Weapon_Profs.append("Martial")
-  # the secondary benefit of this subclass feat is that it allows a character to attack with intelligence instead of dex or str
-  # I'm not currently sure how I would do that but I'm going to wait until I define attack rolls better
+  Player_Character.Weapon_Profs.append('Martial')
+  Player_Character.Usable_Attack_Score['Magical'].append(Player_Character.Int_Score)
 
 
 #Steel_Defender
@@ -785,24 +784,43 @@ def Apply_Steel_Defender(Player_Character):
   # Force-Empowered Rend. Melee Weapon Attack: your spell attack modifier to hit, reach 5 ft., one target you can see. Hit: 1d8 + PB force damage.
   def Force_Empowered_Rend(Player_Character):
     pass
+
+
   # Repair (3/Day). The magical mechanisms inside the defender restore 2d8 + PB hit points to itself or to one construct or object within 5 feet of it.
-  def Repair(Player_Character):
-    pass
+  def Apply_Repair(Player_Character):
+    Repair_Heal_Effect = Effects.Healing_Effect('Construct','Self','Instantaneous','True',2,8,Player_Character.Prof_Bonus)
+    def Recharge_Repair(Player_Character):
+      try:
+        Player_Character.Related_Stat_Blocks['Companion']['Resources'] = {
+          'Repair': 3
+        }
+      except:
+        Player_Character.Related_Stat_Blocks['Companion']['Resources']['Repair'] = 3
+    Player_Character.Related_Stat_Blocks['Companion'].Long_Rest_Options['Recharge_Repair'] = Recharge_Repair(Player_Character)
+    
+    def Repair(Player_Character):
+      Player_Character.Related_Stat_Blocks['Companion']['Resources']['Repair'] = Player_Character.Related_Stat_Blocks['Companion']['Resources']['Repair'] - 1
+      Effects.Apply_Healing_Effect(Repair_Heal_Effect,Player_Character.Related_Stat_Blocks['Companion'])
+
+    Player_Character.Related_Stat_Blocks['Companion'].Actions = {
+      'Independent': {
+        'Dodge': Character_Actions.Dodge_Action(Player_Character.Related_Stat_Blocks['Companion']),
+      },
+      'Dependent': {
+        'Command_Steel_Defender': {
+          'Force_Empowered_Rend': Force_Empowered_Rend(Player_Character),
+          'Repair': Repair(Player_Character)
+        }
+      }
+    }
+
+      
+
+
   # Deflect Attack. The defender imposes disadvantage on the attack roll of one creature it can see that is within 5 feet of it, provided the attack roll is against a creature other than the defender.
   def Deflect_Attack(Player_Character):
     pass
 
-  Player_Character.Related_Stat_Blocks['Companion'].Actions = {
-    'Independent': {
-      'Dodge': Character_Actions.Dodge_Action(Player_Character.Related_Stat_Blocks['Companion']),
-    },
-    'Dependent': {
-      'Command_Steel_Defender': {
-        'Force_Empowered_Rend': Force_Empowered_Rend(Player_Character),
-        'Repair': Repair(Player_Character)
-      }
-    }
-  }
 
   Player_Character.Related_Stat_Blocks['Companion'].Reactions = {
     'Deflect_Attack': Deflect_Attack(Player_Character)
@@ -961,7 +979,7 @@ def Eldritch_Cannon(Player_Character):
 #Arcane_Firearm
 def Arcane_Firearm(Player_Character):
   #adds a d8 to damage rolls from Artificer spells
-  print("Placeholder")
+  pass
 
 #Explosive_Cannon
 def Explosive_Cannon(Player_Character):
@@ -972,7 +990,7 @@ def Explosive_Cannon(Player_Character):
 # can't do this one fully until I do distance and location
 # need to define covers
 def Fortified_Position(Player_Character):
-  print("placeholder")
+  pass
 
 
 
