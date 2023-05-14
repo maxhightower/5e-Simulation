@@ -778,12 +778,25 @@ def Apply_Steel_Defender(Player_Character):
     Player_Character.Related_Stat_Blocks['Companion'] = Steel_Defender
     Player_Character.Class_Resources['Artificer']['Steel_Defenders'] = 0
 
+    Player_Character.Related_Stat_Blocks['Companion'].Actions = {
+      'Independent': {
+        'Dodge': Character_Actions.Dodge_Action(Player_Character.Related_Stat_Blocks['Companion']),
+      },
+      'Dependent': {'Command_Steel_Defender': {}}
+    }
 
+          #'Force_Empowered_Rend': Use_Force_Empowered_Rend(Player_Character),
+          #'Repair': Repair(Player_Character)
   Player_Character.Long_Rest_Options['Create_Steel_Defender'] = Create_Steel_Defender(Player_Character)
 
   # Force-Empowered Rend. Melee Weapon Attack: your spell attack modifier to hit, reach 5 ft., one target you can see. Hit: 1d8 + PB force damage.
-  def Force_Empowered_Rend(Player_Character):
-    pass
+  def Apply_Force_Empowered_Rend(Player_Character):
+    Player_Character.Related_Stat_Blocks['Companion'].Actions['Dependent']['Command_Steel_Defender']['Force_Empowered_Rend'] = Use_Force_Empowered_Rend(Player_Character)
+
+    def Use_Force_Empowered_Rend(Player_Character):
+      Player_Character.Related_Stat_Blocks['Companion']
+      #Force_Empowered_Rend_Damage = 
+
 
 
   # Repair (3/Day). The magical mechanisms inside the defender restore 2d8 + PB hit points to itself or to one construct or object within 5 feet of it.
@@ -802,44 +815,31 @@ def Apply_Steel_Defender(Player_Character):
       Player_Character.Related_Stat_Blocks['Companion']['Resources']['Repair'] = Player_Character.Related_Stat_Blocks['Companion']['Resources']['Repair'] - 1
       Effects.Apply_Healing_Effect(Repair_Heal_Effect,Player_Character.Related_Stat_Blocks['Companion'])
 
-    Player_Character.Related_Stat_Blocks['Companion'].Actions = {
-      'Independent': {
-        'Dodge': Character_Actions.Dodge_Action(Player_Character.Related_Stat_Blocks['Companion']),
-      },
-      'Dependent': {
-        'Command_Steel_Defender': {
-          'Force_Empowered_Rend': Force_Empowered_Rend(Player_Character),
-          'Repair': Repair(Player_Character)
-        }
-      }
-    }
-
-      
-
+    Player_Character.Related_Stat_Blocks['Companion'].Actions['Dependent']['Repair']['Force_Empowered_Rend'] = Repair(Player_Character)
 
   # Deflect Attack. The defender imposes disadvantage on the attack roll of one creature it can see that is within 5 feet of it, provided the attack roll is against a creature other than the defender.
-  def Deflect_Attack(Player_Character):
-    pass
+  def Apply_Deflect_Attack(Player_Character):
+    def Use_Deflect_Attack(Player_Character):
+      Current_Enemy_Attack_Roll
 
-
-  Player_Character.Related_Stat_Blocks['Companion'].Reactions = {
-    'Deflect_Attack': Deflect_Attack(Player_Character)
-  }
+    Player_Character.Related_Stat_Blocks['Companion'].Reactions = {
+      'Deflect_Attack': Use_Deflect_Attack(Player_Character)
+    }
 
 
   # if the player gets incapacitated, the Steel Defender can take any action...perhaps I need some if statements for Conditions...
 
-  def Apply_Command_Steel_Defender(Player_Character):
+#  def Apply_Command_Steel_Defender(Player_Character):
 
 
-    def Use_Command_Steel_Defender(Player_Character):
+#    def Use_Command_Steel_Defender(Player_Character):
       #Player_Character.Related_Stat_Blocks['Companion']
-      pass
+#      pass
 
       # I should have it that using this then adds the functions to the dictionary of the Steel Defender
 
-    Player_Character.Bonus_Actions['Independent']['Command_Steel_Defender'] = Use_Command_Steel_Defender(Player_Character)
-  Apply_Command_Steel_Defender(Player_Character)
+#    Player_Character.Bonus_Actions['Independent']['Command_Steel_Defender'] = Use_Command_Steel_Defender(Player_Character)
+#  Apply_Command_Steel_Defender(Player_Character)
 
 
 #Extra_Attack
@@ -955,13 +955,14 @@ def Artillerist_Spells(Player_Character):
   print(Player_Character.Spellcasting_Prepared)
 
 #Eldritch_Cannon
-def Eldritch_Cannon(Player_Character):
+def Apply_Eldritch_Cannon(Player_Character):
   Eldritch_Cannon_AC = 18
   Eldritch_Cannon_WRI = ["Poisonimmu","Psychicimmu","Proneimmu","Paralyzedimmu","Petrifiedimmu","Stunnedimmu","Blindedimmu","Deafenedimmu","Restrainedimmu","Unconsciousimmu","Incapacitatedimmu","Grappledimmu","Charmedimmu","Frightenedimmu","Exhaustionimmu"]
   Eldritch_Cannon_HP = 5 * Player_Character.level
   Eldritch_Cannon_Scores = 10
   Eldritch_Cannon_Speed = 15
   Player_Character.Name_Eldritch_Cannon = Establishing_Hierarchy.Object()
+  Player_Character.Name_Eldritch_Cannon = Armor_and_Weapons.Weapon()
   Eldritch_Cannon_Options = {
       "Flamethrower": {
 
@@ -997,7 +998,7 @@ def Fortified_Position(Player_Character):
 def Artillerist_One(Player_Character):
   Artillerist_Tools_of_the_Trade(Player_Character)
   Artillerist_Spells(Player_Character)
-  Eldritch_Cannon(Player_Character)
+  Apply_Eldritch_Cannon(Player_Character)
 
 def Artillerist_Two(Player_Character):
   Arcane_Firearm(Player_Character)

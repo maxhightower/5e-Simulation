@@ -313,11 +313,32 @@ class Entity:
 
 
 class Object(Entity):
-  def __init__(self,Name,Size,Material,Type,GP_Value,Rarity):
-    #Magical Weapon? Vehicle? Weapon? Armor?
-    # if not weapon, improvised weapon
-    # table for material ACs
+  def __init__(self,
+               
+               # standard identifiers
+                    # perhaps I'll need a Object ID
+               Name, # the common item name or magic item name example: greatsword
+               Type, # the standard types examples: weapon, armor, potion, trade good, vehicle, 
+               Size, # if it's a weapon, the size creature intended for, otherwise, how much space the item fills examples: large, medium, etc
+               Classification, # the way that 5e tools separates objects examples: mundane, magic, variant
+               Rarity,
+
+               # further identifiers, not every object has these so some will be homebrewed
+               Material, # examples: steel, adamantine, mithral
+               Weight,   # measured in lbs
+               GP_Value, # 
+               
+               Consumable, # is the item 
+
+               Charges,
+               Recharge_Type,
+               Upon_0_Charges,
+               Results_When_Consumed # example: produces a glass flask
+               ):
+
+
     self.Name = Name
+    self.Type = Type    # Object Types = [Weapon,Armor,Trade_Good,Vehicle,]
     self.Size = Size    # Sizes =  Miniscule = 
                         #          Tiny = 1.25ft x 1.25ft
                         #          Small = 2.5ft x 2.5ft
@@ -326,20 +347,47 @@ class Object(Entity):
                         #          Huge = 15ft x 15ft
                         #          Gargantuan = 20ft x 20ft
                         #          Colossal = 25+ x 25+
+    self.Classification = Classification
     self.Material = Material
-    self.Type = Type    # Object Types = [Weapon,Armor,Trade_Good,Vehicle,]
+    self.Weight = Weight
+
     self.GP_Value = GP_Value
-    self.Consumable = bool()
-    self.Magical = bool()
+    self.Consumable = False
+    self.Results_When_Consumed = Results_When_Consumed
+    self.Magical = False
     self.Rarity = Rarity        # Rarity Types = [Common,Uncommon,Rare,Very Rare,Legendary,Artifact]
-    self.Sentient = bool()      # if this is the case, shouldn't it then be a Creature??? 
-    # Does a Sentient Object have Memory? 
-    # Does a Sentient Object have Languages? 
-    # Does a Sentient Object have Proficiencies? 
-    # Does a Sentient Object have Vision?
-    self.Cursed = bool()
-    self.Spellcasting_Focus = bool()
-    self.Strcuture = bool()
+    self.Cursed = False
+    self.Spellcasting_Focus = False
+    
+    
+    self.Sentient = bool()      # if this is the case, shouldn't it then be a Creature???
+      # an object can have many of the same features as a creature (statistics, actions, etc)
+      # the way I'm going to solve this issue is by having an attribute for each of these features in the object class
+
+
+
+
+
+class Weapon(Object):
+  def __init__(self,Name,Type,Size,Material,Rarity,GP_Value):
+    super().__init__(Name,Type,Size,Material,Rarity,GP_Value)
+    
+
+
+class Armor(Object):
+  def __init__(self,Name,Type,Size,Material,GP_Value,Rarity):
+    super().__init__(Name,Type,Size,Material,GP_Value,Rarity)
+
+
+class Trade_Good(Object):
+  def __init__(self,Name,Type,Size,Material,GP_Value,Rarity):
+    super().__init__(Name,Type,Size,Material,GP_Value,Rarity)
+
+
+class Vehicle(Object):
+  def __init__(self,Name,Type,Size,Material,GP_Value,Rarity):
+    super().__init__(Name,Type,Size,Material,GP_Value,Rarity)
+
 
 
 class Object_Instance(Object):
