@@ -313,7 +313,7 @@ class Entity:
 
 
 class Object(Entity):
-  def __init__(self,
+  def __init__(self, #Name,Type,Size,Classification,Rarity,Material,Weight,GP_Value,Magical,Magical_Bonus,Item_Passive_Effects,Requires_Attunement,No_Attunement_Effects,Attunement_Effects,Consumable,Consumable_Effects,Results_When_Consumed,Charges,Recharge_Type,Upon_0_Charges,Sentient,Intelligence,Wisdom,Charisma,Senses,Languages,Spells,Spell_DC,Bestowed_Actions,Spellcasting_Focus,Cursed
                
                # standard identifiers
                     # perhaps I'll need a Object ID
@@ -326,14 +326,38 @@ class Object(Entity):
                # further identifiers, not every object has these so some will be homebrewed
                Material, # examples: steel, adamantine, mithral
                Weight,   # measured in lbs
-               GP_Value, # 
-               
-               Consumable, # is the item 
+               GP_Value, # for magical items I'll round 
 
+               Magical,
+               Magical_Bonus,
+               Item_Passive_Effects,
+               Requires_Attunement,
+               No_Attunement_Effects,
+               Attunement_Effects,
+               
+               Consumable, # does the item destroy itself upon use?
+               Consumable_Effects,
+               Results_When_Consumed, # example: produces a glass flask
+               
                Charges,
                Recharge_Type,
                Upon_0_Charges,
-               Results_When_Consumed # example: produces a glass flask
+
+               Sentient,
+               Intelligence,
+               Wisdom,
+               Charisma,
+               Senses,
+               Languages,
+               Spells, 
+               Spell_DC,
+
+               Bestowed_Actions,
+
+               Spellcasting_Focus,
+               Cursed
+              
+              
                ):
 
 
@@ -348,19 +372,56 @@ class Object(Entity):
                         #          Gargantuan = 20ft x 20ft
                         #          Colossal = 25+ x 25+
     self.Classification = Classification
+    self.Rarity = Rarity        # Rarity Types = [Common,Uncommon,Rare,Very Rare,Legendary,Artifact]
+
     self.Material = Material
     self.Weight = Weight
-
     self.GP_Value = GP_Value
-    self.Consumable = False
+
+    self.Magical = Magical
+    self.Magical_Bonus = Magical_Bonus
+    self.Item_Passive_Effects = Item_Passive_Effects
+    self.Requires_Attunement = Requires_Attunement
+    self.No_Attunement_Effects = No_Attunement_Effects
+    self.Attunement_Effects = Attunement_Effects
+
+    self.Consumable = Consumable
+    self.Consumable_Effects = Consumable_Effects
     self.Results_When_Consumed = Results_When_Consumed
-    self.Magical = False
-    self.Rarity = Rarity        # Rarity Types = [Common,Uncommon,Rare,Very Rare,Legendary,Artifact]
-    self.Cursed = False
-    self.Spellcasting_Focus = False
+
+    self.Charges = Charges
+    self.Recharge_Type = Recharge_Type
+    self.Upon_0_Charges = Upon_0_Charges
+
+    self.Sentient = Sentient
+    self.Intelligence = Intelligence
+    self.Wisdom = Wisdom
+    self.Charisma = Charisma
+    self.Senses = Senses
+    self.Languages = Languages
+    self.Spells = Spells
+    self.Spell_DC = Spell_DC
+
+    self.Bestowed_Actions = Bestowed_Actions
+
+    self.Cursed = Cursed
+    self.Spellcasting_Focus = Spellcasting_Focus
     
-    
-    self.Sentient = bool()      # if this is the case, shouldn't it then be a Creature???
+
+  def Add_Item_to_Inventory(Object,Player_Character):
+    if Object.Magical == True:
+      Player_Character.Inventory[Object.Type].append(Object)
+    else:
+      Player_Character.Inventory[Object.Type].append(Object)
+
+  def Attune_to_Item(Object,Player_Character):
+    if Object in Player_Character.Inventory and Object.Requires_Attunement == True and len(Player_Character.Item_Attunements) < Player_Character.Attunement_Slots:
+      Player_Character.Item_Attunements.append(Object)
+    else:
+      print('Error in Attuning')
+
+
+    #self.Sentient = bool()      # if this is the case, shouldn't it then be a Creature???
       # an object can have many of the same features as a creature (statistics, actions, etc)
       # the way I'm going to solve this issue is by having an attribute for each of these features in the object class
 
@@ -369,33 +430,37 @@ class Object(Entity):
 
 
 class Weapon(Object):
-  def __init__(self,Name,Type,Size,Material,Rarity,GP_Value):
-    super().__init__(Name,Type,Size,Material,Rarity,GP_Value)
-    
+  def __init__(self,Name,Type,Size,Classification,Rarity,Material,Weight,GP_Value,Magical,Magical_Bonus,Item_Passive_Effects,Requires_Attunement,No_Attunement_Effects,Attunement_Effects,Consumable,Consumable_Effects,Results_When_Consumed,Charges,Recharge_Type,Upon_0_Charges,Sentient,Intelligence,Wisdom,Charisma,Senses,Languages,Spells,Spell_DC,Bestowed_Actions,Spellcasting_Focus,Cursed):
+    super().__init__(Name,Type,Size,Classification,Rarity,Material,Weight,GP_Value,Magical,Magical_Bonus,Item_Passive_Effects,Requires_Attunement,No_Attunement_Effects,Attunement_Effects,Consumable,Consumable_Effects,Results_When_Consumed,Charges,Recharge_Type,Upon_0_Charges,Sentient,Intelligence,Wisdom,Charisma,Senses,Languages,Spells,Spell_DC,Bestowed_Actions,Spellcasting_Focus,Cursed)
+    #self.Weapon_Properties = Weapon_Properties
 
 
 class Armor(Object):
-  def __init__(self,Name,Type,Size,Material,GP_Value,Rarity):
-    super().__init__(Name,Type,Size,Material,GP_Value,Rarity)
+  def __init__(self,Name,Type,Size,Classification,Rarity,Material,Weight,GP_Value,Magical,Magical_Bonus,Item_Passive_Effects,Requires_Attunement,No_Attunement_Effects,Attunement_Effects,Consumable,Consumable_Effects,Results_When_Consumed,Charges,Recharge_Type,Upon_0_Charges,Sentient,Intelligence,Wisdom,Charisma,Senses,Languages,Spells,Spell_DC,Bestowed_Actions,Spellcasting_Focus,Cursed):
+    super().__init__(Name,Type,Size,Classification,Rarity,Material,Weight,GP_Value,Magical,Magical_Bonus,Item_Passive_Effects,Requires_Attunement,No_Attunement_Effects,Attunement_Effects,Consumable,Consumable_Effects,Results_When_Consumed,Charges,Recharge_Type,Upon_0_Charges,Sentient,Intelligence,Wisdom,Charisma,Senses,Languages,Spells,Spell_DC,Bestowed_Actions,Spellcasting_Focus,Cursed)
+    
 
 
 class Trade_Good(Object):
-  def __init__(self,Name,Type,Size,Material,GP_Value,Rarity):
-    super().__init__(Name,Type,Size,Material,GP_Value,Rarity)
+  def __init__(self,Name,Type,Size,Classification,Rarity,Material,Weight,GP_Value,Magical,Magical_Bonus,Item_Passive_Effects,Requires_Attunement,No_Attunement_Effects,Attunement_Effects,Consumable,Consumable_Effects,Results_When_Consumed,Charges,Recharge_Type,Upon_0_Charges,Sentient,Intelligence,Wisdom,Charisma,Senses,Languages,Spells,Spell_DC,Bestowed_Actions,Spellcasting_Focus,Cursed):
+    super().__init__(Name,Type,Size,Classification,Rarity,Material,Weight,GP_Value,Magical,Magical_Bonus,Item_Passive_Effects,Requires_Attunement,No_Attunement_Effects,Attunement_Effects,Consumable,Consumable_Effects,Results_When_Consumed,Charges,Recharge_Type,Upon_0_Charges,Sentient,Intelligence,Wisdom,Charisma,Senses,Languages,Spells,Spell_DC,Bestowed_Actions,Spellcasting_Focus,Cursed)
+    
 
 
 class Vehicle(Object):
-  def __init__(self,Name,Type,Size,Material,GP_Value,Rarity):
-    super().__init__(Name,Type,Size,Material,GP_Value,Rarity)
+  def __init__(self,Name,Type,Size,Classification,Rarity,Material,Weight,GP_Value,Magical,Magical_Bonus,Item_Passive_Effects,Requires_Attunement,No_Attunement_Effects,Attunement_Effects,Consumable,Consumable_Effects,Results_When_Consumed,Charges,Recharge_Type,Upon_0_Charges,Sentient,Intelligence,Wisdom,Charisma,Senses,Languages,Spells,Spell_DC,Bestowed_Actions,Spellcasting_Focus,Cursed):
+    super().__init__(Name,Type,Size,Classification,Rarity,Material,Weight,GP_Value,Magical,Magical_Bonus,Item_Passive_Effects,Requires_Attunement,No_Attunement_Effects,Attunement_Effects,Consumable,Consumable_Effects,Results_When_Consumed,Charges,Recharge_Type,Upon_0_Charges,Sentient,Intelligence,Wisdom,Charisma,Senses,Languages,Spells,Spell_DC,Bestowed_Actions,Spellcasting_Focus,Cursed)
+    
 
 
 
 class Object_Instance(Object):
-  def __init__(self,Name,Size,Material,Type,GP_Value,Rarity,Status,Location,Carrier):
-    super().__init__(Name,Size,Material,Type,GP_Value,Rarity)
-    self.Status = Status        # broken, disenchanted, 
-    self.Location = Location    # if not in inventory
-    self.Carrier = Carrier      # who's inventory is it in
+  def __init__(self,Name,Type,Size,Classification,Rarity,Material,Weight,GP_Value,Magical,Magical_Bonus,Item_Passive_Effects,Requires_Attunement,No_Attunement_Effects,Attunement_Effects,Consumable,Consumable_Effects,Results_When_Consumed,Charges,Recharge_Type,Upon_0_Charges,Sentient,Intelligence,Wisdom,Charisma,Senses,Languages,Spells,Spell_DC,Bestowed_Actions,Spellcasting_Focus,Cursed):
+    super().__init__(Name,Type,Size,Classification,Rarity,Material,Weight,GP_Value,Magical,Magical_Bonus,Item_Passive_Effects,Requires_Attunement,No_Attunement_Effects,Attunement_Effects,Consumable,Consumable_Effects,Results_When_Consumed,Charges,Recharge_Type,Upon_0_Charges,Sentient,Intelligence,Wisdom,Charisma,Senses,Languages,Spells,Spell_DC,Bestowed_Actions,Spellcasting_Focus,Cursed)
+    
+    #self.Status = Status        # broken, disenchanted, 
+    #self.Location = Location    # if not in inventory
+    #self.Carrier = Carrier      # who's inventory is it in
 
 
 
