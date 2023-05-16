@@ -1024,14 +1024,19 @@ def Apply_Eldritch_Cannon(Player_Character):
   Player_Character.Bonus_Actions['Independent']['Activate_Eldritch_Cannon'] = Activate_Eldritch_Cannon(Player_Character)
 
 #Arcane_Firearm
-def Arcane_Firearm(Player_Character):
+def Apply_Arcane_Firearm(Player_Character):
+  Arcane_Firearm_Damage_Effect = Effects.Buff_Bonus_Effect(Current_Allied_Damage_Roll,'Instantaneous','Damage',8,1,0)
   #adds a d8 to damage rolls from Artificer spells
-  pass
+  def Use_Arcane_Firearm(Player_Character):
+    Effects.Apply_Buff_Bonus_Effect(Arcane_Firearm_Damage_Effect)
+  Player_Character.Effects['Self_Dealing_Damage']['Spells']['Artificer_Spells']['Arcane_Firearm'] = Use_Arcane_Firearm(Player_Character)
 
 #Explosive_Cannon
-def Explosive_Cannon(Player_Character):
-  Player_Character.Actions.append("Detonate_Eldritch_Cannon")
-  print(Player_Character.ACtions)
+def Apply_Explosive_Cannon(Player_Character):
+  def Detonate_Eldritch_Cannon(Player_Character):
+    pass
+
+  Player_Character.Actions["Detonate_Eldritch_Cannon"] = Detonate_Eldritch_Cannon(Player_Character)
 
 #Fortified_Position
 # can't do this one fully until I do distance and location
@@ -1047,10 +1052,10 @@ def Artillerist_One(Player_Character):
   Apply_Eldritch_Cannon(Player_Character)
 
 def Artillerist_Two(Player_Character):
-  Arcane_Firearm(Player_Character)
+  Apply_Arcane_Firearm(Player_Character)
 
 def Artillerist_Three(Player_Character):
-  Explosive_Cannon(Player_Character)
+  Apply_Explosive_Cannon(Player_Character)
 
 def Artillerist_Four(Player_Character):
   Fortified_Position(Player_Character)
