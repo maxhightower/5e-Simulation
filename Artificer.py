@@ -961,21 +961,67 @@ def Apply_Eldritch_Cannon(Player_Character):
   Eldritch_Cannon_HP = 5 * Player_Character.level
   Eldritch_Cannon_Scores = 10
   Eldritch_Cannon_Speed = 15
-  Player_Character.Name_Eldritch_Cannon = Establishing_Hierarchy.Object()
-  Player_Character.Name_Eldritch_Cannon = Armor_and_Weapons.Weapon()
+  Player_Character.Class_Resources['Artificer']['Eldritch_Cannons_Created'] = 0
+
+
+  Eldritch_Cannon = Establishing_Hierarchy.Monster('Eldritch Cannon','Eldritch Cannon',"Tasha's Cauldron of Everything",5*Player_Character.Level,18,'Construct',['Tiny','Small'],False,False,Player_Character.Prof_Bonus,[],[],10,10,10,10,10,10,{},False,False,False,False,False,False,False,{'Walking':15},False,False,["Poisonimmu","Psychicimmu","Proneimmu","Paralyzedimmu","Petrifiedimmu","Stunnedimmu","Blindedimmu","Deafenedimmu","Restrainedimmu","Unconsciousimmu","Incapacitatedimmu","Grappledimmu","Charmedimmu","Frightenedimmu","Exhaustionimmu"],False)
+  
+  def Create_Eldritch_Cannon(Player_Character):
+    Flamethrower_Effect = Effects
+    Force_Ballista_Effect = Effects
+    Protector_Effect = Effects.Healing_Effect()
+    
+    if Player_Character.Class_Resources['Artificer']['Eldritch_Cannons_Created'] >= 1:
+      Player_Character.Class_Resources
+    else:
+      Player_Character.Class_Resources['Artificer']['Eldritch_Cannons_Created'] = Player_Character.Class_Resources['Artificer']['Eldritch_Cannons_Created'] + 1
+    
+      Eldritch_Cannon_Options = ['Flamethrower','Force_Ballista','Protector']
+      Eldritch_Cannon_Choice = input('What type of Eldritch Cannon: ')
+      if Eldritch_Cannon_Choice not in Eldritch_Cannon_Options:
+        print('Eldritch Cannon Option Not Found')
+      elif Eldritch_Cannon_Choice == 'Flamethrower':
+        pass
+      elif Eldritch_Cannon_Choice == 'Force_Ballista':
+        pass
+      elif Eldritch_Cannon_Choice == 'Protector':
+        pass
+      else: pass
+
+      Player_Character.Inventory['Magic Items']['Weapons'].append(Eldritch_Cannon)
+
+  Player_Character.Actions['Create_Eldritch_Cannon'] = Create_Eldritch_Cannon(Player_Character)
+
+
+
+
   Eldritch_Cannon_Options = {
+    # The cannon exhales fire in an adjacent 15-foot cone that you designate. 
+    # Each creature in that area must make a Dexterity saving throw against your spell save DC, 
+    # taking 2d8 fire damage on a failed save or half as much damage on a successful one. 
+    # The fire ignites any flammable objects in the area that aren't being worn or carried.
       "Flamethrower": {
 
        },
+    # Make a ranged spell attack, originating from the cannon, at one creature or object within 120 feet of it. 
+    # On a hit, the target takes 2d8 force damage, and if the target is a creature, it is pushed up to 5 feet away from the cannon.
       "Force_Ballista": {
 
        },
+    # The cannon emits a burst of positive energy that grants itself and each creature of your choice 
+    # within 10 feet of it a number of temporary hit points equal to 1d8 + your Intelligence modifier (minimum of +1).
       "Protector": {
 
         }
   }
-  Player_Character.Bonus_Actions.append("Activate_Eldritch_Cannon")
-  print(Player_Character.Bonus_Actions)
+
+  def Activate_Eldritch_Cannon(Player_Character):
+    # Should it move?
+    # Should it attack?
+    pass
+
+
+  Player_Character.Bonus_Actions['Independent']['Activate_Eldritch_Cannon'] = Activate_Eldritch_Cannon(Player_Character)
 
 #Arcane_Firearm
 def Arcane_Firearm(Player_Character):

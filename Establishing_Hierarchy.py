@@ -328,6 +328,10 @@ class Object(Entity):
                Weight,   # measured in lbs
                GP_Value, # for magical items I'll round 
 
+               AC,
+               HP,
+               WRI,
+
                Magical,
                Magical_Bonus,
                Item_Passive_Effects,
@@ -378,6 +382,10 @@ class Object(Entity):
     self.Weight = Weight
     self.GP_Value = GP_Value
 
+    self.AC = AC 
+    self.HP = HP 
+    self.WRI = WRI 
+
     self.Magical = Magical
     self.Magical_Bonus = Magical_Bonus
     self.Item_Passive_Effects = Item_Passive_Effects
@@ -414,6 +422,11 @@ class Object(Entity):
     else:
       Player_Character.Inventory[Object.Type].append(Object)
 
+    Player_Character.Effects['Object_Effects'] = Object.No_Attunement_Effects
+    if Object in Player_Character.Item_Attunements and Object.Requires_Attunement != False:
+      Player_Character.Effects['Object_Effects'] = Object.Attunement_Effects
+
+
   def Attune_to_Item(Object,Player_Character):
     if Object in Player_Character.Inventory and Object.Requires_Attunement == True and len(Player_Character.Item_Attunements) < Player_Character.Attunement_Slots:
       Player_Character.Item_Attunements.append(Object)
@@ -430,10 +443,10 @@ class Object(Entity):
 
 
 class Weapon(Object):
-  def __init__(self,Name,Type,Size,Classification,Rarity,Material,Weight,GP_Value,Magical,Magical_Bonus,Item_Passive_Effects,Requires_Attunement,No_Attunement_Effects,Attunement_Effects,Consumable,Consumable_Effects,Results_When_Consumed,Charges,Recharge_Type,Upon_0_Charges,Sentient,Intelligence,Wisdom,Charisma,Senses,Languages,Spells,Spell_DC,Bestowed_Actions,Spellcasting_Focus,Cursed):
+  def __init__(self,Name,Type,Size,Classification,Rarity,Material,Weight,GP_Value,Magical,Magical_Bonus,Item_Passive_Effects,Requires_Attunement,No_Attunement_Effects,Attunement_Effects,Consumable,Consumable_Effects,Results_When_Consumed,Charges,Recharge_Type,Upon_0_Charges,Sentient,Intelligence,Wisdom,Charisma,Senses,Languages,Spells,Spell_DC,Bestowed_Actions,Spellcasting_Focus,Cursed,Weapon_Properties,Weapon_Type):
     super().__init__(Name,Type,Size,Classification,Rarity,Material,Weight,GP_Value,Magical,Magical_Bonus,Item_Passive_Effects,Requires_Attunement,No_Attunement_Effects,Attunement_Effects,Consumable,Consumable_Effects,Results_When_Consumed,Charges,Recharge_Type,Upon_0_Charges,Sentient,Intelligence,Wisdom,Charisma,Senses,Languages,Spells,Spell_DC,Bestowed_Actions,Spellcasting_Focus,Cursed)
-    #self.Weapon_Properties = Weapon_Properties
-
+    self.Weapon_Properties = Weapon_Properties
+    self.Weapon_Type = Weapon_Type
 
 class Armor(Object):
   def __init__(self,Name,Type,Size,Classification,Rarity,Material,Weight,GP_Value,Magical,Magical_Bonus,Item_Passive_Effects,Requires_Attunement,No_Attunement_Effects,Attunement_Effects,Consumable,Consumable_Effects,Results_When_Consumed,Charges,Recharge_Type,Upon_0_Charges,Sentient,Intelligence,Wisdom,Charisma,Senses,Languages,Spells,Spell_DC,Bestowed_Actions,Spellcasting_Focus,Cursed):
@@ -804,6 +817,7 @@ class Player_Character:
       '1/short_rest': {}}
     self.Spellcasting_Known = {}
     self.Spellcasting_Prepared = {}
+    # why isn't there a spell slots attribute?
 
     self.Class_Resources = {
       # 'Barbarian': {
