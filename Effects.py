@@ -51,9 +51,84 @@ def Short_Rest(Player_Character):
 
 
 
+
+Dice_Rolls.Ability_Check
+Dice_Rolls.Attack_Roll
+Dice_Rolls.Spell_Attack_Roll
+Dice_Rolls.Weapon_Attack_Roll
+Dice_Rolls.Ability_Attack_Roll
+Dice_Rolls.Saving_Throw
+Dice_Rolls.Damage_Roll
+
+class Damage_Effect:
+  def __init__(self,Damage_Form,Roll_Type,Damage_Type,Creatures_Targeted,Duration,Dice_Type,Dice_Number,Bonus_Damage,Attack_Type,Save_Type,Save_for_Half):
+    self.Damage_Form = Damage_Form # Single target, AOE, etc
+    self.Roll_Type = Roll_Type
+    self.Damage_Type = Damage_Type
+    self.Creatures_Targeted = Creatures_Targeted # list of creatures effected
+    self.Duration = Duration #most likely instantaneous
+    self.Dice_Type = Dice_Type
+    self.Dice_Number = Dice_Number
+    self.Bonus_Damage = Bonus_Damage
+    self.Attack_Type = Attack_Type  # could be ranged weapon, melee weapon, melee spell, or ranged spell
+    self.Save_Type = Save_Type  # str, dex, con, int, wis, cha, death
+    self.Save_for_Half = Save_for_Half # if a creature saves, do they still take half damage examples: true, false
+
+
+
 ## Deal Damage
-def Deal_Damage(Damage,Creature):
-  pass
+def Attempt_Deal_Damage(Damage_Effect,Defender,Attacker):
+  Damage_Modifiers = []
+
+  if str(Damage_Effect.Damage_Type,'immu') in Defender.WRI:
+    # Need to check if the Attacker has an ability to overcome damage resistances
+    Damage_Dealt = 0
+  elif str(Damage_Effect.Damage_Type,'res') in Defender.WRI:
+    # Need to check if the Attacker has an ability to overcome damage resistances
+    Damage_Modifiers.append('x0.5')
+
+  elif str(Damage_Effect.Damage_Type,'vul') in Defender.WRI:
+    Damage_Modifiers.append('x2')
+  else: pass
+
+  Attacker_Options = {}
+  Attacker.Effects['Self_Attacking']['Rolling']
+  Attacker.Effects['Self_Attacking']['Hit']
+  Attacker.Effects['Self_Attacking']['Miss']
+  Attacker.Effects['Self_Imposing_Save']
+  Attacker.Effects['Self_Dealing_Damage'][Damage_Effect.Damage_Type]
+
+  # Current_Enemy_Saving_Throw
+  Defender_Options = {}
+  Defender.Reactions['Self_Being_Attacked']
+  Defender.Reactions['Self_Taking_Damage'][Damage_Effect.Damage_Type]
+
+  Defender.Effects['Self_Being_Attacked']
+  Defender.Effects['Self_Taking_Damage'][Damage_Effect.Damage_Type]
+
+
+
+  if Damage_Effect.Roll_Type == 'Saving Throw':
+    
+    Current_Enemy_Saving_Throw
+    Current_Allied_Saving_Throw
+
+    if Damage_Effect.Save_for_Half == True:
+      pass
+
+
+  elif Damage_Effect.Roll_Type == 'Attack Roll':
+    pass
+  
+
+  elif Damage_Effect.Roll_Type == 'Ability Check':
+    pass
+
+
+  else: 
+    pass
+
+
   # Check WRI
     # Immunity
     # Resistance
@@ -66,6 +141,9 @@ def Deal_Damage(Damage,Creature):
     # Taking Damage
 
 
+
+def Apply_Damage_Effect(Effect,Caller,Target):
+  pass
 
 #  x = Monsters.monster_primes[Creature].Temp_HP - Damage
 #  if x > 0:

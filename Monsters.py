@@ -154,7 +154,7 @@ for ind in Creatures.index:
   Spellcasting_Prepared = Creatures.iloc[ind,27]
   Spell_DC = Creatures.iloc[ind,29]
   #Creatures[ind,1] = Monster(Name,HP,AC,Type,Size,CR,Prof_Bonus,Saving_Throws,Skill_Profs,Str_Score,Dex_Score,Con_Score,Int_Score,Wis_Score,Cha_Score,[],[],[],[],[],True,True)
-  monster_primes[Monster_ID] = Establishing_Hierarchy.Monster(Monster_ID,Name,Book,HP,AC,Type,Size,CR,XP,Prof_Bonus,Saving_Throws,Skill_Profs,Str_Score,Dex_Score,Con_Score,Int_Score,Wis_Score,Cha_Score,True,Spellcasting_Prepared,Spell_DC,True,True,Languages,Features,WRI,True)
+  monster_primes[Monster_ID] = Establishing_Hierarchy.Monster(Monster_ID,Name,Book,HP,AC,Type,Size,CR,XP,Prof_Bonus,Saving_Throws,Skill_Profs,Str_Score,Dex_Score,Con_Score,Int_Score,Wis_Score,Cha_Score,True,Spellcasting_Prepared,Spell_DC,True,True,True,True,True,True,Languages,Features,WRI,True)
   #Monster_ID,Name,HP,AC,Type,Size,CR,Prof_Bonus,Saving_Throws,Skill_Profs,Str_Score,Dex_Score,Con_Score,Int_Score,Wis_Score,Cha_Score,Effects,Spells_Known,Spell_Save_DC,Attunement_Slots,Attunement_Slots_Filled,Languages,Features,WRI,Active_Conditions
   monster_primes[Monster_ID].Prof_Bonus = Establishing_Hierarchy.CRToProficiency(monster_primes[Monster_ID])
 

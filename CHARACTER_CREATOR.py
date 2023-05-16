@@ -3,7 +3,7 @@ import Establishing_Hierarchy
 
 import Backgrounds
 import Species as s
-
+import Armor_and_Weapons
 import Dice_Rolls
 #import Effects
 #import Conditions
@@ -208,7 +208,7 @@ def Create_Character(Name,Score_Generation_Method,Species,Subspecies,Class,Backg
         Class,    # I need to put a function that accesses the class from the appropriate file
         Species,
         Subspecies,
-        True,                       # I need to make a decision about how the dictionary of levels and the class attribute works
+        True,     # I need to make a decision about how the dictionary of levels and the class attribute works
         Background,
         True,     # skill profs
         True,     # skill expertise
@@ -223,15 +223,19 @@ def Create_Character(Name,Score_Generation_Method,Species,Subspecies,Class,Backg
         Intelligence,
         Wisdom,
         Charisma,
-        True,
-        True,
-        True,
-        True
+        True, # Spellcasting Prepared
+        True, # Item Attunements
+        True, # Inventory
+        True  # Related Stat Blocks
         )
 
-    #print('Error After Creating Name')
 
+    Name.Actions['Don Shield'] = Armor_and_Weapons.Don_Armor(Armor_and_Weapons.Shield,Name)
+    Name.Actions['Doff Shield'] = Armor_and_Weapons.Doff_Armor(Armor_and_Weapons.Shield,Name)
     
+    #Name.Bonus_Actions[]
+    #Name.Reactions[]
+    Name.One_Minute_Options['Unlimited']
 
     for i in range(Level):
         if Class == Artificer.Artificer:

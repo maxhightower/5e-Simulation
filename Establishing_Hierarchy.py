@@ -360,8 +360,6 @@ class Object(Entity):
 
                Spellcasting_Focus,
                Cursed
-              
-              
                ):
 
 

@@ -774,7 +774,7 @@ def Apply_Steel_Defender(Player_Character):
 
   def Create_Steel_Defender(Player_Character):
     Steel_Defender_HP = 2 + Establishing_Hierarchy.abilityScoreToModifier(Player_Character.Int_Score) + (5 * Player_Character.Level_Count)
-    Steel_Defender = Establishing_Hierarchy.Monster("Steel_Defender",'Steel_Defender','Tashas Cauldron of Everything',Steel_Defender_HP,15,"Construct","Medium",Player_Character.Level_Count,True,Player_Character.Prof_Bonus,["Dexterity","Constitution"],["Athletics","Perception"],14,12,14,4,10,6,{},[],False,[],True,True,True,True,[])
+    Steel_Defender = Establishing_Hierarchy.Monster("Steel_Defender",'Steel_Defender','Tashas Cauldron of Everything',Steel_Defender_HP,15,"Construct","Medium",Player_Character.Level_Count,True,Player_Character.Prof_Bonus,["Dexterity","Constitution"],["Athletics","Perception"],14,12,14,4,10,6,{},[],False,[],True,True,True,True,True,True,True,True,True)
     Player_Character.Related_Stat_Blocks['Companion'] = Steel_Defender
     Player_Character.Class_Resources['Artificer']['Steel_Defenders'] = 0
 
@@ -958,19 +958,25 @@ def Artillerist_Spells(Player_Character):
 def Apply_Eldritch_Cannon(Player_Character):
   Eldritch_Cannon_AC = 18
   Eldritch_Cannon_WRI = ["Poisonimmu","Psychicimmu","Proneimmu","Paralyzedimmu","Petrifiedimmu","Stunnedimmu","Blindedimmu","Deafenedimmu","Restrainedimmu","Unconsciousimmu","Incapacitatedimmu","Grappledimmu","Charmedimmu","Frightenedimmu","Exhaustionimmu"]
-  Eldritch_Cannon_HP = 5 * Player_Character.level
-  Eldritch_Cannon_Scores = 10
-  Eldritch_Cannon_Speed = 15
   Player_Character.Class_Resources['Artificer']['Eldritch_Cannons_Created'] = 0
-
 
   Eldritch_Cannon = Establishing_Hierarchy.Monster('Eldritch Cannon','Eldritch Cannon',"Tasha's Cauldron of Everything",5*Player_Character.Level,18,'Construct',['Tiny','Small'],False,False,Player_Character.Prof_Bonus,[],[],10,10,10,10,10,10,{},False,False,False,False,False,False,False,{'Walking':15},False,False,["Poisonimmu","Psychicimmu","Proneimmu","Paralyzedimmu","Petrifiedimmu","Stunnedimmu","Blindedimmu","Deafenedimmu","Restrainedimmu","Unconsciousimmu","Incapacitatedimmu","Grappledimmu","Charmedimmu","Frightenedimmu","Exhaustionimmu"],False)
   
   def Create_Eldritch_Cannon(Player_Character):
-    Flamethrower_Effect = Effects
-    Force_Ballista_Effect = Effects
-    Protector_Effect = Effects.Healing_Effect()
+    Flamethrower_Effect = Effects.Damage_Effect('AOE',True,'Instantaneous',8,2,0)
+    Force_Ballista_Damage_Effect = Effects.Damage_Effect('AOE',True,'Instantaneous',8,2,0)
+    Force_Ballista_Push_Effect = Effects.Move_Effect('Hit',True,True,5,'Away',True,False,False,False)
+    Protector_Effect = Effects.Healing_Effect('Use',Player_Character,'Instantaneous','Temp HP',8,1,Establishing_Hierarchy.abilityScoreToModifier(Player_Character.Int_Score))
     
+    def Activate_Flamethrower(Player_Character):
+      pass
+
+    def Activate_Force_Ballista(Player_Character):
+      pass
+
+    def Activate_Protector(Player_Character):
+      pass
+
     if Player_Character.Class_Resources['Artificer']['Eldritch_Cannons_Created'] >= 1:
       Player_Character.Class_Resources
     else:
@@ -981,11 +987,11 @@ def Apply_Eldritch_Cannon(Player_Character):
       if Eldritch_Cannon_Choice not in Eldritch_Cannon_Options:
         print('Eldritch Cannon Option Not Found')
       elif Eldritch_Cannon_Choice == 'Flamethrower':
-        pass
+        Eldritch_Cannon.Actions['Dependent']['Commanded']['Flamethrower'] = Activate_Flamethrower(Player_Character)
       elif Eldritch_Cannon_Choice == 'Force_Ballista':
-        pass
+        Eldritch_Cannon.Actions['Dependent']['Commanded']['Force_Ballista'] = Activate_Force_Ballista(Player_Character)
       elif Eldritch_Cannon_Choice == 'Protector':
-        pass
+        Eldritch_Cannon.Actions['Dependent']['Commanded']['Protector'] = Activate_Protector(Player_Character)
       else: pass
 
       Player_Character.Inventory['Magic Items']['Weapons'].append(Eldritch_Cannon)
@@ -1018,6 +1024,8 @@ def Apply_Eldritch_Cannon(Player_Character):
   def Activate_Eldritch_Cannon(Player_Character):
     # Should it move?
     # Should it attack?
+    # for now we'll just have it make an attack
+    
     pass
 
 

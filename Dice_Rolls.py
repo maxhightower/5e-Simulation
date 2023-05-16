@@ -11,45 +11,90 @@ class Roll:
     
     #self.Roll_Type = Roll_Type    # ['Attack Roll', 'Ability Check', 'Saving Throw']
 
-class Ability_Check(Roll):
-  def __init__(self,Entity_Making,Score,Skill,Contested_Entity,Modifiers):
-    super().__init__(Entity_Making)
-    self.Score = Score
-    self.Skill = Skill
-    self.Contested = bool
-    self.Contested_Entity = Contested_Entity
-    self.Modifiers = Modifiers
-
-class Attack_Roll(Roll):
-  def __init__(self,Entity_Making,Attack_Type,Attack_Target,Modifiers):
-    super().__init__(Entity_Making)
-    self.Attack_Type = Attack_Type    # ['Weapon', 'Ability', 'Spell']
-    self.Attack_Target = Attack_Target
-    self.Modifiers = Modifiers
-
-  # if it's a Weapon Attack
-    #self.Weapon = Weapon
-    #self.Target = Target
-
-  # if it's an Ability
-    #self.
-
-
-  # if it's a Spell Attack
-
-class Saving_Throw(Roll):
-  def __init__(self,Entity_Making,Score,Entity_Imposing,DC,Modifiers):
-    super().__init__(Entity_Making)
-    self.Score = Score
-    self.Entity_Imposing = Entity_Imposing
-    self.DC = DC
-    self.Modifiers
 
 class Damage_Roll(Roll):
-  def __init__(self,Entity_Taking_Damage,Entity_Causing_Damage,Modifiers,Dice_Num,Dice_Type,Damage_Type):
+  def __init__(self,Entity_Taking_Damage,Entity_Causing_Damage,Modifiers,Damage_Types):
     self.Entity_Taking_Damage = Entity_Taking_Damage
     self.Entity_Causing_Damage = Entity_Causing_Damage
     self.Modifiers = Modifiers
+    self.Damage_Types = Damage_Types
+
+
+class Ability_Check(Roll):
+  def __init__(self,Entity_Making,Score,Skill,Contested,Contested_Entity,Contested_Score,Contested_Skill,Modifiers):
+    super().__init__(Entity_Making)
+    self.Score = Score
+    self.Skill = Skill
+    self.Contested = Contested
+    self.Contested_Entity = Contested_Entity
+    self.Contested_Score = Contested_Score
+    self.Contested_Skill = Contested_Skill
+    self.Modifiers = Modifiers
+    self.Dice_Number = 1
+    self.Dice_Type = 20
+
+class Attack_Roll(Roll):
+  def __init__(self,Entity_Making,Attack_Target,Modifiers):
+    super().__init__(Entity_Making)
+    self.Attack_Target = Attack_Target
+    self.Modifiers = Modifiers
+    self.Dice_Number = 1
+    self.Dice_Type = 20
+    # the Attack Roll defines the Damage Roll 
+
+
+
+class Spell_Attack_Roll(Attack_Roll):
+  def __init__(self,Entity_Making,Attack_Target,Modifiers,Spell):
+    super().__init__(Entity_Making,Attack_Target,Modifiers)
+    self.Spell = Spell
+    self.Dice_Number = 1
+    self.Dice_Type = 20
+    # would this benefit from having the spell attribute?
+    # what parts of the game would this require this?
+        # any monster with Limited Magic Immunity will need to know the Spell Level
+        # Counterspell
+        # 
+
+class Weapon_Attack_Roll(Attack_Roll):
+  def __init__(self,Entity_Making,Attack_Target,Modifiers,Weapon):
+    super().__init__(Entity_Making,Attack_Target,Modifiers)
+    self.Weapon = Weapon
+    self.Dice_Number = 1
+    self.Dice_Type = 20
+
+    def Define_Damage_Roll(Weapon_Attack_Roll):
+      Damage_Roll(Weapon_Attack_Roll.Attack_Target,
+                  Weapon_Attack_Roll.Entity_Making,
+                  Weapon_Attack_Roll.Modifiers,
+                  {
+                    str(Weapon_Attack_Roll.Weapon.Damage_Type): [Weapon_Attack_Roll.Weapon.Dice_Type,Weapon_Attack_Roll.Weapon.Dice_Num]
+                  }
+                  )
+
+
+class Ability_Attack_Roll(Attack_Roll):
+  def __init__(self,Entity_Making,Attack_Target,Modifiers,Ability):
+    super().__init__(Entity_Making,Attack_Target,Modifiers)
+    self.Ability = Ability  # still not convinced about this one
+    self.Dice_Number = 1
+    self.Dice_Type = 20
+
+
+class Saving_Throw(Roll):
+  def __init__(self,Entity_Making,Save_Type,Entity_Imposing,DC,Modifiers):
+    super().__init__(Entity_Making)
+    self.Save_Type = Save_Type  # this is better than "Score" because Death saves don't include a score but some creatures get proficiency in them regardless
+    self.Entity_Imposing = Entity_Imposing
+    self.DC = DC
+    self.Modifiers = Modifiers
+
+    self.Dice_Number = 1
+    self.Dice_Type = 20
+
+
+
+
 
 def Run_Roll(Roll):
   for i in Roll.Modifiers:
@@ -99,15 +144,15 @@ def Reset_Current_Roll(Roll):
   Roll.Modifiers = []
 
 
-Current_Allied_Ability_Check = Ability_Check('Placeholder','Placeholder','Placeholder','Placeholder',[])
-Current_Allied_Attack_Roll = Attack_Roll('Placeholder','Placeholder','Placeholder',[])
+Current_Allied_Ability_Check = Ability_Check('Placeholder','Placeholder','Placeholder','Placeholder','Placeholder','Placeholder','Placeholder',[])
+Current_Allied_Attack_Roll = Attack_Roll('Placeholder','Placeholder',[])
 Current_Allied_Saving_Throw = Saving_Throw('Placeholder','Placeholder','Placeholder','Placeholder',[])
-Current_Allied_Damage_Roll = Damage_Roll('Placeholder','Placeholder',[],'Placeholder','Placeholder','Placeholder')
+Current_Allied_Damage_Roll = Damage_Roll('Placeholder','Placeholder',[],'Placeholder')
 
-Current_Enemy_Ability_Check = Ability_Check('Placeholder','Placeholder','Placeholder','Placeholder',[])
-Current_Enemy_Attack_Roll = Attack_Roll('Placeholder','Placeholder','Placeholder',[])
+Current_Enemy_Ability_Check = Ability_Check('Placeholder','Placeholder','Placeholder','Placeholder','Placeholder','Placeholder','Placeholder',[])
+Current_Enemy_Attack_Roll = Attack_Roll('Placeholder','Placeholder',[])
 Current_Enemy_Saving_Throw = Saving_Throw('Placeholder','Placeholder','Placeholder','Placeholder',[])
-Current_Enemy_Damage_Roll = Damage_Roll('Placeholder','Placeholder',[],'Placeholder','Placeholder','Placeholder')
+Current_Enemy_Damage_Roll = Damage_Roll('Placeholder','Placeholder',[],'Placeholder')
 
 
 
