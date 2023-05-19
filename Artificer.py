@@ -782,7 +782,7 @@ def Apply_Steel_Defender(Player_Character):
       'Independent': {
         'Dodge': Character_Actions.Dodge_Action(Player_Character.Related_Stat_Blocks['Companion']),
       },
-      'Dependent': {'Command_Steel_Defender': {}}
+      'Dependent': {'Command_Steel_Defender': {},'Player_Character_Incapacitated':{}}
     }
 
           #'Force_Empowered_Rend': Use_Force_Empowered_Rend(Player_Character),
@@ -820,13 +820,14 @@ def Apply_Steel_Defender(Player_Character):
   # Deflect Attack. The defender imposes disadvantage on the attack roll of one creature it can see that is within 5 feet of it, provided the attack roll is against a creature other than the defender.
   def Apply_Deflect_Attack(Player_Character):
     def Use_Deflect_Attack(Player_Character):
-      Current_Enemy_Attack_Roll
+      if Current_Enemy_Attack_Roll.Attack_Target != Player_Character.Related_Stat_Blocks['Companion']:
+        Current_Enemy_Attack_Roll.Circumstances.append('Disadvantage')
+      else:
+        print("Can't Deflect Attacks Targeting Self")
 
     Player_Character.Related_Stat_Blocks['Companion'].Reactions = {
       'Deflect_Attack': Use_Deflect_Attack(Player_Character)
     }
-
-
   # if the player gets incapacitated, the Steel Defender can take any action...perhaps I need some if statements for Conditions...
 
 #  def Apply_Command_Steel_Defender(Player_Character):
@@ -893,7 +894,7 @@ def Apply_Improved_Defender(Player_Character):
 
   Deflect_Attack_Damage = Effects.Buff_Bonus_Effect(Current_Enemy_Attack_Roll.Entity_Making,'Instantaneous','Damage',1,4,Establishing_Hierarchy.abilityScoreToModifier(Player_Character.Int_Score))
   def Use_Deflect_Attack_Damage(Player_Character):
-    Effects.Apply_Buff_Bonus_Effect(Deflect_Attack_Damage)
+    Player_Character.Related_Stat_Blocks['Companion'].Effects['Use_Deflect']['Deflect_Damage_Back'] = Effects.Apply_Buff_Bonus_Effect(Deflect_Attack_Damage)
   
   try: 
     Player_Character.Related_Stat_Blocks['Companion'].Effects['Self_Being_Attacked']['Deflect']['Deflect_Attack_Damage'] = Use_Deflect_Attack_Damage(Player_Character)
@@ -947,7 +948,6 @@ Artificer.Subclass.append(Artillerist)
 # Tools of the Trade
 def Artillerist_Tools_of_the_Trade(Player_Character):
   Player_Character.Tool_Profs.append("Woodcarver_Tools")
-  print(Player_Character.Tool_Profs)
 
 #Artillerist_Spells
 def Artillerist_Spells(Player_Character):
@@ -963,19 +963,20 @@ def Apply_Eldritch_Cannon(Player_Character):
   Eldritch_Cannon = Establishing_Hierarchy.Monster('Eldritch Cannon','Eldritch Cannon',"Tasha's Cauldron of Everything",5*Player_Character.Level,18,'Construct',['Tiny','Small'],False,False,Player_Character.Prof_Bonus,[],[],10,10,10,10,10,10,{},False,False,False,False,False,False,False,{'Walking':15},False,False,["Poisonimmu","Psychicimmu","Proneimmu","Paralyzedimmu","Petrifiedimmu","Stunnedimmu","Blindedimmu","Deafenedimmu","Restrainedimmu","Unconsciousimmu","Incapacitatedimmu","Grappledimmu","Charmedimmu","Frightenedimmu","Exhaustionimmu"],False)
   
   def Create_Eldritch_Cannon(Player_Character):
-    Flamethrower_Effect = Effects.Damage_Effect('AOE',True,'Instantaneous',8,2,0)
-    Force_Ballista_Damage_Effect = Effects.Damage_Effect('AOE',True,'Instantaneous',8,2,0)
+    Flamethrower_Effect = Effects.Damage_Effect('AOE',True,'Instantaneous','Fire','Instantaneous',8,2,0,False,'Dexterity',True)
+    Force_Ballista_Damage_Effect = Effects.Damage_Effect('AOE',True,'Force',True,'Instantaneous',8,2,0,'Ranged Weapon',False,False)
     Force_Ballista_Push_Effect = Effects.Move_Effect('Hit',True,True,5,'Away',True,False,False,False)
     Protector_Effect = Effects.Healing_Effect('Use',Player_Character,'Instantaneous','Temp HP',8,1,Establishing_Hierarchy.abilityScoreToModifier(Player_Character.Int_Score))
     
     def Activate_Flamethrower(Player_Character):
-      pass
+      Effects.Apply_Damage_Effect(Flamethrower_Effect)
 
     def Activate_Force_Ballista(Player_Character):
-      pass
+      Effects.Apply_Damage_Effect(Force_Ballista_Damage_Effect,Player_Character,True)
+      Effects.Apply_Move_Effect(Force_Ballista_Push_Effect)
 
     def Activate_Protector(Player_Character):
-      pass
+      Effects.Apply_Healing_Effect(Protector_Effect,Player_Character)
 
     if Player_Character.Class_Resources['Artificer']['Eldritch_Cannons_Created'] >= 1:
       Player_Character.Class_Resources
@@ -998,34 +999,11 @@ def Apply_Eldritch_Cannon(Player_Character):
 
   Player_Character.Actions['Create_Eldritch_Cannon'] = Create_Eldritch_Cannon(Player_Character)
 
-
-
-
-  Eldritch_Cannon_Options = {
-    # The cannon exhales fire in an adjacent 15-foot cone that you designate. 
-    # Each creature in that area must make a Dexterity saving throw against your spell save DC, 
-    # taking 2d8 fire damage on a failed save or half as much damage on a successful one. 
-    # The fire ignites any flammable objects in the area that aren't being worn or carried.
-      "Flamethrower": {
-
-       },
-    # Make a ranged spell attack, originating from the cannon, at one creature or object within 120 feet of it. 
-    # On a hit, the target takes 2d8 force damage, and if the target is a creature, it is pushed up to 5 feet away from the cannon.
-      "Force_Ballista": {
-
-       },
-    # The cannon emits a burst of positive energy that grants itself and each creature of your choice 
-    # within 10 feet of it a number of temporary hit points equal to 1d8 + your Intelligence modifier (minimum of +1).
-      "Protector": {
-
-        }
-  }
-
   def Activate_Eldritch_Cannon(Player_Character):
     # Should it move?
     # Should it attack?
     # for now we'll just have it make an attack
-    
+    Eldritch_Cannon.Actions['Dependent']['Commanded']
     pass
 
 

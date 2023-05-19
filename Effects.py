@@ -277,9 +277,23 @@ class AC_Effect:
     self.AC_Type = AC_Type
     self.AC_Bonus = AC_Bonus
 
-def Apply_AC_Effect(AC_Bonus,Creature):
-  Creature.AC + AC_Bonus
+def Apply_AC_Effect(AC_Effect):
+  AC_Effect.Target.AC = AC_Effect.Target.AC + AC_Effect.AC_Bonus
 
+  def End_AC_Effect(AC_Effect):
+    AC_Effect.Target.AC = AC_Effect.Target.AC - AC_Effect.AC_Bonus
+
+  if AC_Effect.Duration == 'Instantaneous':
+    pass
+  elif AC_Effect.Duration == '1 Round':
+    pass
+  elif AC_Effect.Duration == '1 Minute':
+    pass
+  elif AC_Effect.Duration == '10 Minutes':
+    pass
+  elif AC_Effect.Duration == '1 Hour':
+    pass
+  else: pass
 
 
 class Spell_Effect:

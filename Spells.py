@@ -507,3 +507,41 @@ def Run_Spell(Spell,Caster):           # need a way to implement the Caster, Spe
 # 
 
 
+
+
+#Shield
+Shield_Spell_Effect = Effects.AC_Effect('Spell','Self','1 Round','Magical',5)
+def Shield_Spell(Player_Character):
+       Effects.Apply_AC_Effect(Shield_Spell_Effect,Player_Character)
+
+       if 'Shield' in Player_Character.At_Will_Spells:
+              pass
+       else: pass
+
+
+#Thunderwave
+Thunderwave_Damage_Effect = Effects.Damage_Effect('AOE','Save','Thunder',True,'Instantaneous',8,2,0,False,'Con',True)
+Thunderwave_Move_Effect = Effects.Move_Effect('Cast',True,True,5,'Away',False,False,False,False)
+def Thunderwave_Spell(Player_Character):
+       Effects.Apply_Damage_Effect(Thunderwave_Damage_Effect,Player_Character,True)
+       Effects.Apply_Move_Effect(Thunderwave_Move_Effect)
+
+#Scorching Ray
+Scorching_Ray_Damage_Effect = Effects.Damage_Effect('Single Target','Attack','Fire',True,'Instantaneous',8,1,0,'Ranged Spell',False,False)
+def Scorching_Ray_Spell(Player_Character):
+       Effects.Apply_Damage_Effect(Scorching_Ray_Damage_Effect,Player_Character,True)
+       Effects.Apply_Damage_Effect(Scorching_Ray_Damage_Effect,Player_Character,True)
+       Effects.Apply_Damage_Effect(Scorching_Ray_Damage_Effect,Player_Character,True)
+
+#Shatter
+Shatter_Damage_Effect = Effects.Damage_Effect('AOE','Save','Thunder',True,'Instantaneous',8,2,0,False,'Con',True)
+def Shatter_Spell(Player_Character):
+       Effects.Apply_Damage_Effect(Shatter_Damage_Effect,Player_Character,True)
+
+#Fireball
+#Wind Wall
+#Wall of Ice
+#Wall of Fire
+#Cone of Cold
+#Wall of Force
+

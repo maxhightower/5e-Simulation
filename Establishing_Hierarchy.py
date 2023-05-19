@@ -816,7 +816,8 @@ class Player_Character:
     self.Spellcasting_Known = {}
     self.Spellcasting_Prepared = {}
     # why isn't there a spell slots attribute?
-
+      # because it will go under class resources to separate pact slots from spell slots
+      
     self.Class_Resources = {
       # 'Barbarian': {
       #    ['Rage_Charges']: 

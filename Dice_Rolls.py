@@ -32,6 +32,7 @@ class Ability_Check(Roll):
     self.Modifiers = Modifiers
     self.Dice_Number = 1
     self.Dice_Type = 20
+    self.Circumstances = []
 
 class Attack_Roll(Roll):
   def __init__(self,Entity_Making,Attack_Target,Modifiers):
@@ -40,8 +41,10 @@ class Attack_Roll(Roll):
     self.Modifiers = Modifiers
     self.Dice_Number = 1
     self.Dice_Type = 20
+    self.Circumstances = []
     # the Attack Roll defines the Damage Roll 
 
+    # the rolls need to be able to store Adv and Dis
 
 
 class Spell_Attack_Roll(Attack_Roll):
@@ -91,7 +94,7 @@ class Saving_Throw(Roll):
 
     self.Dice_Number = 1
     self.Dice_Type = 20
-
+    self.Circumstances = []
 
 
 
