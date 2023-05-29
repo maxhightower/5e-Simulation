@@ -30,7 +30,7 @@ class Spell:
         self.Damage_Type = Damage_Type
         self.Healing_Type = Healing_Type
         self.Gives_Options = bool()
-        self.Effect_Type = []
+        self.Effect_Type = Effect_Type
         self.Num_Damage_Dice = Num_Damage_Dice
         self.Damage_Dice = Damage_Dice
         self.Flat_Damage = Flat_Damage                  # I could make a list in excel like target1+3d8fire,target2+3d8fire,target3+3d8fire
@@ -93,7 +93,8 @@ for ind in Spells.index:
         
         Gives_Options = Spells.iloc[ind,41]
         Effect_Type = Spells.iloc[ind,42]
-
+        #print(Effect_Type)
+        #print(type(Effect_Type))
         #print('1:',Spells.iloc[ind,44])
         #print('2:',type(Spells.iloc[ind,44]))
 
@@ -177,7 +178,7 @@ for ind in Spells.index:
         #print(Class_List)
 
         Sourcebook = Spells.iloc[ind,73]
-
+        #print(Effect_Type)
         Method = Spells.iloc[ind,74]
         #print(Method)
         if str(Method) != 'nan':
@@ -193,8 +194,8 @@ for ind in Spells.index:
                Method_Process = 'nan'
                Method_Target = 'nan'
 
-        if str(Effect_Type) != 'nan':
-               Effect_List = Effect_Type.split(':')
+        #if str(Effect_Type) != 'nan':
+        #       Effect_List = Effect_Type.split(':')
 
         
 
@@ -219,6 +220,53 @@ Class_List = {
        'Class': ['Artificer','Bard','Cleric','Druid','Paladin','Ranger','Sorcerer','Warlock','Wizard'],
        'List': [Artificer_Spell_List,Bard_Spell_List,Cleric_Spell_List,Druid_Spell_List,Paladin_Spell_List,Ranger_Spell_List,Sorcerer_Spell_List,Warlock_Spell_List,Wizard_Spell_List]
 }
+
+# Creating Spell Effects
+#print('Seperator')
+Spell_Effects = {}
+for spell in Spells.index:
+       Spell_Effects[Spells.iloc[spell,0]] = []
+       Effect_Type = Spells.iloc[spell,42]
+       if Effect_Type != float:
+              Effect_String = str(Effect_Type)
+              Effect_List = Effect_String.split(',')
+       else:
+              Effect_Type = 'nan'
+              Effect_List = ['None']
+
+       print(Effect_List)
+       for effect in Effect_Type:
+              Effect_List_Types = []
+              if effect == 'Buff_Circumstance':
+                     pass
+              elif effect == 'Light_Effect':
+                     pass
+              elif effect == 'Move_Effect':
+                     pass
+              elif effect == 'Condition_Effect':
+                     pass
+              elif effect == 'Illusory_Effect':
+                     pass
+              elif effect == 'Buff_Bonus':
+                     pass
+              elif effect == 'Create_Item_Effect':
+                     pass
+              elif effect == 'Share_Information_Effect':
+                     pass
+              elif effect == 'Terrain_Effect':
+                     pass
+              elif effect == 'Speed_Effect':
+                     pass
+              elif effect == 'Enchant_Item_Effect':
+                     pass
+              elif effect == 'Summon_Effect':
+                     pass
+              else: pass
+
+
+
+
+
 
 #print(Spells_Dict.keys())
 #print(Spells_Dict['Acid Splash'].Class_Lists)

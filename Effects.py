@@ -465,8 +465,176 @@ Effect_Durations = ['Instantaneous','1_Round','1_Minute','10_Minutes','1_Hour','
 
 
 
+#Cannot Regain Hitpoints
+class Cannot_Heal_Effect:
+  def __init__(self)
+
+#Reduced Maximum Hitpoints
+class Reduced_Maximum_Hitpoint_Effect:
+  def __init__(self,Amount,Reset_Type,Heal_Type):
+    self.Amount = Amount
+    self.Reset_Type = Reset_Type  # long rest, short rest, etc
+    self.Heal_Type = Heal_Type # which spells or abilities can affect this
+
+#Condition Effect
+class Condition_Effect:
+  def __init__(self,):
+    self
+
+#Action Economy Effect
+class Action_Economy_Effect:
+  def __init__(self,):
+    # what are the different types of Action Economy Effects?
+    # removing reactions
+    # having to choose between Action, Movement, or Bonus Action
+    self
+
+#Death Effect - stablizing, death ward
+class Death_Type_Effect:
+  def __init__(self,):
+    self
 
 
+#WRI Effect
+class WRI_Effect:
+  def __init__(self,):
+    self
+
+#Gravity Effect
+class Gravity_Effect:
+  def __init__(self,):
+    self
+
+#Size Effect
+class Size_Effect:
+  def __init__(self,):
+    self
+
+#Sensory_Effect
+class Sensory_Effect:
+  def __init__(self,):
+    self
+
+#Inventory_Effect
+class Inventory_Effect:
+  def __init__(self,):
+    self
+
+#Polymorph_Effect
+class Transform_Effect:
+  def __init__(self,Name,
+               Replace_Mental_Stats,
+               Meld_with_Weapons, Meld_with_Items, Meld_with_Armor,
+               Keep_Class_Benefits, Keep_Racial_Benefits, Keep_Other_Source_Benefits,
+               Keep_Skills, Keep_Saving_Throws,
+               Add_Skills, Add_Saving_Throws,
+               New_Form):
+    
+    self.Name = Name
+    self.Replace_Mental_Stats = bool
+
+    self.Meld_with_Weapons = bool
+    self.Meld_with_Items = bool
+    self.Meld_with_Armor = bool
+
+    self.Keep_Class_Benefits = bool
+    self.Keep_Racial_Benefits = bool
+    self.Keep_Other_Source_Benefits = bool
+
+    self.Keep_Skills = bool
+    self.Keep_Saving_Throws = bool
+
+    self.Add_Skills = bool
+    self.Add_Saving_Throws = bool
+
+    self.New_Form = New_Form
+
+
+def Apply_Transform_Effect(Target,Effect,New_Form):
+  Old_Str = Target.Str_Score
+  Old_Dex = Target.Dex_Score
+  Old_Con = Target.Con_Score
+  Old_Int = Target.Int_Score
+  Old_Wis = Target.Wis_Score
+  Old_Cha = Target.Cha_Score
+
+  Old_Size = Target.Size
+  Old_HP = Target.Current_Hp
+  Old_AC = Target.AC
+  Old_Speed = Target.Speed
+  Old_WRI = Target.WRI
+  Old_Actions = Target.Actions
+  Old_Bonus_Actions = Target.Bonus_Actions
+  Old_Effects = Target.Effects
+  Old_Free_Actions = Target.Free_Actions
+
+  Target.Size = New_Form.Size
+  Target.Current_HP = New_Form.HP
+  Target.AC = New_Form.AC
+  Target.Speed = New_Form.Speed
+  Target.WRI = New_Form.WRI
+  Target.Actions = New_Form.Actions
+  
+  # import Species                            # Will need to use this to apply the racial features such as WRI and Senses
+  # Apply_Species(New_Form,Target.Species)
+
+  if Effect.Meld_with_Weapons == True:
+    Old_Weapons_Equipped = Target.Weapons_Equipped
+    Target.Weapons_Equipped = []
+  else:
+    pass
+
+  if Effect.Meld_with_Items == True:
+    Old_Inventory = Target.Inventory
+    Target.Inventory = {}
+  else:
+    pass
+
+  # the question is how do I want to deal with c
+  if Effect.Replace_Mental_Stats == False:
+    pass
+  else:
+    Target.Int_Score = New_Form.Int_Score
+    Target.Wis_Score = New_Form.Wis_Score
+    Target.Cha_Score = New_Form.Cha_Score
+
+
+  def End_Transformed_Effect(Target):
+    Target.Str_Score = Old_Str
+    Target.Dex_Score = Old_Dex
+    Target.Con_Score = Old_Con
+    Target.Int_Score = Old_Int
+    Target.Wis_Score = Old_Wis
+    Target.Cha_Score = Old_Cha
+
+    Target.Size = Old_Size
+    Target.Current_Hp = Old_HP
+    Target.AC = Old_AC
+    Target.Speed = Old_Speed
+    Target.WRI = Old_WRI
+    Target.Actions = Old_Actions
+    Target.Bonus_Actions = Old_Bonus_Actions
+    Target.Effects = Old_Effects
+    Target.Free_Actions = Old_Free_Actions
+
+    Target.Weapons_Equipped = Old_Weapons_Equipped
+    Target.Inventory = Old_Inventory
+
+
+#Modify_Information_Effect
+class Modify_Information_Effect:
+  def __init__(self,):
+    self
+
+#Arcane_Effect = Antimagic, Glyph, Symbol
+class Arcane_Effect:
+  def __init__(self,):
+    self
+
+#Dimensional_Effect
+class Dimensional_Effect:
+  def __init__(self,):
+    self
 
 
 
@@ -506,13 +674,17 @@ def Apply_Illusory_Effect(Effect,World):
 
 #Terrain Effects
 class Terrain_Effect:
-  def __init__(self,Location,Type):
-    self.Location = Location
+  def __init__(self,Origin,Locations,AOE,Type):
+    self.Origin = Origin
+    self.Locations = Locations
+    self.AOE = AOE
     self.Type = Type # ['Difficult','Normal','Air','Water','Occupied']
+
 # Need something that considers AOE and Size
 
 def Apply_Terrain_Effect(Effect):
   pass
+  # will need to find each coordinate inside the area formed by the locations
 
 
 # Move Effect
@@ -522,19 +694,48 @@ def Apply_Terrain_Effect(Effect):
     # Distance
     # 
 class Move_Effect:
-  def __init__(self,Prerequisite,Forced_Movement,Target,Distance,Direction,End_Location,Teleportation,Prompts_Opportunity_Attacks,Shunts_to_Nearest):
+  def __init__(self,Prerequisite,Forced_Movement,Target,Caller,Distance,Direction,End_Location,Teleportation,Prompts_Opportunity_Attacks,Shunts_to_Nearest):
     self.Prerequisite = Prerequisite
     self.Forced_Movement = bool()
     self.Target = Target
-    self.Distance = Distance
-    self.Direction = Direction
+    self.Caller = Caller
+    self.Distance = Distance  # if distance is stored as [x,y,z]
+    self.Direction = Direction  # "Away"
     self.End_Location = End_Location
     self.Teleportation = bool()
     self.Prompts_Opportunity_Attacks = bool()
     self.Shunts_to_Nearest = bool()
 
 def Apply_Move_Effect(Effect):
-  pass
+  Target_First_Location = Effect.Target.Location 
+  Difference_in_Locations = Effect.Caller.Location - Target_First_Location
+
+  if Effect.Direction == "Away":
+    # now to find the direction they're facing
+    if Difference_in_Locations[0] > 0:
+      pass
+    elif Difference_in_Locations[1] > 0:
+      pass
+    else: pass
+
+  else: # the attacker will have to choose
+    Choices = ['North','South','East','West','Up','Down']
+
+  # if Teleportation is false, won't I have to check the terrain that a creature is passing through?
+  if Effect.Teleportation == False:
+    # need to check each coordinate between the start location and the end location
+    
+    for i in range(1,abs(Difference_in_Locations[0])):
+      New_X_Coord = Target_First_Location + i
+      Location_being_Checked = [New_X_Coord,Target_First_Location[1],Target_First_Location[2]]
+      if Location_being_Checked
+
+
+    
+    pass
+
+
+
 
 
 #Light_Effect
@@ -641,10 +842,6 @@ class Increased_Crit:
       # I'm going to eventually need a for loop here that checks which numbers are or aren't in the list
       # but for now, I'm fine simply appending it
       Creature.Crit.append(Effect.New_Crit_Values)
-      
-# Damage_Invulnerability
-def WRI_Effect():
-  pass
 
 
 # Gravity Shift
@@ -681,106 +878,6 @@ class Sense_Effect:
 
 
 
-
-
-class Transform_Effect:
-  def __init__(self,Name,
-               Replace_Mental_Stats,
-               Meld_with_Weapons, Meld_with_Items, Meld_with_Armor,
-               Keep_Class_Benefits, Keep_Racial_Benefits, Keep_Other_Source_Benefits,
-               Keep_Skills, Keep_Saving_Throws,
-               Add_Skills, Add_Saving_Throws,
-               New_Form):
-    
-    self.Name = Name
-    self.Replace_Mental_Stats = bool
-
-    self.Meld_with_Weapons = bool
-    self.Meld_with_Items = bool
-    self.Meld_with_Armor = bool
-
-    self.Keep_Class_Benefits = bool
-    self.Keep_Racial_Benefits = bool
-    self.Keep_Other_Source_Benefits = bool
-
-    self.Keep_Skills = bool
-    self.Keep_Saving_Throws = bool
-
-    self.Add_Skills = bool
-    self.Add_Saving_Throws = bool
-
-    self.New_Form = New_Form
-
-
-def Apply_Transform_Effect(Target,Effect,New_Form):
-  Old_Str = Target.Str_Score
-  Old_Dex = Target.Dex_Score
-  Old_Con = Target.Con_Score
-  Old_Int = Target.Int_Score
-  Old_Wis = Target.Wis_Score
-  Old_Cha = Target.Cha_Score
-
-  Old_Size = Target.Size
-  Old_HP = Target.Current_Hp
-  Old_AC = Target.AC
-  Old_Speed = Target.Speed
-  Old_WRI = Target.WRI
-  Old_Actions = Target.Actions
-  Old_Bonus_Actions = Target.Bonus_Actions
-  Old_Effects = Target.Effects
-  Old_Free_Actions = Target.Free_Actions
-
-  Target.Size = New_Form.Size
-  Target.Current_HP = New_Form.HP
-  Target.AC = New_Form.AC
-  Target.Speed = New_Form.Speed
-  Target.WRI = New_Form.WRI
-  Target.Actions = New_Form.Actions
-  
-  # import Species                            # Will need to use this to apply the racial features such as WRI and Senses
-  # Apply_Species(New_Form,Target.Species)
-
-  if Effect.Meld_with_Weapons == True:
-    Old_Weapons_Equipped = Target.Weapons_Equipped
-    Target.Weapons_Equipped = []
-  else:
-    pass
-
-  if Effect.Meld_with_Items == True:
-    Old_Inventory = Target.Inventory
-    Target.Inventory = {}
-  else:
-    pass
-
-  # the question is how do I want to deal with c
-  if Effect.Replace_Mental_Stats == False:
-    pass
-  else:
-    Target.Int_Score = New_Form.Int_Score
-    Target.Wis_Score = New_Form.Wis_Score
-    Target.Cha_Score = New_Form.Cha_Score
-
-
-  def End_Transformed_Effect(Target):
-    Target.Str_Score = Old_Str
-    Target.Dex_Score = Old_Dex
-    Target.Con_Score = Old_Con
-    Target.Int_Score = Old_Int
-    Target.Wis_Score = Old_Wis
-    Target.Cha_Score = Old_Cha
-
-    Target.Size = Old_Size
-    Target.Current_Hp = Old_HP
-    Target.AC = Old_AC
-    Target.Speed = Old_Speed
-    Target.WRI = Old_WRI
-    Target.Actions = Old_Actions
-    Target.Bonus_Actions = Old_Bonus_Actions
-    Target.Effects = Old_Effects
-    Target.Free_Actions = Old_Free_Actions
-
-    Target.Weapons_Equipped = Old_Weapons_Equipped
-    Target.Inventory = Old_Inventory
 
 
 ######################################################################
