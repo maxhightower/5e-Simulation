@@ -10,10 +10,6 @@ import math
 from matplotlib import pyplot as plt
 from mpl_toolkits import mplot3d
 
-import Establishing_Hierarchy
-import Monsters
-import Spell_Data
-
 # Joey said to look into pygame
 import pygame
 
@@ -128,6 +124,7 @@ y = [4, 3, -8, 10]
 # Each square needs the following disctinctions:
 #  - Light Level: Bright, Dim, Dark
 #  - Matter Level: Filled, Occupied, Unoccupied, Air, Water, Fire
+#    Matter Type: 
 #  - Obscurement: Light, Heavy
 #  - Terrain: Normal, Difficult
 
@@ -139,16 +136,31 @@ Obscurement_List = ['None','Light','Heavy']
 Terrain_List = ['Normal','Difficult','Unpassable']
 
 class Space:
-    def __init__(self,Location,Light,Matter_Level,Obscurement,Terrain,Piousness):
-        self.Location = Location
-        self.Light = Light
-        self.Matter_Level = Matter_Level
-        self.Obscurement = Obscurement
-        self.Terrain = Terrain
-        self.Piousness = Piousness      # Normal, Consecrated, Desecrated
+    def __init__(self,Coordinates,Light,Sound,Fill_Type,Substance,Obscurement,Terrain,Piousness,Manueverability):
+        self.Coordinates = Coordinates # [x,y,z,d]
+        self.Light = Light             # Bright, Dim, Dark
+        self.Sound = Sound             # Quiet, Normal, Loud
+        self.Fill_Type = Fill_Type     # Filled, Occupied, Unoccupied
+        self.Substance = Substance     # Fire, Water, Earth, Plants, etc
+        self.Obscurement = Obscurement # None, Light, Heavy
+        self.Terrain = Terrain         # Normal, Difficult, Unpassable
+        self.Piousness = Piousness     # Normal, Consecrated, Desecrated
+        self.Manueverability = Manueverability  # Normal, Slippery, Check/Save Required
+
+
 
         # Frigid Water has rules
         # Slippery Ice
         # Thin Ice
         # Webs
 
+def Generate_World(x,y,z):
+    for i in range(0,x,1):
+        for j in range(0,y,1):    
+            for k in range(0,z,1):
+                global space_name
+                space_name = (str(i),'.',str(j),'.',str(k))
+                space_name = Space([i,j,k],'Bright','Quiet','Unoccupied','Air','None','Normal','Normal','Normal')
+                print(space_name.Coordinates)
+
+Generate_World(3,3,3)

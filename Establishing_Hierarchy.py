@@ -2,7 +2,7 @@
 import numpy as np
 from random import randrange
 import Dice_Rolls
-
+import Environment
 
 ##### Common Functions
 def levelToProficiency(Player_Character):
@@ -290,10 +290,46 @@ def Saving_Throw(Creature,Save):
 
 ####### Defining the Heirarchy
 class World:
-  def __init__(self,Parties,Environment):
+  def __init__(self,Parties,Environment,Space):
     self.Parties = []
     self.Environment = Environment
+    self.Space = {}
   # I could have an attribute that's the distance of each creature from each other
+
+class Space:
+  def __init__(self,Coordinates,Light,Sound,Fill_Type,Substance,Obscurement,Terrain,Piousness,Manueverability,Effects):
+      self.Coordinates = Coordinates # [x,y,z,d]
+      self.Light = Light             # Bright, Dim, Dark
+      self.Sound = Sound             # Quiet, Normal, Loud
+      self.Fill_Type = Fill_Type     # Filled, Occupied, Unoccupied
+      self.Substance = Substance     # Fire, Water, Earth, Plants, etc
+      self.Obscurement = Obscurement # None, Light, Heavy
+      self.Terrain = Terrain         # Normal, Difficult, Unpassable
+      self.Piousness = Piousness     # Normal, Consecrated, Desecrated
+      self.Manueverability = Manueverability  # Normal, Slippery, Check/Save Required
+      self.Effects = Effects # magical effects that are location bound, that trigger when entered, left, or starting turn within
+
+
+        # Frigid Water has rules
+        # Slippery Ice
+        # Thin Ice
+        # Webs
+
+def Generate_World(Name,x,y,z):
+  Name = World(True,True,True)
+
+  for i in range(0,x,1):
+      for j in range(0,y,1):    
+          for k in range(0,z,1):
+              global space_name
+              space_name = (str(i),'.',str(j),'.',str(k))
+              space_name = Space([i,j,k],'Bright','Quiet','Unoccupied','Air','None','Normal','Normal','Normal')
+              Name.Space[space_name] = space_name
+
+#Generate_World(3,3,3)
+
+
+
 
 
 
@@ -486,7 +522,37 @@ Object_Hit_Points = {
     'Hit Dice': ['1d4','2d4','1d6','3d6','1d8','4d8','1d10','5d10']}
 
 
+class Memory_Fragment:
+  def __init__(self,Type,Holder):
+    self.Type = Type # Combat, Social, or Exploration
+    self.Holder = Holder # Who has the memories
+    
+    # Combat Attributes
+    self.Fight_Description = {
+      'Creatures_Involved': {
+        # Example Monster: {
+        #   Actions Taken: {
+        #     Type: Damage/Condition/Effect,
+        #     Number of times used: X, 
+        #     
+        #   }
+        # }
+      },
+      'Character_Level': [],
+      'Party_Level': [],
+      'Initiative': []
+    }
 
+
+    # Social Attributes
+    self.Social = {
+
+    }
+
+    # Exploration Attributes
+    self.Exploration = {
+
+    }
 
 
 
@@ -835,6 +901,11 @@ class Player_Character:
     self.Item_Attunements = []
     self.Attunement_Slots_Filled = len(self.Item_Attunements)
     self.WRI = [] # should this be a dictionary so I can identify the source of a WRI so it can be removed if needed?
+    self.Adapted_Environment = {
+      'Air': 'Infinite',
+      'Suffocating': .6 * abilityScoreToModifier(Player_Character.Con_Score),
+      'Water': 1 + abilityScoreToModifier(Player_Character.Con_Score),
+    }
 
     self.Attacks = 1
     self.Usable_Attack_Score = {
@@ -889,9 +960,11 @@ class Player_Character:
         # perhaps what I could do is have a list of things that happen in an encounter. 
         # or it could be a dictionary that goes 
 
+        # creatures that have been seen, creatures that have not been seen
 
         # index is considered the order of events
         'Combat_Encounters': {
+          ''
           'Damage Dealt':       [],
           'Damage Type':        [],
           'Damage Healed':      [],

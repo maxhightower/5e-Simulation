@@ -1,5 +1,6 @@
 from random import randrange
 import Dice_Rolls
+import Environment
 
 from Dice_Rolls import Current_Allied_Ability_Check
 from Dice_Rolls import Current_Allied_Attack_Roll
@@ -467,7 +468,8 @@ Effect_Durations = ['Instantaneous','1_Round','1_Minute','10_Minutes','1_Hour','
 
 #Cannot Regain Hitpoints
 class Cannot_Heal_Effect:
-  def __init__(self)
+  def __init__(self):
+    self
 
 #Reduced Maximum Hitpoints
 class Reduced_Maximum_Hitpoint_Effect:
@@ -694,8 +696,8 @@ def Apply_Terrain_Effect(Effect):
     # Distance
     # 
 class Move_Effect:
-  def __init__(self,Prerequisite,Forced_Movement,Target,Caller,Distance,Direction,End_Location,Teleportation,Prompts_Opportunity_Attacks,Shunts_to_Nearest):
-    self.Prerequisite = Prerequisite
+  def __init__(self,World,Forced_Movement,Target,Caller,Distance,Direction,End_Location,Teleportation,Prompts_Opportunity_Attacks,Shunts_to_Nearest):
+    self.World = World
     self.Forced_Movement = bool()
     self.Target = Target
     self.Caller = Caller
@@ -709,6 +711,9 @@ class Move_Effect:
 def Apply_Move_Effect(Effect):
   Target_First_Location = Effect.Target.Location 
   Difference_in_Locations = Effect.Caller.Location - Target_First_Location
+
+  Movement_Through_Regular_Terrain = 0
+  Movement_Through_Difficult_Terrain = 0
 
   if Effect.Direction == "Away":
     # now to find the direction they're facing
@@ -724,12 +729,14 @@ def Apply_Move_Effect(Effect):
   # if Teleportation is false, won't I have to check the terrain that a creature is passing through?
   if Effect.Teleportation == False:
     # need to check each coordinate between the start location and the end location
-    
-    for i in range(1,abs(Difference_in_Locations[0])):
-      New_X_Coord = Target_First_Location + i
-      Location_being_Checked = [New_X_Coord,Target_First_Location[1],Target_First_Location[2]]
-      if Location_being_Checked
-
+    for space in Effect.World.Space.index:
+      if space.Coordinates >= Target_First_Location and space.Coordinates <= Effect.End_Location:  # need to adjust this later
+        if space.Fill_Type == "Occupied":
+          Movement_Through_Difficult_Terrain = Movement_Through_Difficult_Terrain + 1
+        elif space.Fill_Type == "Unoccupied":
+          Movement_Through_Regular_Terrain = Movement_Through_Regular_Terrain + 1
+        else: pass
+      else: pass
 
     
     pass
@@ -742,19 +749,45 @@ def Apply_Move_Effect(Effect):
   # Darkness is considered a Light_Effect
 
 class Light_Effect:
-  def __init__(self,Location,Type,Magical,Sunlight):    # does this need an area tag?
-    self.Location = Location
+  def __init__(self,World,Locations,Type,Magical,Sunlight):    # does this need an area tag?
+    self.World = World
+    self.Locations = Locations
     self.Type = Type #['Bright','Dim','Darkness']
     self.Magical = bool()
     self.Sunlight = bool()
 
 def Apply_Light_Effect(Effect):
-  pass
+  Effect.Location
+  for i in Effect.World.Space:
+    if i in Effect.Locations:
+      Effect.World.Space[i].Light = Effect.Type
+    else: pass
 
 
 # Water Breathing Effect
+class Adapted_Environment_Effect:
+  def __init__(self,Target,Environment,Time):
+    self.Target = Target
+    self.Environment = Environment  # standard ones are 'Air', 'Suffocating', 'Water'
+    self.Time = Time
+
+def Apply_Adapted_Environment_Effect(Effect):
+  # first need to try as if the environment already exists
+  Old_Target_Environment_Time = Effect.Target.Adapted_Environment[Environment]
+  #try:    
+  Effect.Target.Adapted_Environment[Environment] = Effect.Time
+  #except:
+  #  Effect.Target.Adapted_Environment
+
+  def Reset_Adapted_Environment_Effect():
+    Effect.Target.Adapted_Environment[Environment] = Old_Target_Environment_Time
 
 # Add Natural Weapons
+class Add_Natural_Action:
+  def __init__(self,Action_Name):
+    self.Action_Name = Action_Name
+
+
 
 
 # Share Information
