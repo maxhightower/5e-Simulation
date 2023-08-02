@@ -226,7 +226,11 @@ Class_List = {
 Spell_Effects = {}
 for spell in Spells.index:
        Spell_Effects[Spells.iloc[spell,0]] = []
+       #print(Spell_Effects)
+
        Effect_Type = Spells.iloc[spell,42]
+       print(Effect_Type)
+
        if Effect_Type != float:
               Effect_String = str(Effect_Type)
               Effect_List = Effect_String.split(',')
@@ -235,7 +239,7 @@ for spell in Spells.index:
               Effect_List = ['None']
 
        print(Effect_List)
-       for effect in Effect_Type:
+       for effect in Effect_List:
               Effect_List_Types = []
               if effect == 'Buff_Circumstance':
                      pass
@@ -569,7 +573,7 @@ def Shield_Spell(Player_Character):
 
 #Thunderwave
 Thunderwave_Damage_Effect = Effects.Damage_Effect('AOE','Save','Thunder',True,'Instantaneous',8,2,0,False,'Con',True)
-Thunderwave_Move_Effect = Effects.Move_Effect('Cast',True,True,5,'Away',False,False,False,False)
+Thunderwave_Move_Effect = Effects.Move_Effect('Cast',True,True,5,'Away',False,False,False,False,False)
 def Thunderwave_Spell(Player_Character):
        Effects.Apply_Damage_Effect(Thunderwave_Damage_Effect,Player_Character,True)
        Effects.Apply_Move_Effect(Thunderwave_Move_Effect)

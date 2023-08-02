@@ -885,6 +885,7 @@ class Player_Character:
       # because it will go under class resources to separate pact slots from spell slots
       
     self.Class_Resources = {
+      'Spell_Slots': {}
       # 'Barbarian': {
       #    ['Rage_Charges']: 
       # }
@@ -903,8 +904,8 @@ class Player_Character:
     self.WRI = [] # should this be a dictionary so I can identify the source of a WRI so it can be removed if needed?
     self.Adapted_Environment = {
       'Air': 'Infinite',
-      'Suffocating': .6 * abilityScoreToModifier(Player_Character.Con_Score),
-      'Water': 1 + abilityScoreToModifier(Player_Character.Con_Score),
+      'Suffocating': .6 * abilityScoreToModifier(self.Con_Score),
+      'Water': 1 + abilityScoreToModifier(self.Con_Score),
     }
 
     self.Attacks = 1

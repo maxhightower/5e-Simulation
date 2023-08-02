@@ -699,7 +699,7 @@ def Maximum_Damage_Roll(Dice_Number,Dice_Type):
   return Result
 
 #Thunderbolt_Strike
-Thunderbolt_Strike_Effect = Effects.Move_Effect('Large or Smaller Creature',True,'Target',10,'Away',False,False,False,False)
+Thunderbolt_Strike_Effect = Effects.Move_Effect('Large or Smaller Creature',True,'Target',10,'Away',False,False,False,False,False)
 def Apply_Thunderbolt_Strike(Player_Character):
   Player_Character.Effects['Self_Dealing_Damage']['Thunder']['Thunderbolt_Strike'] = Use_Thunderbolt_Strike
   Player_Character.Effects['Self_Dealing_Damage']['Lightning']['Thunderbolt_Strike'] = Use_Thunderbolt_Strike

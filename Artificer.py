@@ -70,7 +70,7 @@ def Artificer_First_Level(Player_Character):
 
 # Magical Tinkering
 #The object sheds bright light in a 5-foot radius and dim light for an additional 5 feet.
-Magical_Tinkering_Light_Effect = Effects.Light_Effect('Placeholder',['Bright',5,'Dim',5],False,False)
+Magical_Tinkering_Light_Effect = Effects.Light_Effect('Placeholder',['Bright',5,'Dim',5],False,False,False)
 
 #Whenever tapped by a creature, the object emits a recorded message that can be heard up to 10 feet away. You utter the message when you bestow this property on the object, and the recording can be no more than 6 seconds long.
 Magical_Tinkering_Message_Effect = Effects.Share_Information_Effect('Placeholder','Placeholder')
@@ -115,58 +115,98 @@ Magical_Item_Tinkering_Effects = [Magical_Tinkering_Light_Effect,Magical_Tinkeri
 
 # Spellcasting
 def Artificer_Spellcasting(Player_Character):
+  Artificer_Magic_Table = {
+    'Artificer_Level': [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
+    'Infusions_Known': [0,4,4,4,4,6,6,6,6, 8, 8, 8, 8,10,10,10,10,12,12,12],
+    'Infused_Items':   [0,2,2,2,2,3,3,3,3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6],
+    'Spell_Slots': [
+                       [2,2,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+                       [0,0,0,0,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+                       [0,0,0,0,0,0,0,0,2,2,3,3,3,3,3,3,3,3,3,3],
+                       [0,0,0,0,0,0,0,0,0,0,0,0,1,1,2,2,3,3,3,3],
+                       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,2,2]
+    ],
+    'Cantrips_Known':  [2,2,2,2,2,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4]
+  }
+
+  Num_Artificer_Spells_Known = (Player_Character.Levels.count(Artificer) / 2) + Establishing_Hierarchy.abilityScoreToModifier(Player_Character.Int_Score)
+
+  Num_First_Level_Slots = Artificer_Magic_Table['Spell_Slots'][0][Player_Character.Levels.count(Artificer)-1]
+  Num_Second_Level_Slots = Artificer_Magic_Table['Spell_Slots'][1][Player_Character.Levels.count(Artificer)-1]
+  Num_Third_Level_Slots = Artificer_Magic_Table['Spell_Slots'][2][Player_Character.Levels.count(Artificer)-1]
+  Num_Fourth_Level_Slots = Artificer_Magic_Table['Spell_Slots'][3][Player_Character.Levels.count(Artificer)-1]
+  Num_Fifth_Level_Slots = Artificer_Magic_Table['Spell_Slots'][4][Player_Character.Levels.count(Artificer)-1]
+
   Player_Character.Spellcasting_Known['Artificer_Spells'] = Spell_Data.Artificer_Spell_List
-  
+
+  #check if the Class_Resources dictionary object Spell_Slots currently exists
+  if Player_Character.Class_Resources['Spell_Slots'] == {}:
+    Player_Character.Class_Resources['Spell Slots'] = {
+      '1st': Num_First_Level_Slots,
+      '2nd': Num_Second_Level_Slots,
+      '3rd': Num_Third_Level_Slots,
+      '4th': Num_Fourth_Level_Slots,
+      '5th': Num_Fifth_Level_Slots,
+      '6th': 0,
+      '7th': 0,
+      '8th': 0,
+      '9th': 0
+    }
+    Player_Character.Class_Resources['Spell Slots'] = {
+      '1st': Num_First_Level_Slots,
+      '2nd': Num_Second_Level_Slots,
+      '3rd': Num_Third_Level_Slots,
+      '4th': Num_Fourth_Level_Slots,
+      '5th': Num_Fifth_Level_Slots,
+      '6th': 0,
+      '7th': 0,
+      '8th': 0,
+      '9th': 0
+    }
+  else: 
+    pass #will need to reference the multiclass spell table rules later
+
   if Player_Character.Class_Save_DCs.keys() != []:
     Player_Character.Class_Save_DCs['Artificer'] = {
       'Spell_Save_DC': Establishing_Hierarchy.abilityScoreToModifier(Player_Character.Int_Score) + 8 + Player_Character.Prof_Bonus
     }
+
+  def Artificer_Prepare_Spells(Player_Character):
+      # what I want to do is to randomly choose Num_Spells_Known number of spells from the Artificer Spell List (minus the cantrips and too high level spells)
+      # and then according to the Artificer_Magic_Table and then add them to the Prepared_Spells list
+
+      x = [1,2]
+      y = [0,1,2,3,4]
+      for i in y:
+        print(i)
+        print(y)
+        print(Artificer_Magic_Table['Spell_Slots'][i])
+        if Artificer_Magic_Table['Spell_Slots'][i][Player_Character.Levels.count(Artificer)-1] not in x:
+          pass
+        else: 
+          Highest_Spell_Slot_Castable = Artificer_Magic_Table['Spell_Slots'][i]
+
+      Prepared_Spells = []
+
+      def Spell_Filter(Spell):
+        Spell.Base_Level > 0
+        Spell.Base_Level < Highest_Spell_Slot_Castable 
+      
+    #  print(Spell_Data.Artificer_Spell_List)
+    #  Prepared_Spells.append(random.sample(filter(Spell_Filter,Spell_Data.Artificer_Spell_List),Spells_Known))
+
+      # Prepare Int Mod + Artificer Level / 2
 
   Player_Character.Long_Rest_Options['Change_Artificer_Spells'] = Artificer_Prepare_Spells(Player_Character)
 
   #Arcane_Focus
   # if spells have a material component, and there isn't the material in inventory, if the character doesn't have an Arcane_Focus, remove the spell
 
-Artificer_Magic_Table = {
-  'Artificer_Level': [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
-  'Infusions_Known': [0,4,4,4,4,6,6,6,6, 8, 8, 8, 8,10,10,10,10,12,12,12],
-  'Infused_Items':   [0,2,2,2,2,3,3,3,3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6],
-  'Spell_Slots': [
-       [2,2,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
-       [0,0,0,0,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-       [0,0,0,0,0,0,0,0,2,2,3,3,3,3,3,3,3,3,3,3],
-       [0,0,0,0,0,0,0,0,0,0,0,0,1,1,2,2,3,3,3,3],
-       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,2,2]
-  ],
-  'Cantrips_Known':  [2,2,2,2,2,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4]
-}
 
 
-def Artificer_Prepare_Spells(Player_Character):
-  Spells_Known = (Player_Character.Levels.count(Artificer) / 2) + Establishing_Hierarchy.abilityScoreToModifier(Player_Character.Int_Score)
+
   
-  # what I want to do is to randomly choose Spells_Known number of spells from the Artificer Spell List (minus the cantrips and too high level spells)
-  x = [1,2]
-  y = [0,1,2,3,4]
-  for i in y:
-    print(i)
-    print(y)
-    print(Artificer_Magic_Table['Spell_Slots'][i])
-    if Artificer_Magic_Table['Spell_Slots'][i][Player_Character.Levels.count(Artificer)-1] not in x:
-      pass
-    else: 
-      Highest_Spell_Slot_Castable = Artificer_Magic_Table['Spell_Slots'][i]
 
-  Prepared_Spells = []
-
-  def Spell_Filter(Spell):
-    Spell.Base_Level > 0
-    Spell.Base_Level < Highest_Spell_Slot_Castable 
-  
-#  print(Spell_Data.Artificer_Spell_List)
-#  Prepared_Spells.append(random.sample(filter(Spell_Filter,Spell_Data.Artificer_Spell_List),Spells_Known))
-
-  # Prepare Int Mod + Artificer Level / 2
 
 Infusion_Strength_Table = {
   'Level': [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
@@ -563,7 +603,7 @@ def Artificer_Run_Subclass(Player_Character):
   def Artificer_Choose_Subclass(Player_Character):
     Artificer_Choice = input('Which Subclass: ')
     
-    if Artificer_Choice == 'Battle Smith':
+    if Artificer_Choice == 'Battle Smith' or Artificer_Choice == 'Battlesmith':
       Player_Character.Subclasses[Current_Subclass_Number] = Battle_Smith
       Apply_Battle_Smith(Player_Character)
       print(Battle_Smith.Feature)
@@ -586,7 +626,7 @@ def Artificer_Run_Subclass(Player_Character):
       Armorer.Feature['1']
 
     else:
-      print('Cannot find Artificer Subclass')
+      print('Cannot find Artificer Subclass',Artificer_Choice)
 
 
   
@@ -893,7 +933,9 @@ def Apply_Improved_Defender(Player_Character):
 
 
   Deflect_Attack_Damage = Effects.Buff_Bonus_Effect(Current_Enemy_Attack_Roll.Entity_Making,'Instantaneous','Damage',1,4,Establishing_Hierarchy.abilityScoreToModifier(Player_Character.Int_Score))
+  
   def Use_Deflect_Attack_Damage(Player_Character):
+    Player_Character.Related_Stat_Blocks['Companion'].Effects['Use_Deflect'] = {}
     Player_Character.Related_Stat_Blocks['Companion'].Effects['Use_Deflect']['Deflect_Damage_Back'] = Effects.Apply_Buff_Bonus_Effect(Deflect_Attack_Damage)
   
   try: 

@@ -314,7 +314,7 @@ def Use_Crossbow_Expert_Attack():
   # Once per turn, when you hit a creature with an attack that deals bludgeoning damage, you can move it 5 feet to an unoccupied space, provided the target is no more than one size larger than you.
   # When you score a critical hit that deals bludgeoning damage to a creature, attack rolls against that creature are made with advantage until the start of your next turn.
 
-Crusher_Move_Effect = Effects.Move_Effect(['Attack Roll','Bludgeoning Damage'],True,'Target',5,'Any','End Location',False,False,False)
+Crusher_Move_Effect = Effects.Move_Effect(['Attack Roll','Bludgeoning Damage'],True,'Target',5,'Any','End Location',False,False,False,False)
 Crusher_Crit_Effect = Effects.Buff_Circumstance_Effect(['Attack Roll','Hit','Bludgeoning Damage'],'Target','1_Round','Attack Roll','Advantage')
 
 def Apply_Crusher_Feat(Ability_Choice,Player_Character):

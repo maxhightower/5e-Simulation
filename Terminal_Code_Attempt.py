@@ -208,8 +208,8 @@ Player_Character_Summary = {
 
 CHARACTER_CREATOR.Find_the_Best_Armor(Player_Character)
 
-Player_Character_Summary2 = pandas.DataFrame.from_dict(Player_Character_Summary)
-print(Player_Character_Summary2)
+#Player_Character_Summary2 = pandas.DataFrame.from_dict(Player_Character_Summary)
+#print(Player_Character_Summary2)
 
 
 import Character_Actions
@@ -244,28 +244,54 @@ Player_Character.Effects['Self_Dealing_Damage'] = {
 #Barbarian.Activate_Rage(Player_Character)
 
 def Player_Character_Sheet(Player_Character):
+
     # Description Info
-    print(Player_Character.Name)
-    print(Player_Character.Species)
+    #print(Player_Character.Name)
+    #print(Player_Character.Species)
 
     # Code to print Class Levels and Subclasses
 
 
     # Stats
-    print(Player_Character.HP)
-    print(Player_Character.AC)
-    print(Player_Character.Saving_Throws)
+    #print(Player_Character.HP)
+    #print(Player_Character.AC)
+    #print(Player_Character.Saving_Throws)
 
     # Need a section that says if Spellcaster: Spells and if Martial: Weapons and Damage
     
     #print(Player_Character.Class_Save_DCs['Bard'])
 
 
-    print(Player_Character.Actions)
-    print(Player_Character.Bonus_Actions)
-    print(Player_Character.Effects)
-    print(Player_Character.Class_Resources)
-    print(Player_Character.Levels)
+    #print(Player_Character.Actions)
+    #print(Player_Character.Bonus_Actions)
+    #print(Player_Character.Effects)
+    #print(Player_Character.Class_Resources)
+    #print(Player_Character.Levels)
 
-#Player_Character_Sheet(Player_Character)
-print(Player_Character.Saving_Throws[0])
+    #print(Player_Character.Related_Stat_Blocks)
+
+    Player_Character_Summary = {
+    'Name': [Player_Character.Name],
+    #'Race': [Player_Character.Species['Name']],
+    'HP': [Player_Character.HP],
+    'AC': [Player_Character.AC],
+    'Prof Bonus': [Player_Character.Prof_Bonus]}
+    Player_Character_Summary2 = pandas.DataFrame.from_dict(Player_Character_Summary)
+    print(Player_Character_Summary2)
+    
+    print('')
+
+    Player_Scores_Summary = {
+        'STR': [Player_Character.Str_Score],
+        'DEX': [Player_Character.Dex_Score],
+        'CON': [Player_Character.Con_Score],
+        'INT': [Player_Character.Int_Score],
+        'WIS': [Player_Character.Wis_Score],
+        'CHA': [Player_Character.Cha_Score]
+        }
+    Player_Scores_Summary2 = pandas.DataFrame.from_dict(Player_Scores_Summary)
+    print(Player_Scores_Summary2)
+
+Player_Character_Sheet(Player_Character)
+
+#print(Player_Character.Saving_Throws[0])
