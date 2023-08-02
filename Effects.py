@@ -783,9 +783,25 @@ def Apply_Adapted_Environment_Effect(Effect):
     Effect.Target.Adapted_Environment[Environment] = Old_Target_Environment_Time
 
 # Add Natural Weapons
-class Add_Natural_Action:
-  def __init__(self,Action_Name):
+class Add_Natural_Action_Effect:
+  def __init__(self,Target,Action_Name,Use_Action_Function_Name,Action_Type,Action_Path,Damage_Dice,Damage_Dice_Number,Damage_Type):
+    self.Target = Target
     self.Action_Name = Action_Name
+    self.Use_Action_Function_Name = Use_Action_Function_Name
+    self.Action_Type = Action_Type
+
+    self.Action_Path = Action_Path # something similar to the Monster Actions spreadsheet
+
+    self.Damage_Dice = Damage_Dice
+    self.Damage_Dice_Number = Damage_Dice_Number
+    self.Damage_Type = Damage_Type
+    
+
+  def Apply_Natural_Action_Effect(Effect):
+    def Use_Action_Function_Name():
+      #str(str(Effect.Action_Name),'_Effect') = Damage_Effect()
+      pass
+    Effect.Target.Actions[Effect.Action_Name] = Use_Action_Function_Name()
 
 
 
