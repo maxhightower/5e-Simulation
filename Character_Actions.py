@@ -317,3 +317,6 @@ def None_Action():
 
 def Two_Weapon_Fighting_Attack_Bonus_Action(Attacker,Defender,Weapon):
   Weapon_Attack(Attacker,Defender,Weapon)
+
+def Cast_Action(Target,Spell):
+  pass

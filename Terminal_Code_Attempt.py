@@ -282,16 +282,51 @@ def Player_Character_Sheet(Player_Character):
     print('')
 
     Player_Scores_Summary = {
-        'STR': [Player_Character.Str_Score],
-        'DEX': [Player_Character.Dex_Score],
-        'CON': [Player_Character.Con_Score],
-        'INT': [Player_Character.Int_Score],
-        'WIS': [Player_Character.Wis_Score],
-        'CHA': [Player_Character.Cha_Score]
+        'Strength': [Player_Character.Str_Score],
+        'Dexterity': [Player_Character.Dex_Score],
+        'Constitution': [Player_Character.Con_Score],
+        'Intelligence': [Player_Character.Int_Score],
+        'Wisdom': [Player_Character.Wis_Score],
+        'Charisma': [Player_Character.Cha_Score]
         }
     Player_Scores_Summary2 = pandas.DataFrame.from_dict(Player_Scores_Summary)
     print(Player_Scores_Summary2)
 
+    #print('')
+
+    #Player_Saving_Throws_Summary = {
+    #    'Strength': [Player_Character.Saving_Throws[0]],
+    #    'Dexterity': [Player_Character.Saving_Throws[1]],
+    #    'Constitution': [Player_Character.Saving_Throws[2]],
+    #    'Intelligence': [Player_Character.Saving_Throws[3]],
+    #    'Wisdom': [Player_Character.Saving_Throws[4]],
+    #    'Charisma': [Player_Character.Saving_Throws[5]]
+    #    }
+    #Player_Saving_Throws_Summary2 = pandas.DataFrame.from_dict(Player_Saving_Throws_Summary)
+    #print(Player_Saving_Throws_Summary2)
+
+
 Player_Character_Sheet(Player_Character)
 
 #print(Player_Character.Saving_Throws[0])
+
+def Consider_Options(Player_Character,Target):
+    # lets print every option that the character has 
+    for Action in Player_Character.Actions:
+        print(Action)
+
+    #Player_Character.Bonus_Actions
+    #Player_Character.Effects
+
+
+    #Target.AC
+    #Target.HP
+    #Target.WRI
+    #Target.Saving_Throws
+    #Target.Str_Score
+    #Target.Dex_Score
+    #Target.Con_Score
+    #Target.Int_Score
+    #Target.Wis_Score
+    #Target.Cha_Score
+Consider_Options(Player_Character,Target)

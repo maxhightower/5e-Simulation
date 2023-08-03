@@ -20,6 +20,7 @@ from Dice_Rolls import Current_Enemy_Attack_Roll
 from Dice_Rolls import Current_Enemy_Saving_Throw
 from Dice_Rolls import Current_Enemy_Damage_Roll
 
+import pandas
 
 Armor = [['Studded Leather'],['Scale Mail']]
 Weapons = [['Simple Weapon','Simple Weapon']]
@@ -115,6 +116,10 @@ Magical_Item_Tinkering_Effects = [Magical_Tinkering_Light_Effect,Magical_Tinkeri
 
 # Spellcasting
 def Artificer_Spellcasting(Player_Character):
+  # there might be an issue that pops up later with the Artificer Initiate Feat but we'll get there when we get there
+  Player_Character.Spellcasting_Known['Artificer'] = {}
+  Player_Character.Spellcasting_Prepared['Artificer'] = {}
+
   Artificer_Magic_Table = {
     'Artificer_Level': [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
     'Infusions_Known': [0,4,4,4,4,6,6,6,6, 8, 8, 8, 8,10,10,10,10,12,12,12],
@@ -175,27 +180,45 @@ def Artificer_Spellcasting(Player_Character):
       # what I want to do is to randomly choose Num_Spells_Known number of spells from the Artificer Spell List (minus the cantrips and too high level spells)
       # and then according to the Artificer_Magic_Table and then add them to the Prepared_Spells list
 
-      x = [1,2]
-      y = [0,1,2,3,4]
-      for i in y:
-        print(i)
-        print(y)
-        print(Artificer_Magic_Table['Spell_Slots'][i])
-        if Artificer_Magic_Table['Spell_Slots'][i][Player_Character.Levels.count(Artificer)-1] not in x:
-          pass
+      Currently_Prepared_Spells = Player_Character.Spellcasting_Prepared['Artificer']
+      Newly_Prepared_Spells = []
+
+      # determining the number of spell slot levels the class can cast
+      y = len(Artificer_Magic_Table['Spell_Slots'])
+
+      # for each spell slot level
+      for i in range(0,y,1):
+        
+        # checking if a spell level is castable
+        if Artificer_Magic_Table['Spell_Slots'][i][Player_Character.Levels.count(Artificer)-1] != 0:
+          
+          #print(Spell_Data.Artificer_Spell_List)
+
+          print('Spell level:',i)
+
+          Spells_of_Level = Spell_Data.Artificer_Spell_List.loc[Spell_Data.Artificer_Spell_List['Level'] == i]
+          New_Spell = Spells_of_Level.iloc[random.randint(0,len(Spells_of_Level)-1)]
+
+#random.randint(0,len(Spell_Data.Artificer_Spell_List.loc[Spell_Data.Spells.Level == i])-1)
+          
+          print(New_Spell)
+          
+          # that level spell is deemed as castable, now randomly choose a spell of that level
+          Newly_Prepared_Spells = Newly_Prepared_Spells.append(New_Spell)
+
+
         else: 
           Highest_Spell_Slot_Castable = Artificer_Magic_Table['Spell_Slots'][i]
-
-      Prepared_Spells = []
-
-      def Spell_Filter(Spell):
-        Spell.Base_Level > 0
-        Spell.Base_Level < Highest_Spell_Slot_Castable 
+        
       
-    #  print(Spell_Data.Artificer_Spell_List)
-    #  Prepared_Spells.append(random.sample(filter(Spell_Filter,Spell_Data.Artificer_Spell_List),Spells_Known))
+      # gets rid of the old spells that match the ones defined by this feature (so we don't get rid of other class's spells) and then adds the new ones
+        # what about if the program tries to prepare a spell that is already prepared?
+      for i in Currently_Prepared_Spells:
+        Player_Character.Actions['Cast'].remove(i)
+      for i in range(0,len(Newly_Prepared_Spells),1):
+        Player_Character.Actions['Cast'] = Spells.Cast_Action(Player_Character,i)
 
-      # Prepare Int Mod + Artificer Level / 2
+
 
   Player_Character.Long_Rest_Options['Change_Artificer_Spells'] = Artificer_Prepare_Spells(Player_Character)
 
@@ -722,6 +745,7 @@ Artificer_Features = [Artificer_Level_One, Artificer_Level_Two, Artificer_Level_
 
 def Run_Artificer(Player_Character,Level):
   #print('here 0')
+  Player_Character.Class_Resources['Artificer'] = {}
   if Player_Character.First_Class == Artificer:
     #print('here 1')
     Artificer_First_Level(Player_Character)
@@ -791,7 +815,7 @@ def Battle_Smith_Spells(Player_Character):
     Player_Character.Spellcasting_Prepared['Artificer'].append(Spells.Spells_Dict["Shield"],Spells.Spells_Dict["Thunderwave"],Spells.Spells_Dict["Scorching Ray"],Spells.Spells_Dict["Shatter"],Spells.Spells_Dict["Fireball"],Spells.Spells_Dict["Wind Wall"],Spells.Spells_Dict["Wall of Ice"],Spells.Spells_Dict["Wall of Fire"],Spells.Spells_Dict["Cone of Cold"],Spells.Spells_Dict["Wall of Force"])
   except:
     Player_Character.Spellcasting_Prepared = {
-      'Artificer': [Spells.Spells_Dict["Shield"],Spells.Spells_Dict["Thunderwave"],Spells.Spells_Dict["Scorching Ray"],Spells.Spells_Dict["Shatter"],Spells.Spells_Dict["Fireball"],Spells.Spells_Dict["Wind Wall"],Spells.Spells_Dict["Wall of Ice"],Spells.Spells_Dict["Wall of Fire"],Spells.Spells_Dict["Cone of Cold"],Spells.Spells_Dict["Wall of Force"]]
+      'Artificer': [Spells.Shield_Spell,Spells.Thunderwave_Spell,Spells.Spells_Dict["Scorching Ray"],Spells.Spells_Dict["Shatter"],Spells.Spells_Dict["Fireball"],Spells.Spells_Dict["Wind Wall"],Spells.Spells_Dict["Wall of Ice"],Spells.Spells_Dict["Wall of Fire"],Spells.Spells_Dict["Cone of Cold"],Spells.Spells_Dict["Wall of Force"]]
     }
 
 

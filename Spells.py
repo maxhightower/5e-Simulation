@@ -527,6 +527,10 @@ def Run_Spell(Spell,Caster):           # need a way to implement the Caster, Spe
                       Caster.Concentration = False
                 
 
+
+def Cast_Action(Caster,Spell):
+       pass
+
 #Summarize_Spell(Spells_Dict['Thunderclap'])
 
 
