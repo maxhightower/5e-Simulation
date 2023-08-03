@@ -846,6 +846,9 @@ class Player_Character:
     self.Round_Reset_Options = {
       
     }
+    self.Level_Up_Checks = {
+      
+    }
 
     self.Active_Conditions = {
       'Self': [],

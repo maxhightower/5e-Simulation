@@ -117,6 +117,9 @@ Magical_Item_Tinkering_Effects = [Magical_Tinkering_Light_Effect,Magical_Tinkeri
 # Spellcasting
 def Artificer_Spellcasting(Player_Character):
   # there might be an issue that pops up later with the Artificer Initiate Feat but we'll get there when we get there
+
+  Player_Character.Actions['Cast'] = {} # this will need to be changed when multiclassing is implemented
+
   Player_Character.Spellcasting_Known['Artificer'] = {}
   Player_Character.Spellcasting_Prepared['Artificer'] = {}
 
@@ -134,7 +137,8 @@ def Artificer_Spellcasting(Player_Character):
     'Cantrips_Known':  [2,2,2,2,2,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4]
   }
 
-  Num_Artificer_Spells_Known = (Player_Character.Levels.count(Artificer) / 2) + Establishing_Hierarchy.abilityScoreToModifier(Player_Character.Int_Score)
+  Num_Artificer_Spells_Known = int((Player_Character.Levels.count(Artificer) / 2) + Establishing_Hierarchy.abilityScoreToModifier(Player_Character.Int_Score))
+  print('Artificer Spells Known:',Num_Artificer_Spells_Known)
 
   Num_First_Level_Slots = Artificer_Magic_Table['Spell_Slots'][0][Player_Character.Levels.count(Artificer)-1]
   Num_Second_Level_Slots = Artificer_Magic_Table['Spell_Slots'][1][Player_Character.Levels.count(Artificer)-1]
@@ -181,46 +185,43 @@ def Artificer_Spellcasting(Player_Character):
       # and then according to the Artificer_Magic_Table and then add them to the Prepared_Spells list
 
       Currently_Prepared_Spells = Player_Character.Spellcasting_Prepared['Artificer']
-      Newly_Prepared_Spells = []
+      Empty_Spots = Num_Artificer_Spells_Known - len(Currently_Prepared_Spells)
 
-      # determining the number of spell slot levels the class can cast
       y = len(Artificer_Magic_Table['Spell_Slots'])
+      total_left = y
+
 
       # for each spell slot level
-      for i in range(0,y,1):
-        
-        # checking if a spell level is castable
-        if Artificer_Magic_Table['Spell_Slots'][i][Player_Character.Levels.count(Artificer)-1] != 0:
-          
-          #print(Spell_Data.Artificer_Spell_List)
+      for i in range(0,4,1):
+        chosen_num_of_spells_at_level = random.randrange(0,total_left,1)
+        total_left = total_left - chosen_num_of_spells_at_level
 
-          print('Spell level:',i)
+        for x in range(0,chosen_num_of_spells_at_level,1):
+          # checking if a spell level is castable
+          if Artificer_Magic_Table['Spell_Slots'][i][Player_Character.Levels.count(Artificer)-1] != 0:
+            
+            Spells_of_Level = Spell_Data.Artificer_Spell_List.loc[Spell_Data.Artificer_Spell_List['Level'] == i]
+            New_Spell = Spells_of_Level.iloc[random.randint(0,len(Spells_of_Level)-1)]
+            
+            print('New Spell:',New_Spell)
+            
+            # that level spell is deemed as castable, now randomly choose a spell of that level
+            Player_Character.Actions['Cast'].update({New_Spell['Spell Name']:New_Spell})
 
-          Spells_of_Level = Spell_Data.Artificer_Spell_List.loc[Spell_Data.Artificer_Spell_List['Level'] == i]
-          New_Spell = Spells_of_Level.iloc[random.randint(0,len(Spells_of_Level)-1)]
-
-#random.randint(0,len(Spell_Data.Artificer_Spell_List.loc[Spell_Data.Spells.Level == i])-1)
-          
-          print(New_Spell)
-          
-          # that level spell is deemed as castable, now randomly choose a spell of that level
-          Newly_Prepared_Spells = Newly_Prepared_Spells.append(New_Spell)
-
-
-        else: 
-          Highest_Spell_Slot_Castable = Artificer_Magic_Table['Spell_Slots'][i]
-        
-      
+          else: pass
+              
       # gets rid of the old spells that match the ones defined by this feature (so we don't get rid of other class's spells) and then adds the new ones
         # what about if the program tries to prepare a spell that is already prepared?
       for i in Currently_Prepared_Spells:
         Player_Character.Actions['Cast'].remove(i)
-      for i in range(0,len(Newly_Prepared_Spells),1):
-        Player_Character.Actions['Cast'] = Spells.Cast_Action(Player_Character,i)
+  Artificer_Prepare_Spells(Player_Character)
+  
+  def Artificer_Prepare_Spells_Level_Up(Player_Character):
+    pass
 
 
-
-  Player_Character.Long_Rest_Options['Change_Artificer_Spells'] = Artificer_Prepare_Spells(Player_Character)
+  Player_Character.Level_Up_Checks['Update_Artificer_Spellcasting'] = Artificer_Spellcasting(Player_Character)
+  Player_Character.Long_Rest_Options['Change_Artificer_Spells'] = Artificer_Prepare_Spells_Level_Up(Player_Character)
 
   #Arcane_Focus
   # if spells have a material component, and there isn't the material in inventory, if the character doesn't have an Arcane_Focus, remove the spell
@@ -682,60 +683,75 @@ def Artificer_Level_One(Player_Character):
 
 def Artificer_Level_Two(Player_Character):
   Apply_Infuse_Item(Player_Character)
+  print(Player_Character.Long_Rest_Options['Change_Artificer_Spells'])
 
 def Artificer_Level_Three(Player_Character):
   Artificer_Run_Subclass(Player_Character)
+  #Player_Character.Long_Rest_Options['Change_Artificer_Spells'](Player_Character)
 
 def Artificer_Level_Four(Player_Character):
   Character_Functions.ASI(Player_Character)
+  Player_Character.Long_Rest_Options['Change_Artificer_Spells']
 
 def Artificer_Level_Five(Player_Character):
   Artificer_Run_Subclass(Player_Character)
+  Player_Character.Long_Rest_Options['Change_Artificer_Spells']
 
 def Artificer_Level_Six(Player_Character):
-  pass
+  Player_Character.Long_Rest_Options['Change_Artificer_Spells']
 
 def Artificer_Level_Seven(Player_Character):
   Apply_Flash_of_Genius(Player_Character)
+  Player_Character.Long_Rest_Options['Change_Artificer_Spells']
 
 def Artificer_Level_Eight(Player_Character):
   Character_Functions.ASI(Player_Character)
+  Player_Character.Long_Rest_Options['Change_Artificer_Spells']
 
 def Artificer_Level_Nine(Player_Character):
   Artificer_Run_Subclass(Player_Character)
+  Player_Character.Long_Rest_Options['Change_Artificer_Spells']
 
 def Artificer_Level_Ten(Player_Character):
   Magic_Item_Adept(Player_Character)
+  Player_Character.Long_Rest_Options['Change_Artificer_Spells']
 
 def Artificer_Level_Eleven(Player_Character):
   Apply_Spell_Storing_Item(Player_Character)
+  Player_Character.Long_Rest_Options['Change_Artificer_Spells']
 
 def Artificer_Level_Twelve(Player_Character):
   Character_Functions.ASI(Player_Character)
+  Player_Character.Long_Rest_Options['Change_Artificer_Spells']
 
 def Artificer_Level_Thirteen(Player_Character):
-  pass
+  Player_Character.Long_Rest_Options['Change_Artificer_Spells']
 
 def Artificer_Level_Fourteen(Player_Character):
-  pass
+  Player_Character.Long_Rest_Options['Change_Artificer_Spells']
 
 def Artificer_Level_Fifteen(Player_Character):
   Artificer_Run_Subclass(Player_Character)
+  Player_Character.Long_Rest_Options['Change_Artificer_Spells']
 
 def Artificer_Level_Sixteen(Player_Character):
   Character_Functions.ASI(Player_Character)
+  Player_Character.Long_Rest_Options['Change_Artificer_Spells']
 
 def Artificer_Level_Seventeen(Player_Character):
-  pass
+  Player_Character.Long_Rest_Options['Change_Artificer_Spells']
 
 def Artificer_Level_Eighteen(Player_Character):
   Magic_Item_Master(Player_Character)
+  Player_Character.Long_Rest_Options['Change_Artificer_Spells']
 
 def Artificer_Level_Nineteen(Player_Character):
   Character_Functions.ASI(Player_Character)
+  Player_Character.Long_Rest_Options['Change_Artificer_Spells']
 
 def Artificer_Level_Twenty(Player_Character):
   Apply_Soul_of_Artifice(Player_Character)
+  Player_Character.Long_Rest_Options['Change_Artificer_Spells']
 
 Artificer_Features = [Artificer_Level_One, Artificer_Level_Two, Artificer_Level_Seven, Artificer_Level_Ten, Artificer_Level_Eleven, Artificer_Level_Eighteen, Artificer_Level_Twenty]
 
