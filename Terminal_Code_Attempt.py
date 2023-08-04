@@ -13,11 +13,6 @@ Target = Monsters.monster_primes[Target_ID]
 #Cleric.Target_Placeholder = Target
 print(Target)
 
-#Player_Character.Actions.append(Character_Actions.Weapon_Attack(Player_Character,Target,Player_Character.Weapon_Equipped[0]))
-#Player_Character.Bonus_Actions['Dependent']['Attack_Action'].append(Character_Actions.Two_Weapon_Fighting_Attack_Bonus_Action(Player_Character,Target,Player_Character.Weapon_Equipped[0]))
-
-
-
 Target_Summary = {
     'Name': [Target.Name],
     'Book': [Target.Book],
@@ -314,6 +309,9 @@ def Consider_Options(Player_Character,Target):
     # lets print every option that the character has 
     for Action in Player_Character.Actions:
         print(Action)
+
+    for Spell in Player_Character.Spellcasting_Prepared['Artificer']:
+        print(Spell)
 
     #Player_Character.Bonus_Actions
     #Player_Character.Effects
