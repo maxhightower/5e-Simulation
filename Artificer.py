@@ -522,16 +522,19 @@ def Infuse_Item(Player_Character):
 
 def Apply_Infuse_Item(Player_Character):
   Player_Character.Long_Rest_Options['Infuse_Item'] = Infuse_Item(Player_Character)
-  
+
+
 
 
 # The Right Tool for the Job (3rd level)
 def Use_Right_Tool_for_the_Job(Player_Character):
+  # make a for loop that allows the player to enter an artisan tool and if they enter something not in the list, print the options and ask again
   Tool_of_Choice = input('What tool do you want: ')
   if Tool_of_Choice in Backgrounds.Artisans_Tools:
     Player_Character.Inventory['Artisan_Tools'].append(Tool_of_Choice)
   else:
     print("Couldn't Find Artisan Tool")
+
 
 def Apply_Right_Tool_for_the_Job(Player_Character):
   Player_Character.Short_Rest_Options['Unlimited']['Right_Tool_for_the_Job'] = Use_Right_Tool_for_the_Job(Player_Character)

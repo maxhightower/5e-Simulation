@@ -313,6 +313,13 @@ def Consider_Options(Player_Character,Target):
     for Spell in Player_Character.Spellcasting_Prepared['Artificer']:
         print(Spell)
 
+    for Event in Player_Character.Effects:
+        print(Event)
+        for Subevent in Player_Character.Effects[Event]:
+            print(Subevent)
+            for Effect in Player_Character.Effects[Event][Subevent]:
+                print(Effect)
+    
     #Player_Character.Bonus_Actions
     #Player_Character.Effects
 
