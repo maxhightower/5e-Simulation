@@ -1,5 +1,144 @@
 import torch 
 import numpy as np
+import random
 
-import Terminal_Code_Attempt
+import Species as S
+import Backgrounds
+import Artificer
+import Barbarian
+import Bard
+import Cleric
+import Druid
+import Fighter
+import Monk
+import Paladin
+import Ranger
+import Rogue
+import Sorcerer
+import Warlock
+import Wizard
+import Establishing_Hierarchy
+import CHARACTER_CREATOR
 
+Class_List = [Barbarian.Barbarian,Cleric.Cleric,Artificer.Artificer,Bard.Bard,Druid.Druid,Fighter.Fighter,Paladin.Paladin,Monk.Monk,Rogue.Rogue,Ranger.Ranger,Sorcerer.Sorcerer,Warlock.Warlock,Wizard.Wizard]
+
+
+def Generate_Random_Character():
+    Name = "John_Smith"
+    Species = random.choice(S.Species_List)
+    Background = random.choice(Backgrounds.Background_Options)
+    Level = random.randint(1,20)
+    # I could also go random by level, so that multiclassing can happen at any point
+    Num_Classes_to_Take = random.randint(1,min(Level,len(Class_List)),1)
+    Class_Choices = []
+    for i in Num_Classes_to_Take:
+        Class = random.choice(Class_List)
+        Class_Choices.append([Class])
+        Subclass = random.choice(Class.Subclasses)
+        Class_Choices[i].append(Subclass)
+
+    list_of_scores = CHARACTER_CREATOR.Use_Standard_Array()
+    #randomly assign each number in list_of_scores to a stat
+    Strength = list_of_scores[random.randint(0,len(list_of_scores)-1)]
+    list_of_scores.remove(Strength)
+    Dexterity = list_of_scores[random.randint(0,len(list_of_scores)-1)]
+    list_of_scores.remove(Dexterity)
+    Constitution = list_of_scores[random.randint(0,len(list_of_scores)-1)]
+    list_of_scores.remove(Constitution)
+    Intelligence = list_of_scores[random.randint(0,len(list_of_scores)-1)]
+    list_of_scores.remove(Intelligence)
+    Wisdom = list_of_scores[random.randint(0,len(list_of_scores)-1)]
+    list_of_scores.remove(Wisdom)
+    Charisma = list_of_scores[random.randint(0,len(list_of_scores)-1)]
+    list_of_scores.remove(Charisma)
+    
+    Name = Establishing_Hierarchy.Player_Character(Name,Class,Species,False,Level,Background,True,True,True,True,True,True,True,Strength,Dexterity,Constitution,Intelligence,Wisdom,Charisma,True,True,True,True)
+
+    Name.One_Minute_Options['Unlimited']
+
+    for i in range(Level):
+        if Class == Artificer.Artificer:
+            Name.Levels[i] = Artificer.Artificer
+        elif Class == Barbarian.Barbarian:
+            Name.Levels[i] = Barbarian.Barbarian
+        elif Class == Bard.Bard:
+            Name.Levels[i] = Bard.Bard
+        elif Class == Cleric.Cleric:
+            Name.Levels[i] = Cleric.Cleric
+        elif Class == Druid.Druid:
+            Name.Levels[i] = Druid.Druid
+        elif Class == Fighter.Fighter:
+            Name.Levels[i] = Fighter.Fighter
+        elif Class == Monk.Monk:
+            Name.Levels[i] = Monk.Monk
+        elif Class == Paladin.Paladin:
+            Name.Levels[i] = Paladin.Paladin
+        elif Class == Ranger.Ranger:
+            Name.Levels[i] = Ranger.Ranger
+        elif Class == Rogue.Rogue:
+            Name.Levels[i] = Rogue.Rogue
+        elif Class == Sorcerer.Sorcerer:
+            Name.Levels[i] = Sorcerer.Sorcerer
+        elif Class == Warlock.Warlock:
+            Name.Levels[i] = Warlock.Warlock
+        elif Class == Wizard.Wizard:
+            Name.Levels[i] = Wizard.Wizard
+        else:
+            pass
+
+    Name.HP = Establishing_Hierarchy.Predicted_Hit_Points(Name)
+    Name.Prof_Bonus = Establishing_Hierarchy.levelToProficiency(Name)
+
+    Artificer_Levels = Name.Levels.count(Artificer.Artificer)
+    Barbarian_Levels = Name.Levels.count(Barbarian.Barbarian)
+    Bard_Levels = Name.Levels.count(Bard.Bard)
+    Cleric_Levels = Name.Levels.count(Cleric.Cleric)
+    Druid_Levels = Name.Levels.count(Druid.Druid)
+    Fighter_Levels = Name.Levels.count(Fighter.Fighter)
+    Monk_Levels = Name.Levels.count(Monk.Monk)
+    Paladin_Levels = Name.Levels.count(Paladin.Paladin)
+    Ranger_Levels = Name.Levels.count(Ranger.Ranger)
+    Rogue_Levels = Name.Levels.count(Rogue.Rogue)
+    Sorcerer_Levels = Name.Levels.count(Sorcerer.Sorcerer)
+    Warlock_Levels = Name.Levels.count(Warlock.Warlock)
+    Wizard_Levels = Name.Levels.count(Wizard.Wizard)
+
+    if Artificer_Levels > 0:
+        Artificer.Run_Artificer(Name,Artificer_Levels)
+    if Barbarian_Levels > 0:
+        Barbarian.Run_Barbarian(Name,Barbarian_Levels)
+    if Bard_Levels > 0:
+        Bard.Run_Bard(Name,Bard_Levels)
+    if Cleric_Levels > 0:
+        Cleric.Run_Cleric(Name,Cleric_Levels)
+    if Druid_Levels > 0:        
+        Druid.Run_Druid(Name,Druid_Levels)
+    if Fighter_Levels > 0:
+        Fighter.Run_Fighter(Name,Fighter_Levels)
+    if Monk_Levels > 0:
+        Monk.Run_Monk(Name,Monk_Levels)
+    if Paladin_Levels > 0:
+        Paladin.Run_Paladin(Name,Paladin_Levels)
+    if Ranger_Levels > 0:
+        Ranger.Run_Ranger(Name,Ranger_Levels)
+    if Rogue_Levels > 0:
+        Rogue.Run_Rogue(Name,Rogue_Levels)
+    if Sorcerer_Levels > 0:
+        Sorcerer.Run_Sorcerer(Name,Sorcerer_Levels)
+    if Warlock_Levels > 0:
+        Warlock.Run_Warlock(Name,Warlock_Levels)
+    if Wizard_Levels > 0:
+        Wizard.Run_Wizard(Name,Wizard_Levels)
+    
+    Backgrounds.Take_Background(Background,Name)
+    S.Apply_Species(Species,Name)
+    
+    return Name
+
+Generate_Random_Character()
+
+# I want to use pytorch to create a function that will take all of a character's actions, bonus actions, spells, and effects and iteratively go through every possibly option and then return the option that deals the most damage
+# first I'll need to consider how to organize that into a tensor
+# the character can only choose one of each action, bonus action, and reaction, but can choose many effects depending on the action types...
+# so I'll need to create a tensor that has a place for action choice, bonus action choice, reaction choice, and then a place for a sub-tensor to store the effects of each action-type
+# so the tensor will be 4xN, where the rows represent Action, Bonus Action, Free Action, Reaction, and the columns are their own tensor that represents the effects of each action-type

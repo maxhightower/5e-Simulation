@@ -44,7 +44,6 @@ class Subspecies(Species):
 
 
 
-
 def Apply_Species(Species,Player_Character):
     # (Book: Any, Creature_Type: Any, Species_Sizes: Any, Species_Senses: Any, Species_Bonuses: Any, Movement_Speeds: Any, 
     # Species_Circumstances: Any, Species_Language_Prof: Any, Species_Skill_Profs: Any, Species_Weapon_Profs: Any, 
@@ -183,3 +182,7 @@ def Use_Breath_Weapon():
 #Orc = h.Species()
 
 #Half_Orc = h.Species()
+
+
+
+Species_List = [Human,Elf,Half_Elf,Dwarf]

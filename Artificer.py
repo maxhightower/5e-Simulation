@@ -30,7 +30,7 @@ Packs = [['Dungeoneers Pack']]
 Focus = []
 Gold = ['5d4']
 
-Artificer = Establishing_Hierarchy.Class("Artificer",8,["Constitution","Intelligence"],2,["Light","Medium","Shields"],["Simple","Firearms"],["Arcana","History","Investigation","Medicine","Nature","Perception","Sleight_Of_Hand"],["Thieves","Tinkers","Artisan"],"Intelligence",['Alchemist','Armorer','Artillerist','Battle_Smith'],["Magical_Tinkering","Spellcasting","Infuse_Item","The_Right_Tool_for_the_Job","Tool_Expertise","Magic_Item_Adept","Magic_Item_Savant","Magic_Item_Master","Soul_of_Artifice"],"Intelligence 13",Spell_Data.Artificer_Spell_List,"Half",
+Artificer = Establishing_Hierarchy.Class("Artificer",8,["Constitution","Intelligence"],2,["Light","Medium","Shields"],["Simple","Firearms"],["Arcana","History","Investigation","Medicine","Nature","Perception","Sleight_Of_Hand"],["Thieves","Tinkers","Artisan"],"Intelligence",['Alchemist,'Armorer','Artillerist','Battle_Smith'],["Magical_Tinkering","Spellcasting","Infuse_Item","The_Right_Tool_for_the_Job","Tool_Expertise","Magic_Item_Adept","Magic_Item_Savant","Magic_Item_Master","Soul_of_Artifice"],"Intelligence 13",Spell_Data.Artificer_Spell_List,"Half",
 {
   'Armor': Armor,
   'Weapons': Weapons,

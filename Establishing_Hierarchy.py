@@ -2,7 +2,6 @@
 import numpy as np
 from random import randrange
 import Dice_Rolls
-import Environment
 
 ##### Common Functions
 def levelToProficiency(Player_Character):

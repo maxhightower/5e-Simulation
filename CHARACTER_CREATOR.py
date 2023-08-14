@@ -278,12 +278,6 @@ def Create_Character(Name,Score_Generation_Method,Species,Subspecies,Class,Backg
     Name.HP = Establishing_Hierarchy.Predicted_Hit_Points(Name)
     Name.Prof_Bonus = Establishing_Hierarchy.levelToProficiency(Name)
     #Name.AC = 
- 
-
-    
-    
-
-    
 
     #print('Error After for i in Name.Levels')
 

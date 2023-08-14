@@ -11,7 +11,7 @@ from matplotlib import pyplot as plt
 from mpl_toolkits import mplot3d
 
 # Joey said to look into pygame
-import pygame
+#import pygame
 
 
  
@@ -56,7 +56,7 @@ Environments_List = ['Arctic','Coastal','Desert','Forest','Grassland','Hill','Mo
 
 Planes = ['Material Plane','Ethereal Plane','Astral Plane','Feywild','Shadowfell','Avernus','Celestia',
           'Plane of Fire','Plane of Water','Plane of Air','Plane of Earth','Abyss','Beastlands','Limbo','Mechanus','Demiplane']
-print(len(Planes))
+#print(len(Planes))
 
 
 Environment = (range(0, 12),range(0, 12),range(-12, 12))
@@ -161,6 +161,6 @@ def Generate_World(x,y,z):
                 global space_name
                 space_name = (str(i),'.',str(j),'.',str(k))
                 space_name = Space([i,j,k],'Bright','Quiet','Unoccupied','Air','None','Normal','Normal','Normal')
-                print(space_name.Coordinates)
+                #print(space_name.Coordinates)
 
-Generate_World(3,3,3)
+#Generate_World(3,3,3)

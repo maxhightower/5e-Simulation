@@ -2,28 +2,30 @@ import pandas
 #import Character_Actions
 
 import Species
-import Monsters
+#import Monsters
 import Backgrounds
 
-Target_Creature = input('Target: ')
-Target_Book = input('Source: ')
+#Target_Creature = input('Target: ')
+#Target_Book = input('Source: ')
 
-Target_ID = str(Target_Creature + ',' + Target_Book)
-Target = Monsters.monster_primes[Target_ID]
+#Target_ID = str(Target_Creature + ',' + Target_Book)
+#Target = Monsters.monster_primes[Target_ID]
 #Cleric.Target_Placeholder = Target
-print(Target)
+#print(Target)
 
-Target_Summary = {
-    'Name': [Target.Name],
-    'Book': [Target.Book],
-    'HP': [Target.HP],
-    'AC': [Target.AC],
-    'CR': [Target.CR],
-    'WRI': [Target.WRI]
-}
+Class_List = ['Barbarian','Cleric','Artificer','Bard','Druid','Fighter','Paladin','Monk','Rogue','Ranger','Sorcerer','Warlock','Wizard']
 
-Target_Summary2 = pandas.DataFrame.from_dict(Target_Summary)
-print(Target_Summary2)
+#Target_Summary = {
+#    'Name': [Target.Name],
+#    'Book': [Target.Book],
+#    'HP': [Target.HP],
+#    'AC': [Target.AC],
+#    'CR': [Target.CR],
+#    'WRI': [Target.WRI]
+#}
+
+#Target_Summary2 = pandas.DataFrame.from_dict(Target_Summary)
+#print(Target_Summary2)
 
 
 import CHARACTER_CREATOR
@@ -120,6 +122,7 @@ elif User_Species == 'Half Elf':
     User_Species_Data = Species.Half_Elf
 else:
     pass
+
 
 if User_Class == 'Barbarian':
     User_Class_Data = Barbarian.Barbarian
@@ -305,20 +308,20 @@ Player_Character_Sheet(Player_Character)
 
 #print(Player_Character.Saving_Throws[0])
 
-def Consider_Options(Player_Character,Target):
+#def Consider_Options(Player_Character,Target):
     # lets print every option that the character has 
-    for Action in Player_Character.Actions:
-        print(Action)
+#    for Action in Player_Character.Actions:
+#        print(Action)
 
-    for Spell in Player_Character.Spellcasting_Prepared['Artificer']:
-        print(Spell)
+    #for Spell in Player_Character.Spellcasting_Prepared['Artificer']:
+    #    print(Spell)
 
-    for Event in Player_Character.Effects:
-        print(Event)
-        for Subevent in Player_Character.Effects[Event]:
-            print(Subevent)
-            for Effect in Player_Character.Effects[Event][Subevent]:
-                print(Effect)
+#    for Event in Player_Character.Effects:
+#        print(Event)
+#        for Subevent in Player_Character.Effects[Event]:
+#            print(Subevent)
+#            for Effect in Player_Character.Effects[Event][Subevent]:
+#                print(Effect)
     
     #Player_Character.Bonus_Actions
     #Player_Character.Effects
@@ -334,4 +337,10 @@ def Consider_Options(Player_Character,Target):
     #Target.Int_Score
     #Target.Wis_Score
     #Target.Cha_Score
-Consider_Options(Player_Character,Target)
+#Consider_Options(Player_Character,Target)
+
+# I want to use pytorch to create a function that will take all of a character's actions, bonus actions, spells, and effects and iteratively go through every possibly option and then return the option that deals the most damage
+# first I'll need to consider how to organize that into a tensor
+# the character can only choose one of each action, bonus action, and reaction, but can choose many effects depending on the action types...
+# so I'll need to create a tensor that has a place for action choice, bonus action choice, reaction choice, and then a place for a sub-tensor to store the effects of each action-type
+# so the tensor will be 4xN, where the rows represent Action, Bonus Action, Free Action, Reaction, and the columns are their own tensor that represents the effects of each action-type

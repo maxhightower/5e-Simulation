@@ -229,7 +229,7 @@ for spell in Spells.index:
        #print(Spell_Effects)
 
        Effect_Type = Spells.iloc[spell,42]
-       print(Effect_Type)
+       #print(Effect_Type)
 
        if Effect_Type != float:
               Effect_String = str(Effect_Type)
@@ -238,7 +238,7 @@ for spell in Spells.index:
               Effect_Type = 'nan'
               Effect_List = ['None']
 
-       print(Effect_List)
+       #print(Effect_List)
        for effect in Effect_List:
               Effect_List_Types = []
               if effect == 'Buff_Circumstance':
