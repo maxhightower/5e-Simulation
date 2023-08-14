@@ -185,12 +185,14 @@ def Run_Warlock(Player_Character, Level):
 
 
 
-# Hexblade
-# Celestial
-# Fiend
-# Great Old One
-# Fathomless
-# Archfey
-# Undead
-# Undying
+Hexblade = Establishing_Hierarchy.Subclass(Warlock,[],False)
+Celestial = Establishing_Hierarchy.Subclass(Warlock,[],False)
+Fiend = Establishing_Hierarchy.Subclass(Warlock,[],False)
+Great_Old_One = Establishing_Hierarchy.Subclass(Warlock,[],False)
+Fathomless = Establishing_Hierarchy.Subclass(Warlock,[],False)
+Archfey = Establishing_Hierarchy.Subclass(Warlock,[],False)
+Undead = Establishing_Hierarchy.Subclass(Warlock,[],False)
+Undying = Establishing_Hierarchy.Subclass(Warlock,[],False)
 
+Warlock_Subclasses = [Hexblade,Celestial,Fiend,Great_Old_One,Fathomless,Archfey,Undead,Undying]
+Warlock.Subclass = Warlock_Subclasses

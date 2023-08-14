@@ -209,3 +209,17 @@ def Run_Wizard(Player_Character, Level):
 # Transmutation
 # War Magic
 # 
+
+Abjuration = Establishing_Hierarchy.Subclass(Wizard,[],False)
+Bladesinging = Establishing_Hierarchy.Subclass(Wizard,[],False)
+Conjuration = Establishing_Hierarchy.Subclass(Wizard,[],False)
+Divination = Establishing_Hierarchy.Subclass(Wizard,[],False)
+Evocation = Establishing_Hierarchy.Subclass(Wizard,[],False)
+Enchantment = Establishing_Hierarchy.Subclass(Wizard,[],False)
+Illusion = Establishing_Hierarchy.Subclass(Wizard,[],False)
+Scribes = Establishing_Hierarchy.Subclass(Wizard,[],False)
+Necromancy = Establishing_Hierarchy.Subclass(Wizard,[],False)
+Transmutation = Establishing_Hierarchy.Subclass(Wizard,[],False)
+War_Magic = Establishing_Hierarchy.Subclass(Wizard,[],False)
+
+Wizard_Subclasses = [Abjuration,Bladesinging,Conjuration,Divination,Evocation,Enchantment,Illusion,Scribes,Necromancy,Transmutation,War_Magic]
