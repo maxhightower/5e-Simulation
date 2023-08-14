@@ -447,3 +447,15 @@ def Apply_Swarming_Dispersal(Player_Character):
   pass
 
 
+
+Beast_Master = Establishing_Hierarchy.Subclass(Ranger,[],False)
+Monster_Slayer = Establishing_Hierarchy.Subclass(Ranger,[],False)
+Drakewarden = Establishing_Hierarchy.Subclass(Ranger,[],False)
+Gloomstalker = Establishing_Hierarchy.Subclass(Ranger,[],False)
+Swarmkeeper = Establishing_Hierarchy.Subclass(Ranger,[],False)
+Hunter = Establishing_Hierarchy.Subclass(Ranger,[],False)
+Horizon_Walker = Establishing_Hierarchy.Subclass(Ranger,[],False)
+Fey_Wanderer = Establishing_Hierarchy.Subclass(Ranger,[],False)
+
+Ranger_Subclasses = [Beast_Master,Monster_Slayer,Drakewarden,Gloomstalker,Swarmkeeper,Hunter,Horizon_Walker,Fey_Wanderer]
+Ranger.Subclasses = Ranger_Subclasses

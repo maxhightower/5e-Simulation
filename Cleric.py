@@ -766,3 +766,17 @@ def Apply_War_Gods_Blessing(Player_Character):
 #Divine_Strike
 #Avatar_of_Battle
 
+Arcana = Establishing_Hierarchy.Subclass(Cleric,[],False)
+Death = Establishing_Hierarchy.Subclass(Cleric,[],False)
+Grave = Establishing_Hierarchy.Subclass(Cleric,[],False)
+Knowledge = Establishing_Hierarchy.Subclass(Cleric,[],False)
+Forge = Establishing_Hierarchy.Subclass(Cleric,[],False)
+Life = Establishing_Hierarchy.Subclass(Cleric,[],False)
+Light = Establishing_Hierarchy.Subclass(Cleric,[],False)
+War = Establishing_Hierarchy.Subclass(Cleric,[],False)
+Tempest = Establishing_Hierarchy.Subclass(Cleric,[],False)
+Trickery = Establishing_Hierarchy.Subclass(Cleric,[],False)
+Twilight = Establishing_Hierarchy.Subclass(Cleric,[],False)
+
+Cleric_Subclasses = [Arcana,Death,Grave,Knowledge,Forge,Life,Light,War,Tempest,Trickery,Twilight]
+Cleric.Subclasses = Cleric_Subclasses

@@ -526,3 +526,15 @@ def Champion_Two(Player_Character):
 #Master_of_Runes 
 #Additional_Runes_Known
 #Runic_Juggernaut
+
+Echo_Knight = Establishing_Hierarchy.Subclass(Fighter,[],False)
+Arcane_Archer = Establishing_Hierarchy.Subclass(Fighter,[],False)
+Eldritch_Knight = Establishing_Hierarchy.Subclass(Fighter,[],True)
+Rune_Knight = Establishing_Hierarchy.Subclass(Fighter,[],False)
+Cavalier = Establishing_Hierarchy.Subclass(Fighter,[],False)
+Champion = Establishing_Hierarchy.Subclass(Fighter,[],False)
+Samurai = Establishing_Hierarchy.Subclass(Fighter,[],False)
+Battle_Master = Establishing_Hierarchy.Subclass(Fighter,[],False)
+
+Fighter_Subclasses = [Echo_Knight,Arcane_Archer,Eldritch_Knight,Rune_Knight,Cavalier,Champion,Samurai,Battle_Master]
+Fighter.Subclasses = Fighter_Subclasses

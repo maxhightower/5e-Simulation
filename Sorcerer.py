@@ -256,16 +256,16 @@ def Run_Sorcerer(Player_Character, Level):
 
 
 
-# Aberrant
-# Clockwork
-# Divine
-# Lunar
-# Shadow
-# Storm
-# Genie
+Aberrant_Mind = Establishing_Hierarchy.Subclass(Sorcerer,[],False)
+Clockwork = Establishing_Hierarchy.Subclass(Sorcerer,[],False)
+Divine = Establishing_Hierarchy.Subclass(Sorcerer,[],False)
+Lunar = Establishing_Hierarchy.Subclass(Sorcerer,[],False)
+Shadow = Establishing_Hierarchy.Subclass(Sorcerer,[],False)
+Storm = Establishing_Hierarchy.Subclass(Sorcerer,[],False)
+Genie = Establishing_Hierarchy.Subclass(Sorcerer,[],False)
     # Djinn
     # Efreeti
     # Marid
     # Dao
-# Draconic
-# Wild Magic
+Draconic = Establishing_Hierarchy.Subclass(Sorcerer,[],False)
+Wild_Magic = Establishing_Hierarchy.Subclass(Sorcerer,[],False)
