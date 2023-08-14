@@ -26,19 +26,24 @@ Class_List = [Barbarian.Barbarian,Cleric.Cleric,Artificer.Artificer,Bard.Bard,Dr
 def Generate_Random_Character():
     Name = "John_Smith"
     Species = random.choice(S.Species_List)
+    print(Species)
     Background = random.choice(Backgrounds.Background_Options)
+    print(Background)
     Level = random.randint(1,20)
+    print(Level)
     # I could also go random by level, so that multiclassing can happen at any point
-    Num_Classes_to_Take = random.randint(1,min(Level,len(Class_List)),1)
+    Num_Classes_to_Take = random.randint(1,min(Level,len(Class_List)))
+    print(Num_Classes_to_Take)
     Class_Choices = []
-    for i in Num_Classes_to_Take:
+    for i in range(0,Num_Classes_to_Take,1):
         Class = random.choice(Class_List)
+        print(Class.Name)
         Class_Choices.append([Class])
         Subclass = random.choice(Class.Subclasses)
+        print(Subclass)
         Class_Choices[i].append(Subclass)
 
     list_of_scores = CHARACTER_CREATOR.Use_Standard_Array()
-    #randomly assign each number in list_of_scores to a stat
     Strength = list_of_scores[random.randint(0,len(list_of_scores)-1)]
     list_of_scores.remove(Strength)
     Dexterity = list_of_scores[random.randint(0,len(list_of_scores)-1)]

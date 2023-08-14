@@ -5,7 +5,7 @@ import Spell_Data
 
 # Sorcerer
 
-Sorcerer = Establishing_Hierarchy.Class('Sorcerer',6,['Constitution', 'Charisma'],2,False,['Dagger','Dart','Sling','Quarter_Staff','Light_Crossbow'],['Arcana','Deception','Insight','Intimidation','Persuasion','Religion'],False,"Charisma",{"Draconic","Wild_Magic","Aberrant_Mind","Clockwork_Soul","Shadow","Storm","Divine_Soul"},{"Spellcasting","Font_of_Magic","Metamagic","Metamagic","Metamagic","Sorcerous_Restoration"},["Charisma 13"],Spell_Data.Sorcerer_Spell_List,'Full',
+Sorcerer = Establishing_Hierarchy.Class('Sorcerer',6,['Constitution', 'Charisma'],2,False,['Dagger','Dart','Sling','Quarter_Staff','Light_Crossbow'],['Arcana','Deception','Insight','Intimidation','Persuasion','Religion'],False,"Charisma",["Draconic","Wild_Magic","Aberrant_Mind","Clockwork_Soul","Shadow","Storm","Divine_Soul"],["Spellcasting","Font_of_Magic","Metamagic","Metamagic","Metamagic","Sorcerous_Restoration"],["Charisma 13"],Spell_Data.Sorcerer_Spell_List,'Full',
 {
     
 })

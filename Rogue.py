@@ -7,7 +7,7 @@ import Character_Actions
 
 # Rogue
 
-Rogue = Establishing_Hierarchy.Class('Rogue',8,['Dexterity', 'Intelligence'],4,["Light"],["Simple","Hand_Crossbow",'Longsword','Rapier','Shortsword'],["Acrobatics",'Athletics','Deception','Insight','Intimidation','Investigation','Perception','Performance','Persuasion','Sleight_Of_Hand','Stealth'],["Theives_Tools"],False,{"Arcane_Trickster","Assassin","Inquisitive","Mastermind","Phantom","Scout","Soulknife","Swashbuckler","Thief"},{"Expertise","Sneak_Attack","Thieves'_Cant","Cunning_Action","Uncanny_Dodge","Expertise","Evasion","Reliable_Talent","Blindsense","Slippery_Mind","Elusive","Stroke_of_Luck"},["Dexterity 13"],False,False,
+Rogue = Establishing_Hierarchy.Class('Rogue',8,['Dexterity', 'Intelligence'],4,["Light"],["Simple","Hand_Crossbow",'Longsword','Rapier','Shortsword'],["Acrobatics",'Athletics','Deception','Insight','Intimidation','Investigation','Perception','Performance','Persuasion','Sleight_Of_Hand','Stealth'],["Theives_Tools"],False,["Arcane_Trickster","Assassin","Inquisitive","Mastermind","Phantom","Scout","Soulknife","Swashbuckler","Thief"],["Expertise","Sneak_Attack","Thieves'_Cant","Cunning_Action","Uncanny_Dodge","Expertise","Evasion","Reliable_Talent","Blindsense","Slippery_Mind","Elusive","Stroke_of_Luck"],["Dexterity 13"],False,False,
 {
     
 })

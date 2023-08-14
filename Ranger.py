@@ -6,7 +6,7 @@ import Character_Actions
 
 # Ranger
 
-Ranger = Establishing_Hierarchy.Class('Ranger',10,["Dexterity", "Strength"],2,["Light","Medium","Shields"],["Simple","Martial"],["Animal_Handling","Athletics","Insight","Investigation","Nature","Perception","Stealth","Survival"],False,"Wisdom",{"Gloomstalker","Hunter","Beast_Master","Drake_Warden","Fey_Wanderer","Horizon_Walker","Monster_Slayer"},{"Favored_Enemy","Natural_Explorer","Fighting_Style","Ranger_Spellcasting","Primeval_Awareness","Extra_Attack","Land's_Stride","Hide_in_Plain_Sight","Natural_Explorer_Improvement","Vanish","Feral_Sense","Foe_Slayer"},["Dexterity 13","Wisdom 13"],Spell_Data.Ranger_Spell_List,'Half',
+Ranger = Establishing_Hierarchy.Class('Ranger',10,["Dexterity", "Strength"],2,["Light","Medium","Shields"],["Simple","Martial"],["Animal_Handling","Athletics","Insight","Investigation","Nature","Perception","Stealth","Survival"],False,"Wisdom",["Gloomstalker","Hunter","Beast_Master","Drake_Warden","Fey_Wanderer","Horizon_Walker","Monster_Slayer"],["Favored_Enemy","Natural_Explorer","Fighting_Style","Ranger_Spellcasting","Primeval_Awareness","Extra_Attack","Land's_Stride","Hide_in_Plain_Sight","Natural_Explorer_Improvement","Vanish","Feral_Sense","Foe_Slayer"],["Dexterity 13","Wisdom 13"],Spell_Data.Ranger_Spell_List,'Half',
 {
     
 })

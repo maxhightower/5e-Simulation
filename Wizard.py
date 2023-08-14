@@ -5,7 +5,7 @@ import Spell_Data
 
 # Wizard
 
-Wizard = Establishing_Hierarchy.Class('Wizard',6,['Wisdom', 'Intelligence'],2,False,['Dagger','Dart','Sling','Quarter_Staff','Light_Crossbow'],['Arcana','History','Insight','Investigation','Medicine','Religion'],False,"Intelligence",{"Abjuration","Conjuration","Chronurgy","Divination","Bladesinging","Evocation","Illusion","Necromancy","Transmutation","Scribes","War","Graviturgy","Enchantment"},{"Arcane_Recovery","Spellcasting","Spell_Mastery","Signature_Spells"},"Intelligence 13",Spell_Data.Wizard_Spell_List,'Full',
+Wizard = Establishing_Hierarchy.Class('Wizard',6,['Wisdom', 'Intelligence'],2,False,['Dagger','Dart','Sling','Quarter_Staff','Light_Crossbow'],['Arcana','History','Insight','Investigation','Medicine','Religion'],False,"Intelligence",["Abjuration","Conjuration","Chronurgy","Divination","Bladesinging","Evocation","Illusion","Necromancy","Transmutation","Scribes","War","Graviturgy","Enchantment"],["Arcane_Recovery","Spellcasting","Spell_Mastery","Signature_Spells"],"Intelligence 13",Spell_Data.Wizard_Spell_List,'Full',
 {
     
 })

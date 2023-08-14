@@ -5,7 +5,7 @@ import Spell_Data
 
 # Warlock
 
-Warlock = Establishing_Hierarchy.Class('Warlock',8,['Wisdom', 'Charisma'],2,['Light','Medium','Shields'],['Simple'],['Arcana','Deception','History','Intimidation','Investigation','Nature','Religion'],False,"Charisma",{"Fiend","Archfey","Fathomless","Genie","Celestial","Undying","Undead","Great_Old_One","Hexblade"},{"Pact_Magic","Eldritch_Invocations","Mystic_Arcanum(6th_Level)","Mystic_Arcanum(7th_Level)","Mystic_Arcanum(8th_Level)","Mystic_Arcanum(9th_Level)","Eldritch_Master"},"Charisma 13",Spell_Data.Warlock_Spell_List,'Full',
+Warlock = Establishing_Hierarchy.Class('Warlock',8,['Wisdom', 'Charisma'],2,['Light','Medium','Shields'],['Simple'],['Arcana','Deception','History','Intimidation','Investigation','Nature','Religion'],False,"Charisma",["Fiend","Archfey","Fathomless","Genie","Celestial","Undying","Undead","Great_Old_One","Hexblade"],["Pact_Magic","Eldritch_Invocations","Mystic_Arcanum(6th_Level)","Mystic_Arcanum(7th_Level)","Mystic_Arcanum(8th_Level)","Mystic_Arcanum(9th_Level)","Eldritch_Master"],"Charisma 13",Spell_Data.Warlock_Spell_List,'Full',
 {
     
 })

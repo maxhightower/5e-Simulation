@@ -5,7 +5,7 @@ import Spell_Data
 
 # Paladin
 
-Paladin = Establishing_Hierarchy.Class('Paladin',10,["Wisdom", "Charisma"],2,["Light","Medium","Heavy","Shields"],["Simple","Martial"],["Athletics","Insight","Intimidation","Medicine","Persuasion","Religion"],False,"Charisma",{"Conquest","Redemption","Watchers","Ancients","Glory","Devotion","Crown","Vengeance"},{"Divine_Sense","Lay_On_Hands","Divine_Smite","Fighting_Style","Paladin_Spellcasting","Divine_Health","Extra_Attack","Aura_of_Protection","Aura_of_Courage","Improved_Divine_Smite","Cleansing_Touch","Aura_Improvements"},["Strength 13","Charisma 13"],Spell_Data.Paladin_Spell_List,'Half',
+Paladin = Establishing_Hierarchy.Class('Paladin',10,["Wisdom", "Charisma"],2,["Light","Medium","Heavy","Shields"],["Simple","Martial"],["Athletics","Insight","Intimidation","Medicine","Persuasion","Religion"],False,"Charisma",["Conquest","Redemption","Watchers","Ancients","Glory","Devotion","Crown","Vengeance"],{"Divine_Sense","Lay_On_Hands","Divine_Smite","Fighting_Style","Paladin_Spellcasting","Divine_Health","Extra_Attack","Aura_of_Protection","Aura_of_Courage","Improved_Divine_Smite","Cleansing_Touch","Aura_Improvements"},["Strength 13","Charisma 13"],Spell_Data.Paladin_Spell_List,'Half',
 {
   
 })

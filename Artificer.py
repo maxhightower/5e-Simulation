@@ -30,7 +30,7 @@ Packs = [['Dungeoneers Pack']]
 Focus = []
 Gold = ['5d4']
 
-Artificer = Establishing_Hierarchy.Class("Artificer",8,["Constitution","Intelligence"],2,["Light","Medium","Shields"],["Simple","Firearms"],["Arcana","History","Investigation","Medicine","Nature","Perception","Sleight_Of_Hand"],["Thieves","Tinkers","Artisan"],"Intelligence",['Alchemist,'Armorer','Artillerist','Battle_Smith'],["Magical_Tinkering","Spellcasting","Infuse_Item","The_Right_Tool_for_the_Job","Tool_Expertise","Magic_Item_Adept","Magic_Item_Savant","Magic_Item_Master","Soul_of_Artifice"],"Intelligence 13",Spell_Data.Artificer_Spell_List,"Half",
+Artificer = Establishing_Hierarchy.Class("Artificer",8,["Constitution","Intelligence"],2,["Light","Medium","Shields"],["Simple","Firearms"],["Arcana","History","Investigation","Medicine","Nature","Perception","Sleight_Of_Hand"],["Thieves","Tinkers","Artisan"],"Intelligence",['Alchemist','Armorer','Artillerist','Battle_Smith'],["Magical_Tinkering","Spellcasting","Infuse_Item","The_Right_Tool_for_the_Job","Tool_Expertise","Magic_Item_Adept","Magic_Item_Savant","Magic_Item_Master","Soul_of_Artifice"],"Intelligence 13",Spell_Data.Artificer_Spell_List,"Half",
 {
   'Armor': Armor,
   'Weapons': Weapons,
@@ -694,20 +694,20 @@ def Artificer_Run_Subclass(Player_Character):
   if Player_Character.Levels.count(Artificer) >= 3:
     Artificer_Choose_Subclass(Player_Character)
   
-  Current_Subclass_Location_in_Artificer = Artificer.Subclass.index(Player_Character.Subclasses[Current_Subclass_Number])
+  Current_Subclass_Location_in_Artificer = Artificer.Subclasses.index(Player_Character.Subclasses[Current_Subclass_Number])
 
   if Player_Character.Levels.count(Artificer) >= 5:  # I know I had a logical reason for doing it like this but I'm having trouble remembering why # the intention was to avoid issues during multiclassing                    # so that if there was a different subclass taken first, we could still locate the Artificer subclass
-    Artificer.Subclass[Current_Subclass_Location_in_Artificer].Feature['2']
+    Artificer.Subclasses[Current_Subclass_Location_in_Artificer].Feature['2']
   else:
     pass
   
   if Player_Character.Levels.count(Artificer) >= 9:    # But I already created the function Run_Battle_Smith
-    Artificer.Subclass[Current_Subclass_Location_in_Artificer].Feature['3']
+    Artificer.Subclasses[Current_Subclass_Location_in_Artificer].Feature['3']
   else:
     pass
 
   if Player_Character.Levels.count(Artificer) >= 15:
-    Artificer.Subclass[Current_Subclass_Location_in_Artificer].Feature['4']
+    Artificer.Subclasses[Current_Subclass_Location_in_Artificer].Feature['4']
   else:
     pass
 
@@ -854,9 +854,9 @@ def Run_Artificer(Player_Character,Level):
     pass
 
 Battle_Smith = Establishing_Hierarchy.Subclass(Artificer,[],False)
-print(Artificer.Subclass)
+print(Artificer.Subclasses)
 #Artificer.Subclass.remove(Artificer.Subclass[3])
-Artificer.Subclass.append(Battle_Smith)
+Artificer.Subclasses.append(Battle_Smith)
 
 # Tools of the Trade
 def Battle_Smith_Tools_of_the_Trade(Player_Character):
@@ -1064,7 +1064,7 @@ def Apply_Battle_Smith(Player_Character):
 
 Artillerist = Establishing_Hierarchy.Subclass(Artificer,[],False)
 #Artificer.Subclass.remove('Artillerist')
-Artificer.Subclass.append(Artillerist)
+Artificer.Subclasses.append(Artillerist)
 
 # Tools of the Trade
 def Artillerist_Tools_of_the_Trade(Player_Character):
@@ -1192,7 +1192,7 @@ def Apply_Artillerist(Player_Character):
 
 Armorer = Establishing_Hierarchy.Subclass(Artificer,[],False)
 #Artificer.Subclass.remove('Armorer')
-Artificer.Subclass.append(Armorer)
+Artificer.Subclasses.append(Armorer)
 
 #Tools of the Trade
 def Armorer_Tools_of_the_Trade(Player_Character):
@@ -1303,7 +1303,7 @@ def Apply_Armorer(Player_Character):
 
 Alchemist = Establishing_Hierarchy.Subclass(Artificer,[],False)
 #Artificer.Subclass.remove('Alchemist')
-Artificer.Subclass.append(Alchemist)
+Artificer.Subclasses.append(Alchemist)
 
 ## Alchemist
 # Tool_Profiencies

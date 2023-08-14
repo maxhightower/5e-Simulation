@@ -1124,7 +1124,7 @@ class Class:
     self.Skill_Profs = []
     self.Tool_Profs = []
     self.Spellcasting_Ability = Spellcasting_Ability
-    self.Subclass = []
+    self.Subclasses = []
     self.Features = []
     self.MultiClassing_Requirement = []
     self.Spell_List = []
