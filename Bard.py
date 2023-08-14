@@ -344,6 +344,26 @@ def Run_Bard(Player_Character,Level):
   else:
     pass
 
+# bard subclasses:
+# Lore
+Lore = Establishing_Hierarchy.Subclass(Bard,[],False)
+# Valor
+Valor = Establishing_Hierarchy.Subclass(Bard,[],False)
+# Glamour
+Glamour = Establishing_Hierarchy.Subclass(Bard,[],False)
+# Swords
+Swords = Establishing_Hierarchy.Subclass(Bard,[],False)
+# Whispers
+Whispers = Establishing_Hierarchy.Subclass(Bard,[],False)
+# Eloquence
+Eloquence = Establishing_Hierarchy.Subclass(Bard,[],False)
+# Creation
+Creation = Establishing_Hierarchy.Subclass(Bard,[],False)
+
+Bard_Subclasses = [Lore,Valor,Glamour,Swords,Whispers,Eloquence,Creation]
+Bard.Subclasses = Bard_Subclasses
+
+
 
 #Mote_of_Potential
 #Mote_Ability_Check = Effects.Buff_Replacement_Effect()

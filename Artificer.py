@@ -854,9 +854,6 @@ def Run_Artificer(Player_Character,Level):
     pass
 
 Battle_Smith = Establishing_Hierarchy.Subclass(Artificer,[],False)
-print(Artificer.Subclasses)
-#Artificer.Subclass.remove(Artificer.Subclass[3])
-Artificer.Subclasses.append(Battle_Smith)
 
 # Tools of the Trade
 def Battle_Smith_Tools_of_the_Trade(Player_Character):
@@ -1063,8 +1060,6 @@ def Apply_Battle_Smith(Player_Character):
 
 
 Artillerist = Establishing_Hierarchy.Subclass(Artificer,[],False)
-#Artificer.Subclass.remove('Artillerist')
-Artificer.Subclasses.append(Artillerist)
 
 # Tools of the Trade
 def Artillerist_Tools_of_the_Trade(Player_Character):
@@ -1191,8 +1186,6 @@ def Apply_Artillerist(Player_Character):
 
 
 Armorer = Establishing_Hierarchy.Subclass(Artificer,[],False)
-#Artificer.Subclass.remove('Armorer')
-Artificer.Subclasses.append(Armorer)
 
 #Tools of the Trade
 def Armorer_Tools_of_the_Trade(Player_Character):
@@ -1303,7 +1296,7 @@ def Apply_Armorer(Player_Character):
 
 Alchemist = Establishing_Hierarchy.Subclass(Artificer,[],False)
 #Artificer.Subclass.remove('Alchemist')
-Artificer.Subclasses.append(Alchemist)
+
 
 ## Alchemist
 # Tool_Profiencies
@@ -1466,3 +1459,5 @@ def Apply_Alchemist(Player_Character):
       Alchemist.Feature[3]
 
 
+Artificer_Subclasses = [Battle_Smith,Artillerist,Armorer,Alchemist]
+Artificer.Subclasses = Artificer_Subclasses

@@ -806,3 +806,7 @@ def Unstable_Backlash(Player_Character):
 #	Controlled Surge
 def Controlled_Surge(Player_Character):
   pass
+
+
+Barbarian_Subclasses = [Berserker,Ancestral_Guardians]
+Barbarian.Subclasses = Barbarian_Subclasses

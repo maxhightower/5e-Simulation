@@ -21,7 +21,21 @@ import Establishing_Hierarchy
 import CHARACTER_CREATOR
 
 Class_List = [Barbarian.Barbarian,Cleric.Cleric,Artificer.Artificer,Bard.Bard,Druid.Druid,Fighter.Fighter,Paladin.Paladin,Monk.Monk,Rogue.Rogue,Ranger.Ranger,Sorcerer.Sorcerer,Warlock.Warlock,Wizard.Wizard]
-
+Class_Subclass_Level = {
+    'Artificer': 3,
+    'Barbarian': 3,
+    'Bard': 3,
+    'Cleric': 1,
+    'Druid': 2,
+    'Fighter': 3,
+    'Monk': 3,
+    'Paladin': 3,
+    'Ranger': 3,
+    'Rogue': 3,
+    'Sorcerer': 1,
+    'Warlock': 1,
+    'Wizard': 2
+}
 
 def Generate_Random_Character():
     Name = "John_Smith"
@@ -29,19 +43,48 @@ def Generate_Random_Character():
     print(Species)
     Background = random.choice(Backgrounds.Background_Options)
     print(Background)
+
+
     Level = random.randint(1,20)
-    print(Level)
+    print('Level:',Level)
     # I could also go random by level, so that multiclassing can happen at any point
+    # they've chosen their total level already, now they choose how many classes to take
     Num_Classes_to_Take = random.randint(1,min(Level,len(Class_List)))
-    print(Num_Classes_to_Take)
+    print('Different Classes:',Num_Classes_to_Take)
+    # now they choose how to split the levels among the classes
+    Class_Level_Allocation = []
+    Levels_Remaining = Level
+    print('Levels Remaining:',Levels_Remaining)
+    xclass = Level - Num_Classes_to_Take
+    print('xclass:',xclass)
+    for i in range(0,Num_Classes_to_Take,1): # for each class they're taking
+        print('start of loop')
+        if i+1 == Num_Classes_to_Take: # if it's the last class they're taking
+            Class_Level_Allocation.append(Levels_Remaining) # give it all the remaining levels
+            print('last level allocated')
+        else:
+            print('allocating random amount')
+            random_amount = random.randint(1,xclass)
+            print('Random Amount:',random_amount)
+            Class_Level_Allocation.append(random_amount) # give it a random number of levels
+
+        Levels_Remaining = Levels_Remaining - Class_Level_Allocation[i] # subtract the number of levels given from the total levels remaining
+    print('Class Level Allocation:',Class_Level_Allocation)
+    print('Levels Remaining:',Levels_Remaining)
+
     Class_Choices = []
     for i in range(0,Num_Classes_to_Take,1):
-        Class = random.choice(Class_List)
+        Personal_Class_List = [Barbarian.Barbarian,Cleric.Cleric,Artificer.Artificer,Bard.Bard,Druid.Druid,Fighter.Fighter,Paladin.Paladin,Monk.Monk,Rogue.Rogue,Ranger.Ranger,Sorcerer.Sorcerer,Warlock.Warlock,Wizard.Wizard]
+        Class = random.choice(Personal_Class_List)
         print(Class.Name)
         Class_Choices.append([Class])
-        Subclass = random.choice(Class.Subclasses)
-        print(Subclass)
-        Class_Choices[i].append(Subclass)
+        Personal_Class_List.remove(Class)
+        Levels_Remaining = Levels_Remaining - 1
+
+        if Class_Level_Allocation[i] >= Class_Subclass_Level[Class.Name]:
+            Subclass = random.choice(Class.Subclasses)
+            print(Subclass)
+            Class_Choices[i].append(Subclass)
 
     list_of_scores = CHARACTER_CREATOR.Use_Standard_Array()
     Strength = list_of_scores[random.randint(0,len(list_of_scores)-1)]
