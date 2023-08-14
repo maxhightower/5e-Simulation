@@ -275,9 +275,11 @@ Barbarian_Subclasses = ['Ancestral Protectors','Beast','Berserker','Storm Herald
 
 
 def Choose_Barbarian_Subclass(Player_Character):
-  Subclass = input('Subclass: ')
+  #Subclass = input('Subclass: ')
+  Subclass = 'print'
   if Subclass not in Barbarian_Subclasses:
-    print('Barbarian Subclass Not Found')
+    #print('Barbarian Subclass Not Found')
+    pass
   return Subclass
 
 

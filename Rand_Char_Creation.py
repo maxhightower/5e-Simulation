@@ -59,7 +59,7 @@ def Generate_Random_Character():
         if i+1 == Num_Classes_to_Take: # if it's the last class they're taking
             Class_Level_Allocation.append(Levels_Remaining) # give it all the remaining levels
         else:
-            random_amount = random.randint(1,xclass)
+            random_amount = random.randint(0,xclass) + 1
             Class_Level_Allocation.append(random_amount) # give it a random number of levels
 
         Levels_Remaining = Levels_Remaining - Class_Level_Allocation[i] # subtract the number of levels given from the total levels remaining
@@ -76,7 +76,7 @@ def Generate_Random_Character():
 
         if Class_Level_Allocation[i] >= Class_Subclass_Level[Class.Name]:
             Subclass = random.choice(Class.Subclasses)
-            print(Subclass)
+            print(Subclass.Name)
             Class_Choices[i].append(Subclass)
 
     list_of_scores = CHARACTER_CREATOR.Use_Standard_Array()

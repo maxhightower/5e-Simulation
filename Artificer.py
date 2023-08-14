@@ -656,44 +656,43 @@ def Apply_Soul_of_Artifice(Player_Character):
 #  Player_Character.Current_HP = 1
 #   Prompt a user to pick an item to drop attunement with
 
-def Artificer_Run_Subclass(Player_Character):
+def Artificer_Run_Subclass(Player_Character,Subclass):
   Current_Subclass_Number = 9 - Player_Character.Subclasses.count(False)
+
+  def Artificer_Choose_Subclass(Player_Character,Subclass):
+    if Subclass == "":
+      Artificer_Choice = input('Which Subclass: ')
+
+      if Artificer_Choice == 'Battle Smith' or Artificer_Choice == 'Battlesmith':
+        Player_Character.Subclasses[Current_Subclass_Number] = Battle_Smith
+        Apply_Battle_Smith(Player_Character)
+        Battle_Smith.Feature['1']
+
+      elif Artificer_Choice == 'Alchemist':
+        Player_Character.Subclasses[Current_Subclass_Number] = Alchemist
+        Apply_Alchemist(Player_Character)
+        Alchemist.Feature['1']
+
+      elif Artificer_Choice == 'Artillerist':
+        Player_Character.Subclasses[Current_Subclass_Number] = Artillerist
+        Apply_Artillerist(Player_Character)
+        Artillerist.Feature['1']
+
+      elif Artificer_Choice == 'Armorer':
+        Player_Character.Subclasses[Current_Subclass_Number] = Armorer
+        Apply_Armorer(Player_Character)
+        Armorer.Feature['1']
+
+      else:
+        print('Cannot find Artificer Subclass',Artificer_Choice)
   
+    if Player_Character.Levels.count(Artificer) >= 3 and Subclass == "":
+      Artificer_Choose_Subclass(Player_Character,"")
+    elif Player_Character.Levels.count(Artificer) >= 3 and Subclass != "":
+      Artificer_Choose_Subclass(Player_Character,Subclass)
+    else: pass
 
 
-  def Artificer_Choose_Subclass(Player_Character):
-    Artificer_Choice = input('Which Subclass: ')
-    
-    if Artificer_Choice == 'Battle Smith' or Artificer_Choice == 'Battlesmith':
-      Player_Character.Subclasses[Current_Subclass_Number] = Battle_Smith
-      Apply_Battle_Smith(Player_Character)
-      print(Battle_Smith.Feature)
-      Battle_Smith.Feature['1']
-
-    elif Artificer_Choice == 'Alchemist':
-      Player_Character.Subclasses[Current_Subclass_Number] = Alchemist
-      Apply_Alchemist(Player_Character)
-      print(Alchemist.Feature)
-      Alchemist.Feature['1']
-
-    elif Artificer_Choice == 'Artillerist':
-      Player_Character.Subclasses[Current_Subclass_Number] = Artillerist
-      Apply_Artillerist(Player_Character)
-      Artillerist.Feature['1']
-
-    elif Artificer_Choice == 'Armorer':
-      Player_Character.Subclasses[Current_Subclass_Number] = Armorer
-      Apply_Armorer(Player_Character)
-      Armorer.Feature['1']
-
-    else:
-      print('Cannot find Artificer Subclass',Artificer_Choice)
-
-
-  
-  if Player_Character.Levels.count(Artificer) >= 3:
-    Artificer_Choose_Subclass(Player_Character)
-  
   Current_Subclass_Location_in_Artificer = Artificer.Subclasses.index(Player_Character.Subclasses[Current_Subclass_Number])
 
   if Player_Character.Levels.count(Artificer) >= 5:  # I know I had a logical reason for doing it like this but I'm having trouble remembering why # the intention was to avoid issues during multiclassing                    # so that if there was a different subclass taken first, we could still locate the Artificer subclass
@@ -794,20 +793,12 @@ def Artificer_Level_Twenty(Player_Character):
 
 Artificer_Features = [Artificer_Level_One, Artificer_Level_Two, Artificer_Level_Seven, Artificer_Level_Ten, Artificer_Level_Eleven, Artificer_Level_Eighteen, Artificer_Level_Twenty]
 
-#def Run_Artificer(Player_Character):
-#  for Player_Character.level in Artificer_Features:
-#    Player_Character.level(Player_Character)
-
-def Run_Artificer(Player_Character,Level):
-  #print('here 0')
+def Run_Artificer(Player_Character,Level,Subclass):
   Player_Character.Class_Resources['Artificer'] = {}
   if Player_Character.First_Class == Artificer:
-    #print('here 1')
     Artificer_First_Level(Player_Character)
   else:
-    #print('here 2')
     pass
-
 
   Level = Player_Character.Levels.count(Artificer)
   if Level >= 1:

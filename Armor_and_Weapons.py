@@ -43,7 +43,8 @@ def Don_Armor(Armor,Player_Character):
   elif Armor in Player_Character.Inventory['Magic Items']['Armor']:
     Player_Character.Armor_Equipped.append(Armor)
   else: 
-    print('Error in Don Armor')
+    #print('Error in Don Armor')
+    pass
 
   # probably gonna want to recalculate Armor Class at this point
 
@@ -53,8 +54,9 @@ def Doff_Armor(Armor,Player_Character):
   elif Armor in Player_Character.Inventory['Magic Items']['Armor']:
     Player_Character.Armor_Equipped.pop(Armor)
   else: 
-    print('Error in Doff Armor')
-
+    #print('Error in Doff Armor')
+    pass
+  
   # probably gonna want to recalculate Armor Class at this point
 
 
