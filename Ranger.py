@@ -448,14 +448,14 @@ def Apply_Swarming_Dispersal(Player_Character):
 
 
 
-Beast_Master = Establishing_Hierarchy.Subclass(Ranger,[],False)
-Monster_Slayer = Establishing_Hierarchy.Subclass(Ranger,[],False)
-Drakewarden = Establishing_Hierarchy.Subclass(Ranger,[],False)
-Gloomstalker = Establishing_Hierarchy.Subclass(Ranger,[],False)
-Swarmkeeper = Establishing_Hierarchy.Subclass(Ranger,[],False)
-Hunter = Establishing_Hierarchy.Subclass(Ranger,[],False)
-Horizon_Walker = Establishing_Hierarchy.Subclass(Ranger,[],False)
-Fey_Wanderer = Establishing_Hierarchy.Subclass(Ranger,[],False)
+Beast_Master = Establishing_Hierarchy.Subclass(Ranger,'Beast Master',[],False)
+Monster_Slayer = Establishing_Hierarchy.Subclass(Ranger,'Monster Slayer',[],False)
+Drakewarden = Establishing_Hierarchy.Subclass(Ranger,'Drakewarden',[],False)
+Gloomstalker = Establishing_Hierarchy.Subclass(Ranger,'Gloomstalker',[],False)
+Swarmkeeper = Establishing_Hierarchy.Subclass(Ranger,'Swarmkeeper',[],False)
+Hunter = Establishing_Hierarchy.Subclass(Ranger,'Hunter',[],False)
+Horizon_Walker = Establishing_Hierarchy.Subclass(Ranger,'Horizon Walker',[],False)
+Fey_Wanderer = Establishing_Hierarchy.Subclass(Ranger,'Fey Wanderer',[],False)
 
 Ranger_Subclasses = [Beast_Master,Monster_Slayer,Drakewarden,Gloomstalker,Swarmkeeper,Hunter,Horizon_Walker,Fey_Wanderer]
 Ranger.Subclasses = Ranger_Subclasses

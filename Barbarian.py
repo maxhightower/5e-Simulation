@@ -491,7 +491,7 @@ def Run_Barbarian(Player_Character,Level):
 
 
 #Ancestral_Protectors
-Ancestral_Guardians = Establishing_Hierarchy.Subclass(Barbarian,['Ancestral_Protectors','Spirit_Shield','Consult_the_Spirits','Vengeful_Ancestors'],False)
+Ancestral_Guardians = Establishing_Hierarchy.Subclass(Barbarian,'Ancestral Guardians',['Ancestral_Protectors','Spirit_Shield','Consult_the_Spirits','Vengeful_Ancestors'],False)
 
 Ancestral_Protectors_Attack_Debuff = Effects.Buff_Circumstance_Effect('Attack Rolls','Target','1 round','Attack Rolls','Disadvantage: ')
 #Ancestral_Protectors_Damage_Debuff = Buff_Bonus_Effect()
@@ -587,7 +587,7 @@ def Use_Call_the_Hunt(Player_Character):
 
 
 #### Berserker
-Berserker = Establishing_Hierarchy.Subclass(Barbarian,['Apply_Frenzy','Apply_Mindless_Rage','Apply_Intimidating_Presence','Apply_Retaliation'],False)
+Berserker = Establishing_Hierarchy.Subclass(Barbarian,'Berserker',['Apply_Frenzy','Apply_Mindless_Rage','Apply_Intimidating_Presence','Apply_Retaliation'],False)
 
 #	Frenzy
 def Apply_Frenzy(Player_Character):

@@ -256,16 +256,16 @@ def Run_Sorcerer(Player_Character, Level):
 
 
 
-Aberrant_Mind = Establishing_Hierarchy.Subclass(Sorcerer,[],False)
-Clockwork = Establishing_Hierarchy.Subclass(Sorcerer,[],False)
-Divine = Establishing_Hierarchy.Subclass(Sorcerer,[],False)
-Lunar = Establishing_Hierarchy.Subclass(Sorcerer,[],False)
-Shadow = Establishing_Hierarchy.Subclass(Sorcerer,[],False)
-Storm = Establishing_Hierarchy.Subclass(Sorcerer,[],False)
-Genie = Establishing_Hierarchy.Subclass(Sorcerer,[],False)
+Aberrant_Mind = Establishing_Hierarchy.Subclass(Sorcerer,'Aberrant Mind',[],False)
+Clockwork = Establishing_Hierarchy.Subclass(Sorcerer,'Clockwork Soul',[],False)
+Divine = Establishing_Hierarchy.Subclass(Sorcerer,'Divine',[],False)
+Lunar = Establishing_Hierarchy.Subclass(Sorcerer,'Lunar',[],False)
+Shadow = Establishing_Hierarchy.Subclass(Sorcerer,'Shadow',[],False)
+Storm = Establishing_Hierarchy.Subclass(Sorcerer,'Storm',[],False)
+Genie = Establishing_Hierarchy.Subclass(Sorcerer,'Genie',[],False)
     # Djinn
     # Efreeti
     # Marid
     # Dao
-Draconic = Establishing_Hierarchy.Subclass(Sorcerer,[],False)
-Wild_Magic = Establishing_Hierarchy.Subclass(Sorcerer,[],False)
+Draconic = Establishing_Hierarchy.Subclass(Sorcerer,'Draconic',[],False)
+Wild_Magic = Establishing_Hierarchy.Subclass(Sorcerer,'Wild Magic',[],False)

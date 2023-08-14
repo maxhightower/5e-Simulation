@@ -346,19 +346,19 @@ def Run_Bard(Player_Character,Level):
 
 # bard subclasses:
 # Lore
-Lore = Establishing_Hierarchy.Subclass(Bard,[],False)
+Lore = Establishing_Hierarchy.Subclass(Bard,'Lore',[],False)
 # Valor
-Valor = Establishing_Hierarchy.Subclass(Bard,[],False)
+Valor = Establishing_Hierarchy.Subclass(Bard,'Valor',[],False)
 # Glamour
-Glamour = Establishing_Hierarchy.Subclass(Bard,[],False)
+Glamour = Establishing_Hierarchy.Subclass(Bard,'Glamour',[],False)
 # Swords
-Swords = Establishing_Hierarchy.Subclass(Bard,[],False)
+Swords = Establishing_Hierarchy.Subclass(Bard,'Swords',[],False)
 # Whispers
-Whispers = Establishing_Hierarchy.Subclass(Bard,[],False)
+Whispers = Establishing_Hierarchy.Subclass(Bard,'Whispers',[],False)
 # Eloquence
-Eloquence = Establishing_Hierarchy.Subclass(Bard,[],False)
+Eloquence = Establishing_Hierarchy.Subclass(Bard,'Eloquence',[],False)
 # Creation
-Creation = Establishing_Hierarchy.Subclass(Bard,[],False)
+Creation = Establishing_Hierarchy.Subclass(Bard,'Creation',[],False)
 
 Bard_Subclasses = [Lore,Valor,Glamour,Swords,Whispers,Eloquence,Creation]
 Bard.Subclasses = Bard_Subclasses

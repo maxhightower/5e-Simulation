@@ -210,16 +210,16 @@ def Run_Wizard(Player_Character, Level):
 # War Magic
 # 
 
-Abjuration = Establishing_Hierarchy.Subclass(Wizard,[],False)
-Bladesinging = Establishing_Hierarchy.Subclass(Wizard,[],False)
-Conjuration = Establishing_Hierarchy.Subclass(Wizard,[],False)
-Divination = Establishing_Hierarchy.Subclass(Wizard,[],False)
-Evocation = Establishing_Hierarchy.Subclass(Wizard,[],False)
-Enchantment = Establishing_Hierarchy.Subclass(Wizard,[],False)
-Illusion = Establishing_Hierarchy.Subclass(Wizard,[],False)
-Scribes = Establishing_Hierarchy.Subclass(Wizard,[],False)
-Necromancy = Establishing_Hierarchy.Subclass(Wizard,[],False)
-Transmutation = Establishing_Hierarchy.Subclass(Wizard,[],False)
-War_Magic = Establishing_Hierarchy.Subclass(Wizard,[],False)
+Abjuration = Establishing_Hierarchy.Subclass(Wizard,'Abjuration',[],False)
+Bladesinging = Establishing_Hierarchy.Subclass(Wizard,'Bladesinging',[],False)
+Conjuration = Establishing_Hierarchy.Subclass(Wizard,'Conjuration',[],False)
+Divination = Establishing_Hierarchy.Subclass(Wizard,'Divination',[],False)
+Evocation = Establishing_Hierarchy.Subclass(Wizard,'Evocation',[],False)
+Enchantment = Establishing_Hierarchy.Subclass(Wizard,'Enchantment',[],False)
+Illusion = Establishing_Hierarchy.Subclass(Wizard,'Illusion',[],False)
+Scribes = Establishing_Hierarchy.Subclass(Wizard,'Scribes',[],False)
+Necromancy = Establishing_Hierarchy.Subclass(Wizard,'Necromancy',[],False)
+Transmutation = Establishing_Hierarchy.Subclass(Wizard,'Transmutation',[],False)
+War_Magic = Establishing_Hierarchy.Subclass(Wizard,'War Magic',[],False)
 
 Wizard_Subclasses = [Abjuration,Bladesinging,Conjuration,Divination,Evocation,Enchantment,Illusion,Scribes,Necromancy,Transmutation,War_Magic]

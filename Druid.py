@@ -321,12 +321,12 @@ Moon_Druid_Wild_Shape_CR_Table = pd.DataFrame(Moon_Druid_Wild_Shape_CR_Table)
 #Blazing_Revival = Feature()
 
 
-Dreams = Establishing_Hierarchy.Subclass(Druid,[],False)
-Moon = Establishing_Hierarchy.Subclass(Druid,[],False)
-Wildfire = Establishing_Hierarchy.Subclass(Druid,[],False)
-Stars = Establishing_Hierarchy.Subclass(Druid,[],False)
-Spores = Establishing_Hierarchy.Subclass(Druid,[],False)
-Shepherd = Establishing_Hierarchy.Subclass(Druid,[],False)
+Dreams = Establishing_Hierarchy.Subclass(Druid,'Dreams',[],False)
+Moon = Establishing_Hierarchy.Subclass(Druid,'Moon',[],False)
+Wildfire = Establishing_Hierarchy.Subclass(Druid,'Wildfire',[],False)
+Stars = Establishing_Hierarchy.Subclass(Druid,'Stars',[],False)
+Spores = Establishing_Hierarchy.Subclass(Druid,'Spores',[],False)
+Shepherd = Establishing_Hierarchy.Subclass(Druid,'Shepherd',[],False)
 
 Druid_Subclasses = [Dreams,Moon,Wildfire,Stars,Spores,Shepherd]
 Druid.Subclasses = Druid_Subclasses

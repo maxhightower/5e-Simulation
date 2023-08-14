@@ -1140,8 +1140,9 @@ class Class:
 
 
 class Subclass(Class):
-  def __init__(self,Class,Feature,Spellcasting_Ability):
+  def __init__(self,Class,Name,Feature,Spellcasting_Ability):
     self.Class = Class
+    self.Name = Name
     self.Feature = Feature
     self.Spellcasting_Ability = Spellcasting_Ability
 

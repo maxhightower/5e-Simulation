@@ -231,15 +231,15 @@ def Ancients_Spells(Player_Character):
 #Vengeance
 #Watchers
 
-Conquest = Establishing_Hierarchy.Subclass(Paladin,[],False)
-Crown = Establishing_Hierarchy.Subclass(Paladin,[],False)
-Devotion = Establishing_Hierarchy.Subclass(Paladin,[],False)
-Glory = Establishing_Hierarchy.Subclass(Paladin,[],False)
-Oathbreaker = Establishing_Hierarchy.Subclass(Paladin,[],False)
-Redemption = Establishing_Hierarchy.Subclass(Paladin,[],False)
-Vengeance = Establishing_Hierarchy.Subclass(Paladin,[],False)
-Watchers = Establishing_Hierarchy.Subclass(Paladin,[],False)
-Ancients = Establishing_Hierarchy.Subclass(Paladin,[],False)
+Conquest = Establishing_Hierarchy.Subclass(Paladin,'Conquest',[],False)
+Crown = Establishing_Hierarchy.Subclass(Paladin,'Crown',[],False)
+Devotion = Establishing_Hierarchy.Subclass(Paladin,'Devotion',[],False)
+Glory = Establishing_Hierarchy.Subclass(Paladin,'Glory',[],False)
+Oathbreaker = Establishing_Hierarchy.Subclass(Paladin,'Oathbreaker',[],False)
+Redemption = Establishing_Hierarchy.Subclass(Paladin,'Redemption',[],False)
+Vengeance = Establishing_Hierarchy.Subclass(Paladin,'Vengeance',[],False)
+Watchers = Establishing_Hierarchy.Subclass(Paladin,'Watchers',[],False)
+Ancients = Establishing_Hierarchy.Subclass(Paladin,'Ancients',[],False)
 
 Paladin_Subclasses = [Conquest,Crown,Devotion,Glory,Oathbreaker,Redemption,Vengeance,Watchers,Ancients]
 Paladin.Subclasses = Paladin_Subclasses

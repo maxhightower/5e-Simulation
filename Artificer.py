@@ -853,7 +853,7 @@ def Run_Artificer(Player_Character,Level):
   else:
     pass
 
-Battle_Smith = Establishing_Hierarchy.Subclass(Artificer,[],False)
+Battle_Smith = Establishing_Hierarchy.Subclass(Artificer,'Battle_Smith',[],False)
 
 # Tools of the Trade
 def Battle_Smith_Tools_of_the_Trade(Player_Character):
@@ -1059,7 +1059,7 @@ def Apply_Battle_Smith(Player_Character):
 
 
 
-Artillerist = Establishing_Hierarchy.Subclass(Artificer,[],False)
+Artillerist = Establishing_Hierarchy.Subclass(Artificer,'Artillerist',[],False)
 
 # Tools of the Trade
 def Artillerist_Tools_of_the_Trade(Player_Character):
@@ -1185,7 +1185,7 @@ def Apply_Artillerist(Player_Character):
 
 
 
-Armorer = Establishing_Hierarchy.Subclass(Artificer,[],False)
+Armorer = Establishing_Hierarchy.Subclass(Artificer,'Armorer',[],False)
 
 #Tools of the Trade
 def Armorer_Tools_of_the_Trade(Player_Character):
@@ -1294,7 +1294,7 @@ def Apply_Armorer(Player_Character):
 
 
 
-Alchemist = Establishing_Hierarchy.Subclass(Artificer,[],False)
+Alchemist = Establishing_Hierarchy.Subclass(Artificer,'Alchemist',[],False)
 #Artificer.Subclass.remove('Alchemist')
 
 

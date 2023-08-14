@@ -386,11 +386,11 @@ def Use_Shadow_Step(Player_Character):
 #Flurry_of_Healing_and_Harm 
 #Hand_of_Ultimate_Mercy 
 
-Shadow = Establishing_Hierarchy.Subclass(Monk,[],False)
-Mercy = Establishing_Hierarchy.Subclass(Monk,[],False)
-Open_Hand = Establishing_Hierarchy.Subclass(Monk,[],False)
-Kensei = Establishing_Hierarchy.Subclass(Monk,[],False)
-Astral_Self = Establishing_Hierarchy.Subclass(Monk,[],False)
+Shadow = Establishing_Hierarchy.Subclass(Monk,'Shadow',[],False)
+Mercy = Establishing_Hierarchy.Subclass(Monk,'Mercy',[],False)
+Open_Hand = Establishing_Hierarchy.Subclass(Monk,'Open Hand',[],False)
+Kensei = Establishing_Hierarchy.Subclass(Monk,'Kensei',[],False)
+Astral_Self = Establishing_Hierarchy.Subclass(Monk,'Astral Self',[],False)
 
 Monk_Subclasses = [Shadow,Mercy,Open_Hand,Kensei,Astral_Self]
 Monk.Subclasses = Monk_Subclasses

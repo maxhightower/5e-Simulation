@@ -54,23 +54,16 @@ def Generate_Random_Character():
     # now they choose how to split the levels among the classes
     Class_Level_Allocation = []
     Levels_Remaining = Level
-    print('Levels Remaining:',Levels_Remaining)
     xclass = Level - Num_Classes_to_Take
-    print('xclass:',xclass)
     for i in range(0,Num_Classes_to_Take,1): # for each class they're taking
-        print('start of loop')
         if i+1 == Num_Classes_to_Take: # if it's the last class they're taking
             Class_Level_Allocation.append(Levels_Remaining) # give it all the remaining levels
-            print('last level allocated')
         else:
-            print('allocating random amount')
             random_amount = random.randint(1,xclass)
-            print('Random Amount:',random_amount)
             Class_Level_Allocation.append(random_amount) # give it a random number of levels
 
         Levels_Remaining = Levels_Remaining - Class_Level_Allocation[i] # subtract the number of levels given from the total levels remaining
     print('Class Level Allocation:',Class_Level_Allocation)
-    print('Levels Remaining:',Levels_Remaining)
 
     Class_Choices = []
     for i in range(0,Num_Classes_to_Take,1):

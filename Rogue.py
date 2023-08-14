@@ -264,12 +264,12 @@ def Apply_Unerring_Eye(Player_Character):
 def Apply_Eye_for_Weakness(Player_Character):
    pass
 
-Mastermind = Establishing_Hierarchy.Subclass(Rogue,[],False)
-Phantom = Establishing_Hierarchy.Subclass(Rogue,[],False)
-Scout = Establishing_Hierarchy.Subclass(Rogue,[],False)
-Soulknife = Establishing_Hierarchy.Subclass(Rogue,[],False)
-Swashbuckler = Establishing_Hierarchy.Subclass(Rogue,[],False)
-Thief = Establishing_Hierarchy.Subclass(Rogue,[],False)
+Mastermind = Establishing_Hierarchy.Subclass(Rogue,'Mastermind',[],False)
+Phantom = Establishing_Hierarchy.Subclass(Rogue,'Phatom',[],False)
+Scout = Establishing_Hierarchy.Subclass(Rogue,'Scout',[],False)
+Soulknife = Establishing_Hierarchy.Subclass(Rogue,'Soulknife',[],False)
+Swashbuckler = Establishing_Hierarchy.Subclass(Rogue,'Swashbuckler',[],False)
+Thief = Establishing_Hierarchy.Subclass(Rogue,'Thief',[],False)
 
 Rogue_Subclasses = [Mastermind, Phantom, Scout, Soulknife, Swashbuckler, Thief]
 Rogue.Subclasses = Rogue_Subclasses
