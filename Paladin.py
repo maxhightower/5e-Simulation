@@ -173,7 +173,6 @@ def Run_Paladin(Player_Character,Level):
   Level = Player_Character.Levels.count(Paladin)
   if Level >= 1:
     Paladin_Level_One(Player_Character)
-    Establishing_Hierarchy.Count_Player_Levels(Player_Character)
     if Level >= 2:
       Paladin_Level_Two(Player_Character)
       if Level >= 3:

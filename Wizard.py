@@ -143,7 +143,6 @@ def Run_Wizard(Player_Character, Level):
   Level = Player_Character.Levels.count(Wizard)
   if Level >= 1:
     Wizard_Level_One(Player_Character)
-    Establishing_Hierarchy.Count_Player_Levels(Player_Character)
     if Level >= 2:
       Wizard_Level_Two(Player_Character)
       if Level >= 3:
@@ -187,6 +186,7 @@ def Run_Wizard(Player_Character, Level):
 
 
 # Abjuration
+
 # Abjurers Ward
 
 
@@ -223,3 +223,4 @@ Transmutation = Establishing_Hierarchy.Subclass(Wizard,'Transmutation',[],False)
 War_Magic = Establishing_Hierarchy.Subclass(Wizard,'War Magic',[],False)
 
 Wizard_Subclasses = [Abjuration,Bladesinging,Conjuration,Divination,Evocation,Enchantment,Illusion,Scribes,Necromancy,Transmutation,War_Magic]
+Wizard.Subclasses = Wizard_Subclasses

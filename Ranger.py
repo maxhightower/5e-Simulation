@@ -79,9 +79,13 @@ def Add_Favored_Enemy(Player_Character):
 
 
 def Apply_Favored_Foe(Player_Character):
-  Favored_Foe_Effect = Effects.Buff_Bonus_Effect('Target','Instantaneous','Damage',Ranger_Features['Favored_Enemy_Dice'][Player_Character.Levels.count(Ranger)],1,0)
+  Favored_Foe_Effect = Effects.Buff_Bonus_Effect('Target','Instantaneous','Damage',Ranger_Features['Favored_Enemy_Dice'][Player_Character.Levels.count(Ranger)-1],1,0)
   #Player_Character.Effects['Self_Attacking']['Hit']['Favored_Foe'] = Use_Favored_Foe(Target)
-  Player_Character.Class_Resources['Ranger']['Favored_Foe_Charges'] = Player_Character.Prof_Bonus
+  try: 
+    Player_Character.Class_Resources['Ranger']['Favored_Foe_Charges'] = Player_Character.Prof_Bonus
+  except:
+    Player_Character.Class_Resources['Ranger'] = {'Favored_Foe_Charges': Player_Character.Prof_Bonus}
+
   Player_Character.Long_Rest_Options['Favored_Foe'] = Reset_Favored_Foe(Player_Character)
 
   def Use_Favored_Foe(Target):
@@ -248,7 +252,6 @@ def Run_Ranger(Player_Character,Level):
   Level = Player_Character.Levels.count(Ranger)
   if Level >= 1:
     Ranger_Level_One(Player_Character)
-    Establishing_Hierarchy.Count_Player_Levels(Player_Character)
     if Level >= 2:
       Ranger_Level_Two(Player_Character)
       if Level >= 3:

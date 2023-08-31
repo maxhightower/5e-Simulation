@@ -222,7 +222,6 @@ def Run_Druid(Player_Character,Level):
   Level = Player_Character.Levels.count(Druid)
   if Level >= 1:
     Druid_Level_One(Player_Character)
-    #Establishing_Hierarchy.Count_Player_Levels(Player_Character)
     if Level >= 2:
       Druid_Level_Two(Player_Character)
       if Level >= 3:

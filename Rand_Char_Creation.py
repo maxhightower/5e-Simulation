@@ -40,34 +40,50 @@ Class_Subclass_Level = {
 def Generate_Random_Character():
     Name = "John_Smith"
     Species = random.choice(S.Species_List)
-    print(Species)
+    print(Species.Name)
     Background = random.choice(Backgrounds.Background_Options)
-    print(Background)
+    print(Background.Name)
 
 
     Level = random.randint(1,20)
     print('Level:',Level)
-    # I could also go random by level, so that multiclassing can happen at any point
-    # they've chosen their total level already, now they choose how many classes to take
-    Num_Classes_to_Take = random.randint(1,min(Level,len(Class_List)))
-    print('Different Classes:',Num_Classes_to_Take)
-    # now they choose how to split the levels among the classes
-    Class_Level_Allocation = []
-    Levels_Remaining = Level
-    xclass = Level - Num_Classes_to_Take
-    for i in range(0,Num_Classes_to_Take,1): # for each class they're taking
-        if i+1 == Num_Classes_to_Take: # if it's the last class they're taking
-            Class_Level_Allocation.append(Levels_Remaining) # give it all the remaining levels
-        else:
-            random_amount = random.randint(0,xclass) + 1
-            Class_Level_Allocation.append(random_amount) # give it a random number of levels
 
-        Levels_Remaining = Levels_Remaining - Class_Level_Allocation[i] # subtract the number of levels given from the total levels remaining
+    Num_Classes_to_Take = random.randint(1,min(Level,len(Class_List)-1))
+    print('Different Classes:',Num_Classes_to_Take)
+
+    Class_Level_Allocation = []
+    Levels_Remaining = Level - Num_Classes_to_Take
+
+    if Num_Classes_to_Take == 1:
+        Class_Level_Allocation.append(Level)
+    elif Num_Classes_to_Take == Level:
+        for i in range(0,Num_Classes_to_Take,1):
+            Class_Level_Allocation.append(1)
+    else:
+        for i in range(0,Num_Classes_to_Take,1): # for each class they're taking
+            
+            Class_Level_Allocation.append(1) # give it one level
+            if Levels_Remaining > 0:
+                a = random.randint(0,Levels_Remaining)
+                Class_Level_Allocation[i] = Class_Level_Allocation[i] + a
+                Levels_Remaining = Levels_Remaining - Class_Level_Allocation[i]
+            else:
+                pass
+
+            if sum(Class_Level_Allocation) < Level and i == Num_Classes_to_Take-1:
+                a = random.randint(0,Level-sum(Class_Level_Allocation))
+                Class_Level_Allocation[i] = Class_Level_Allocation[i] + a
+            
+            if sum(Class_Level_Allocation) > Level:
+                print('Too many levels taken')
+
+
     print('Class Level Allocation:',Class_Level_Allocation)
 
     Class_Choices = []
+    Personal_Class_List = [Barbarian.Barbarian,Cleric.Cleric,Artificer.Artificer,Bard.Bard,Druid.Druid,Fighter.Fighter,Paladin.Paladin,Monk.Monk,Rogue.Rogue,Ranger.Ranger,Sorcerer.Sorcerer,Warlock.Warlock,Wizard.Wizard]
+
     for i in range(0,Num_Classes_to_Take,1):
-        Personal_Class_List = [Barbarian.Barbarian,Cleric.Cleric,Artificer.Artificer,Bard.Bard,Druid.Druid,Fighter.Fighter,Paladin.Paladin,Monk.Monk,Rogue.Rogue,Ranger.Ranger,Sorcerer.Sorcerer,Warlock.Warlock,Wizard.Wizard]
         Class = random.choice(Personal_Class_List)
         print(Class.Name)
         Class_Choices.append([Class])
@@ -78,6 +94,12 @@ def Generate_Random_Character():
             Subclass = random.choice(Class.Subclasses)
             print(Subclass.Name)
             Class_Choices[i].append(Subclass)
+
+    #print(Class_Choices)
+    for i in Class_Choices:
+        print(i)
+    # need to make it so that they can't take two classes twice
+
 
     list_of_scores = CHARACTER_CREATOR.Use_Standard_Array()
     Strength = list_of_scores[random.randint(0,len(list_of_scores)-1)]
@@ -145,15 +167,15 @@ def Generate_Random_Character():
     Wizard_Levels = Name.Levels.count(Wizard.Wizard)
 
     if Artificer_Levels > 0:
-        Artificer.Run_Artificer(Name,Artificer_Levels)
+        Artificer.Run_Artificer(Name,Artificer_Levels,Subclass)
     if Barbarian_Levels > 0:
-        Barbarian.Run_Barbarian(Name,Barbarian_Levels)
+        Barbarian.Run_Barbarian(Name,Barbarian_Levels,Subclass)
     if Bard_Levels > 0:
-        Bard.Run_Bard(Name,Bard_Levels)
+        Bard.Run_Bard(Name,Bard_Levels,Subclass)
     if Cleric_Levels > 0:
-        Cleric.Run_Cleric(Name,Cleric_Levels)
+        Cleric.Run_Cleric(Name,Cleric_Levels,Subclass)
     if Druid_Levels > 0:        
-        Druid.Run_Druid(Name,Druid_Levels)
+        Druid.Run_Druid(Name,Druid_Levels,Subclass)
     if Fighter_Levels > 0:
         Fighter.Run_Fighter(Name,Fighter_Levels)
     if Monk_Levels > 0:

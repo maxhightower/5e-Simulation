@@ -141,7 +141,6 @@ def Run_Warlock(Player_Character, Level):
   Level = Player_Character.Levels.count(Warlock)
   if Level >= 1:
     Warlock_Level_One(Player_Character)
-    Establishing_Hierarchy.Count_Player_Levels(Player_Character)
     if Level >= 2:
       Warlock_Level_Two(Player_Character)
       if Level >= 3:
@@ -195,4 +194,4 @@ Undead = Establishing_Hierarchy.Subclass(Warlock,'Undead',[],False)
 Undying = Establishing_Hierarchy.Subclass(Warlock,'Undying',[],False)
 
 Warlock_Subclasses = [Hexblade,Celestial,Fiend,Great_Old_One,Fathomless,Archfey,Undead,Undying]
-Warlock.Subclass = Warlock_Subclasses
+Warlock.Subclasses = Warlock_Subclasses

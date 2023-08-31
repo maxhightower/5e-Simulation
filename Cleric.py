@@ -410,7 +410,6 @@ def Run_Cleric(Player_Character,Level):
   Level = Player_Character.Levels.count(Cleric)
   if Level >= 1:
     Cleric_Level_One(Player_Character)
-    #Establishing_Hierarchy.Count_Player_Levels(Player_Character)
     if Level >= 2:
       Cleric_Level_Two(Player_Character)
       if Level >= 3:

@@ -1,6 +1,7 @@
 
 class Species:
-  def __init__(self,Book,Creature_Type,Species_Sizes,Species_Senses,Species_Bonuses,Movement_Speeds,Species_Circumstances,Species_Language_Prof,Species_Skill_Profs,Species_Weapon_Profs,Species_Tool_Profs,Species_Artisan_Tool_Profs,Species_Actions,Species_Bonus_Actions,Species_WRI,Species_Feat):
+  def __init__(self,Name,Book,Creature_Type,Species_Sizes,Species_Senses,Species_Bonuses,Movement_Speeds,Species_Circumstances,Species_Language_Prof,Species_Skill_Profs,Species_Weapon_Profs,Species_Tool_Profs,Species_Artisan_Tool_Profs,Species_Actions,Species_Bonus_Actions,Species_WRI,Species_Feat):
+    self.Name = Name
     self.Book = Book
     self.Creature_Type = Creature_Type    # Humanoid, Ooze, Monstrosity, etc
     self.Species_Sizes = Species_Sizes    # = ['Medium','Small']
@@ -96,19 +97,19 @@ def Apply_Species(Species,Player_Character):
 
 
 
-Human = Species('Players Handbook','Humanoid',['Medium','Small'],False,['STR:1','DEX:1','CON:1','INT:1','WIS:1','CHA:1'],30,False,['Common',1],False,False,False,False,False,False,False,False)
-Human_Variant = Species('Players Handbook','Humanoid',['Medium','Small'],False,30,False,False,1,False,False,False,False,False,False,False,True)
+Human = Species('Human','Players Handbook','Humanoid',['Medium','Small'],False,['STR:1','DEX:1','CON:1','INT:1','WIS:1','CHA:1'],30,False,['Common',1],False,False,False,False,False,False,False,False)
+Human_Variant = Species('Human_Variant','Players Handbook','Humanoid',['Medium','Small'],False,30,False,False,1,False,False,False,False,False,False,False,True)
 
-Elf = Species('Players Handbook','Humanoid',['Medium','Small'],['Darkvision 60'],['Dex:2'],30,['Fey Ancestry'],['Common','Elvish'],['Perception'],False,False,False,False,False,False,False)
+Elf = Species('Elf','Players Handbook','Humanoid',['Medium','Small'],['Darkvision 60'],['Dex:2'],30,['Fey Ancestry'],['Common','Elvish'],['Perception'],False,False,False,False,False,False,False)
 
 #High_Elf = h.Subspecies()
 #Wood_Elf = h.Subspecies()
 
 
 
-Half_Elf = Species('Players Handbook','Humanoid',['Medium','Small'],['Darkvision 60'],['CHA:2','2:1'],30,['Fey Ancestry'],['Common','Elvish',1],2,False,False,False,False,False,False,False)
+Half_Elf = Species('Half Elf','Players Handbook','Humanoid',['Medium','Small'],['Darkvision 60'],['CHA:2','2:1'],30,['Fey Ancestry'],['Common','Elvish',1],2,False,False,False,False,False,False,False)
 
-Dwarf = Species('Players Handbook','Humanoid',['Medium','Small'],['Darkvision 60'],['CON:2'],25,['Dwarven Resilience','Stonecunning'],['Common','Dwarvish'],False,['Battleaxe','Handaxe','Light Hammer','Warhammer'],False,1,False,False,['poisonres'],False)
+Dwarf = Species('Dwarf','Players Handbook','Humanoid',['Medium','Small'],['Darkvision 60'],['CON:2'],25,['Dwarven Resilience','Stonecunning'],['Common','Dwarvish'],False,['Battleaxe','Handaxe','Light Hammer','Warhammer'],False,1,False,False,['poisonres'],False)
 
 #Hill_Dwarf = h.Subspecies()
 #Mountain_Dwarf = h.Subspecies()

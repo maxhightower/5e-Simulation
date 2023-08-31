@@ -292,10 +292,12 @@ def Barbarian_Level_One(Player_Character):
   Apply_Rage(Player_Character)
   Barbarian_Unarmored_Defense(Player_Character)
   #print('Barbarian Level One')
+  print('Rage')
 
 def Barbarian_Level_Two(Player_Character):
   Danger_Sense(Player_Character)
   #print('Barbarian Level Two')
+  print('Danger Sense')
 
 def Barbarian_Level_Three(Player_Character):
   Subclass = Choose_Barbarian_Subclass(Player_Character)
@@ -322,6 +324,7 @@ def Barbarian_Level_Four(Player_Character):
 def Barbarian_Level_Five(Player_Character):
   Character_Functions.Extra_Attack(Player_Character)
   Fast_Movement(Player_Character)
+  print('Fast Movement')
 
 def Barbarian_Level_Six(Player_Character):
   Subclass = Choose_Barbarian_Subclass(Player_Character)
@@ -342,12 +345,14 @@ def Barbarian_Level_Six(Player_Character):
 
 def Barbarian_Level_Seven(Player_Character):
   Apply_Feral_Instinct(Player_Character)
+  print('Feral Instinct')
 
 def Barbarian_Level_Eight(Player_Character):
   pass
 
 def Barbarian_Level_Nine(Player_Character):
   Brutal_Critical(Player_Character)
+  print('Brutal Critical')
 
 def Barbarian_Level_Ten(Player_Character):
   Subclass = Choose_Barbarian_Subclass(Player_Character)
@@ -368,6 +373,7 @@ def Barbarian_Level_Ten(Player_Character):
 
 def Barbarian_Level_Eleven(Player_Character):
   Apply_Relentless_Rage(Player_Character)
+  print('Relentless Rage')
 
 def Barbarian_Level_Twelve(Player_Character):
   pass
@@ -407,10 +413,11 @@ def Barbarian_Level_Eighteen(Player_Character):
 
 def Barbarian_Level_Nineteen(Player_Character):
   Indomitable_Might(Player_Character)
+  print('Indomitable Might')
 
 def Barbarian_Level_Twenty(Player_Character):
   Primal_Champion(Player_Character)
-
+  print('Primal Champion')
 
 
 Barbarian_Features = [Barbarian_Level_One, Barbarian_Level_Two, Barbarian_Level_Three, Barbarian_Level_Four, Barbarian_Level_Five, Barbarian_Level_Six, Barbarian_Level_Seven, Barbarian_Level_Eight, Barbarian_Level_Nine, Barbarian_Level_Ten, Barbarian_Level_Eleven, Barbarian_Level_Twelve, Barbarian_Level_Thirteen, Barbarian_Level_Fourteen, Barbarian_Level_Fifteen, Barbarian_Level_Sixteen, Barbarian_Level_Seventeen, Barbarian_Level_Eighteen, Barbarian_Level_Nineteen, Barbarian_Level_Twenty]

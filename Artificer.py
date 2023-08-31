@@ -716,22 +716,23 @@ def Artificer_Level_One(Player_Character):
   #Apply_Magical_Tinkering(Player_Character)
   Artificer_Spellcasting(Player_Character)
   # need to add a function that applies the saving throws from the class to the character
+  print('Artificer Spellcasting')
 
 def Artificer_Level_Two(Player_Character):
   Apply_Infuse_Item(Player_Character)
   Player_Character.Long_Rest_Options['Change_Artificer_Spells']
+  print('Infuse Item')
 
-def Artificer_Level_Three(Player_Character):
-  Artificer_Run_Subclass(Player_Character)
+def Artificer_Level_Three(Player_Character,Subclass):
+  Artificer_Run_Subclass(Player_Character,Subclass)
   Player_Character.Long_Rest_Options['Change_Artificer_Spells']
-
 
 def Artificer_Level_Four(Player_Character):
   Character_Functions.ASI(Player_Character)
   Player_Character.Long_Rest_Options['Change_Artificer_Spells']
 
-def Artificer_Level_Five(Player_Character):
-  Artificer_Run_Subclass(Player_Character)
+def Artificer_Level_Five(Player_Character,Subclass):
+  Artificer_Run_Subclass(Player_Character,Subclass)
   Player_Character.Long_Rest_Options['Change_Artificer_Spells']
 
 def Artificer_Level_Six(Player_Character):
@@ -741,22 +742,25 @@ def Artificer_Level_Six(Player_Character):
 def Artificer_Level_Seven(Player_Character):
   Apply_Flash_of_Genius(Player_Character)
   Player_Character.Long_Rest_Options['Change_Artificer_Spells']
+  print('Flash of Genius')
 
 def Artificer_Level_Eight(Player_Character):
   Character_Functions.ASI(Player_Character)
   Player_Character.Long_Rest_Options['Change_Artificer_Spells']
 
-def Artificer_Level_Nine(Player_Character):
-  Artificer_Run_Subclass(Player_Character)
+def Artificer_Level_Nine(Player_Character,Subclass):
+  Artificer_Run_Subclass(Player_Character,Subclass)
   Player_Character.Long_Rest_Options['Change_Artificer_Spells']
 
 def Artificer_Level_Ten(Player_Character):
   Magic_Item_Adept(Player_Character)
   Player_Character.Long_Rest_Options['Change_Artificer_Spells']
+  print('Magic Item Adept')
 
 def Artificer_Level_Eleven(Player_Character):
   Apply_Spell_Storing_Item(Player_Character)
   Player_Character.Long_Rest_Options['Change_Artificer_Spells']
+  print('Spell Storing Item')
 
 def Artificer_Level_Twelve(Player_Character):
   Character_Functions.ASI(Player_Character)
@@ -768,8 +772,8 @@ def Artificer_Level_Thirteen(Player_Character):
 def Artificer_Level_Fourteen(Player_Character):
   Player_Character.Long_Rest_Options['Change_Artificer_Spells']
 
-def Artificer_Level_Fifteen(Player_Character):
-  Artificer_Run_Subclass(Player_Character)
+def Artificer_Level_Fifteen(Player_Character,Subclass):
+  Artificer_Run_Subclass(Player_Character,Subclass)
   Player_Character.Long_Rest_Options['Change_Artificer_Spells']
 
 def Artificer_Level_Sixteen(Player_Character):
@@ -782,6 +786,7 @@ def Artificer_Level_Seventeen(Player_Character):
 def Artificer_Level_Eighteen(Player_Character):
   Magic_Item_Master(Player_Character)
   Player_Character.Long_Rest_Options['Change_Artificer_Spells']
+  print('Magic Item Master')
 
 def Artificer_Level_Nineteen(Player_Character):
   Character_Functions.ASI(Player_Character)
@@ -790,6 +795,7 @@ def Artificer_Level_Nineteen(Player_Character):
 def Artificer_Level_Twenty(Player_Character):
   Apply_Soul_of_Artifice(Player_Character)
   Player_Character.Long_Rest_Options['Change_Artificer_Spells']
+  print('Soul of Artifice')
 
 Artificer_Features = [Artificer_Level_One, Artificer_Level_Two, Artificer_Level_Seven, Artificer_Level_Ten, Artificer_Level_Eleven, Artificer_Level_Eighteen, Artificer_Level_Twenty]
 
@@ -806,11 +812,11 @@ def Run_Artificer(Player_Character,Level,Subclass):
     if Level >= 2:
       Artificer_Level_Two(Player_Character)
       if Level >= 3:
-        Artificer_Level_Three(Player_Character)
+        Artificer_Level_Three(Player_Character,Subclass)
         if Level >= 4:
           Artificer_Level_Four(Player_Character)
           if Level >= 5:
-            Artificer_Level_Five(Player_Character)
+            Artificer_Level_Five(Player_Character,Subclass)
             if Level >= 6:
               Artificer_Level_Six(Player_Character)
               if Level >= 7:
@@ -818,7 +824,7 @@ def Run_Artificer(Player_Character,Level,Subclass):
                 if Level >= 8:
                   Artificer_Level_Eight(Player_Character)
                   if Level >= 9:
-                    Artificer_Level_Nine(Player_Character)
+                    Artificer_Level_Nine(Player_Character,Subclass)
                     if Level >= 10:
                       Artificer_Level_Ten(Player_Character)
                       if Level >= 11:
@@ -830,7 +836,7 @@ def Run_Artificer(Player_Character,Level,Subclass):
                             if Level >= 14:
                               Artificer_Level_Fourteen(Player_Character)
                               if Level >= 15:
-                                Artificer_Level_Fifteen(Player_Character)
+                                Artificer_Level_Fifteen(Player_Character,Subclass)
                                 if Level >= 16:
                                   Artificer_Level_Sixteen(Player_Character)
                                   if Level >= 17:

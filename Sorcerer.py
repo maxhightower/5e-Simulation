@@ -212,7 +212,6 @@ def Run_Sorcerer(Player_Character, Level):
   Level = Player_Character.Level_Count
   if Level >= 1:
     Sorcerer_Level_One(Player_Character)
-    Establishing_Hierarchy.Count_Player_Levels(Player_Character)
     if Level >= 2:
       Sorcerer_Level_Two(Player_Character)
       if Level >= 3:
@@ -269,3 +268,6 @@ Genie = Establishing_Hierarchy.Subclass(Sorcerer,'Genie',[],False)
     # Dao
 Draconic = Establishing_Hierarchy.Subclass(Sorcerer,'Draconic',[],False)
 Wild_Magic = Establishing_Hierarchy.Subclass(Sorcerer,'Wild Magic',[],False)
+
+Sorcerer_Subclasses = [Aberrant_Mind, Clockwork, Divine, Lunar, Shadow, Storm, Genie]
+Sorcerer.Subclasses = Sorcerer_Subclasses

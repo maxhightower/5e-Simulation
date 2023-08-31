@@ -302,7 +302,6 @@ def Run_Monk(Player_Character,Level):
   Level = Player_Character.Levels.count(Monk)
   if Level >= 1:
     Monk_Level_One(Player_Character)
-#    Establishing_Hierarchy.Count_Player_Levels(Player_Character)
     if Level >= 2:
       Monk_Level_Two(Player_Character)
       if Level >= 3:

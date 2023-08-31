@@ -172,7 +172,6 @@ def Run_Rogue(Player_Character, Level):
   Level = Player_Character.Levels.count(Rogue)
   if Level >= 1:
     Rogue_Level_One(Player_Character)
-    Establishing_Hierarchy.Count_Player_Levels(Player_Character)
     if Level >= 2:
       Rogue_Level_Two(Player_Character)
       if Level >= 3:

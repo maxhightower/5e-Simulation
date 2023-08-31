@@ -220,7 +220,6 @@ def Run_Fighter(Player_Character,Level):
   Level = Player_Character.Levels.count(Fighter)
   if Level >= 1:
     Fighter_Level_One(Player_Character)
-    #Establishing_Hierarchy.Count_Player_Levels(Player_Character)
     if Level >= 2:
       Fighter_Level_Two(Player_Character)
       if Level >= 3:

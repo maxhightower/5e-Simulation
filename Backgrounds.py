@@ -3,7 +3,8 @@ from random import randrange
 
 
 class Background:
-  def __init__(self,Skill_Profs,Language_Profs,Tool_Profs,Artisans_Tools_Profs,Instrument_Profs,Vehicle_Profs,Game_Profs,Inventory_Tools,Inventory_Artisan_Tools,Inventory_Instruments,Inventory_Games,Inventory_Storage,Inventory_Currency,Inventory_Apparel,Inventory_Items_of_Identification,Inventory_Vehicles,Features):
+  def __init__(self,Name,Skill_Profs,Language_Profs,Tool_Profs,Artisans_Tools_Profs,Instrument_Profs,Vehicle_Profs,Game_Profs,Inventory_Tools,Inventory_Artisan_Tools,Inventory_Instruments,Inventory_Games,Inventory_Storage,Inventory_Currency,Inventory_Apparel,Inventory_Items_of_Identification,Inventory_Vehicles,Features):
+    self.Name = Name
     self.Skill_Profs = Skill_Profs
     self.Language_Profs = Language_Profs
     self.Tool_Profs = Tool_Profs
@@ -54,7 +55,7 @@ Exotic_Languages = ['Abyssal','Celestial','Draconic','Deep Speech','Infernal','P
     # Common Clothes, Belt Pouch of 10gp
     # City Secrets Feature
 
-Urchin = Background(['Sleight of Hand','Stealth'],False,['Disguise Kit','Thieves Tools'],False,False,False,False,False,False,False,False,'Belt Pouch','15gp','Common Clothes',False,False,'City Secrets',)
+Urchin = Background('Urchin',['Sleight of Hand','Stealth'],False,['Disguise Kit','Thieves Tools'],False,False,False,False,False,False,False,False,'Belt Pouch','15gp','Common Clothes',False,False,'City Secrets',)
 
 # Soldier
     # Athletics, Intimidation
@@ -62,7 +63,7 @@ Urchin = Background(['Sleight of Hand','Stealth'],False,['Disguise Kit','Thieves
     # Insignia of Rank, Dice Set or Playing Cards, Common Clothes, Belt Pouch of 10gp
     # Military Rank Feature
 
-Soldier = Background(['Athletics','Intimidation'],False,False,False,False,['Land_Vehicles'],1,False,False,False,1,'Belt Pouch','10gp','Common Clothes','Insignia of Rank',False,'Military Rank')
+Soldier = Background('Soldier',['Athletics','Intimidation'],False,False,False,False,['Land_Vehicles'],1,False,False,False,1,'Belt Pouch','10gp','Common Clothes','Insignia of Rank',False,'Military Rank')
 
 # Sailor
     # Athletics, Perception
@@ -70,7 +71,7 @@ Soldier = Background(['Athletics','Intimidation'],False,False,False,False,['Land
     # Club, Silk Rope (50ft), Common Clothes, Belt Pouch of 10gp
     # Ship's Passage Feature
 
-Sailor = Background(['Athletics','Perception'],False,['Navigators Tools'],False,False,['Water_Vehicles'],False,False,False,False,False,'Belt Pouch','10gp','Common Clothes',False,False,'Ships Passage')
+Sailor = Background('Sailor',['Athletics','Perception'],False,['Navigators Tools'],False,False,['Water_Vehicles'],False,False,False,False,False,'Belt Pouch','10gp','Common Clothes',False,False,'Ships Passage')
 
 # Pirate
     # Athletics, Perception
@@ -78,7 +79,7 @@ Sailor = Background(['Athletics','Perception'],False,['Navigators Tools'],False,
     #  Club, Silk Rope (50ft), Common Clothes, Belt Pouch of 10gp
     # Bad Reputation Feature
 
-Pirate = Background(['Athletics','Perception'],False,['Navigators Tools'],False,False,['Water_Vehicles'],False,False,False,False,False,'Belt Pouch','10gp','Common Clothes',False,False,'Bad Reputation')
+Pirate = Background('Pirate',['Athletics','Perception'],False,['Navigators Tools'],False,False,['Water_Vehicles'],False,False,False,False,False,'Belt Pouch','10gp','Common Clothes',False,False,'Bad Reputation')
 
 # Sage
     # Arcana, History
@@ -86,7 +87,7 @@ Pirate = Background(['Athletics','Perception'],False,['Navigators Tools'],False,
     # Ink, Quill, Common Clothes, Belt Pouch of 10gp
     # Researcher Feature
 
-Sage = Background(['Arcana','History'],2,False,False,False,False,False,False,False,False,False,'Belt Pouch',['10gp'],'Common Clothes',False,False,'Researcher')
+Sage = Background('Sage',['Arcana','History'],2,False,False,False,False,False,False,False,False,False,'Belt Pouch',['10gp'],'Common Clothes',False,False,'Researcher')
 
 # Outlander
     # Athletics, Survival
@@ -95,7 +96,7 @@ Sage = Background(['Arcana','History'],2,False,False,False,False,False,False,Fal
     # Staff, hunting trap, traveler's clothes, belt pouch of 10gp
     # Wanderer Feature
 
-Outlander = Background(['Athletics','Survival'],1,False,False,1,False,False,False,False,False,False,'Belt Pouch','10gp','Travelers Clothes',False,False,'Wanderer')
+Outlander = Background('Outlander',['Athletics','Survival'],1,False,False,1,False,False,False,False,False,False,'Belt Pouch','10gp','Travelers Clothes',False,False,'Wanderer')
 
 # Noble
     # History, Persuasion
@@ -104,7 +105,7 @@ Outlander = Background(['Athletics','Survival'],1,False,False,1,False,False,Fals
     # Fine Clothes, Signet Ring, Scroll of Pedigree, Purse of 25gp
     # Position of Privilege Feature
 
-Noble = Background(['History','Persuasion'],1,False,False,False,False,1,False,False,False,False,'Purse','25gp','Fine Clothes',['Signet Ring','Scroll of Pedigree'],False,'Position of Privilege')
+Noble = Background('Noble',['History','Persuasion'],1,False,False,False,False,1,False,False,False,False,'Purse','25gp','Fine Clothes',['Signet Ring','Scroll of Pedigree'],False,'Position of Privilege')
 
 # Knight
     # History, Persuasion
@@ -113,7 +114,7 @@ Noble = Background(['History','Persuasion'],1,False,False,False,False,1,False,Fa
     # Fine Clothes, Signet Ring, Scroll of Pedigree, Purse of 25gp
     # Retainers Feature
 
-Knight = Background(['History','Persuasion'],1,False,False,False,False,1,False,False,False,False,'Purse','25gp','Fine Clothes',['Signet Ring','Scroll of Pedigree'],False,'Retainers')
+Knight = Background('Knight',['History','Persuasion'],1,False,False,False,False,1,False,False,False,False,'Purse','25gp','Fine Clothes',['Signet Ring','Scroll of Pedigree'],False,'Retainers')
 
 # Hermit
     # Medicine, Religion
@@ -122,7 +123,7 @@ Knight = Background(['History','Persuasion'],1,False,False,False,False,1,False,F
     # Scroll Case, Winter Blanket, Common Clothes, Herbalism Kit, 5gp
     # Discovery Feature
 
-Hermit = Background(['Medicine','Religion'],1,['Herbalism Kit'],False,False,False,False,['Herbalism Kit'],False,False,False,False,'5gp','Common Clothes',False,False,'Discovery')
+Hermit = Background('Hermit',['Medicine','Religion'],1,['Herbalism Kit'],False,False,False,False,['Herbalism Kit'],False,False,False,False,'5gp','Common Clothes',False,False,'Discovery')
 
 # Guild Merchant
     # Insight, Persuasion
@@ -131,8 +132,8 @@ Hermit = Background(['Medicine','Religion'],1,['Herbalism Kit'],False,False,Fals
     # Artisan's tools OR mule and cart, letter of introduction, traveler's clothes, pouch of 15gp
     # Guild Membership Feature
 
-Guild_Merchant1 = Background(['Insight','Persuasion'],1,['Navigators Tools'],False,False,False,False,False,1,False,False,'Belt Pouch','15gp','Travelers Clothes','Letter of Introduction',False,'Guild Membership')
-Guild_Merchant2 = Background(['Insight','Persuasion'],1,False,1,False,False,False,False,False,False,False,'Belt Pouch','15gp','Travelers Clothes','Letter of Introduction',['Mule','Cart'],'Guild Membership')
+Guild_Merchant1 = Background('Guild Merchant 1',['Insight','Persuasion'],1,['Navigators Tools'],False,False,False,False,False,1,False,False,'Belt Pouch','15gp','Travelers Clothes','Letter of Introduction',False,'Guild Membership')
+Guild_Merchant2 = Background('Guild Merchant 2',['Insight','Persuasion'],1,False,1,False,False,False,False,False,False,False,'Belt Pouch','15gp','Travelers Clothes','Letter of Introduction',['Mule','Cart'],'Guild Membership')
 
 # Guild Artisan
     # Insight, Persuasion
@@ -141,7 +142,7 @@ Guild_Merchant2 = Background(['Insight','Persuasion'],1,False,1,False,False,Fals
     # Artisan's tools, letter of introduction, traveler's clothes, belt pouch of 15gp
     # Guild Membership Feature
 
-Guild_Artisan = Background(['Insight','Persuasion'],1,False,1,False,False,False,False,1,False,False,'Belt Pouch','15gp','Travelers Clothes','Letter of Introduction',False,'Guild Membership')
+Guild_Artisan = Background('Guild Artisan',['Insight','Persuasion'],1,False,1,False,False,False,False,1,False,False,'Belt Pouch','15gp','Travelers Clothes','Letter of Introduction',False,'Guild Membership')
 
 # Folk Hero
     # Animal Handling, Survival
@@ -149,7 +150,7 @@ Guild_Artisan = Background(['Insight','Persuasion'],1,False,1,False,False,False,
     # Artisan's tools, shovel, iron pot, common clothes, belt pouch of 10gp
     # Rustic Hospitality feature
 
-Folk_Hero = Background(['Animal Handling','Survival'],False,False,1,False,['Water_Vehicles'],False,False,1,False,False,'Belt Pouch',['10gp'],'Common Clothes',False,False,'Rustic Hospitality')
+Folk_Hero = Background('Folk Hero',['Animal Handling','Survival'],False,False,1,False,['Water_Vehicles'],False,False,1,False,False,'Belt Pouch',['10gp'],'Common Clothes',False,False,'Rustic Hospitality')
 
 # Gladiator
     # Acrobatics, Performance
@@ -157,7 +158,7 @@ Folk_Hero = Background(['Animal Handling','Survival'],False,False,1,False,['Wate
     # weapon, costume clothes, belt pouch of 15gp
     # By Popular Demand Feature
 
-Gladiator = Background(['Acrobatics','Performance'],False,['Disguise Kit'],False,1,False,False,False,False,False,False,'Belt Pouch','15gp','Costume Clothes',False,False,'By Popular Demand')
+Gladiator = Background('Gladiator',['Acrobatics','Performance'],False,['Disguise Kit'],False,1,False,False,False,False,False,False,'Belt Pouch','15gp','Costume Clothes',False,False,'By Popular Demand')
 
 # Entertainer
     # Acrobatics, Performance
@@ -165,7 +166,7 @@ Gladiator = Background(['Acrobatics','Performance'],False,['Disguise Kit'],False
     # instrument, costume clothes, belt pouch of 15gp
     # By Popular Demand Feature
 
-Entertainer = Background(['Acrobatics','Performance'],False,['Disguise Kit'],False,1,False,False,False,False,1,False,'Belt Pouch','15gp','Costume Clothes',False,False,'By Popular Demand')
+Entertainer = Background('Entertainer',['Acrobatics','Performance'],False,['Disguise Kit'],False,1,False,False,False,False,1,False,'Belt Pouch','15gp','Costume Clothes',False,False,'By Popular Demand')
 
 # Criminal
     # Deception,Stealth
@@ -173,7 +174,7 @@ Entertainer = Background(['Acrobatics','Performance'],False,['Disguise Kit'],Fal
     # Crowbar, common clothes, belt pouch of 15gp
     # Criminal Contact Feature
 
-Criminal = Background(['Deception','Stealth'],False,['Thieves Tools'],False,False,False,1,False,False,False,False,'Belt Pouch','15gp','Common Clothes',False,False,'Criminal Contact')
+Criminal = Background('Criminal',['Deception','Stealth'],False,['Thieves Tools'],False,False,False,1,False,False,False,False,'Belt Pouch','15gp','Common Clothes',False,False,'Criminal Contact')
 
 # Spy
     # Deception,Stealth
@@ -181,7 +182,7 @@ Criminal = Background(['Deception','Stealth'],False,['Thieves Tools'],False,Fals
     # Crowbar, common clothes, belt pouch of 15gp
     # Spy Contact Feature
 
-Spy = Background(['Deception','Stealth'],False,['Thieves Tools'],False,False,False,1,False,False,False,False,'Belt Pouch','15gp','Common Clothes',False,False,'Spy Contact')
+Spy = Background('Spy',['Deception','Stealth'],False,['Thieves Tools'],False,False,False,1,False,False,False,False,'Belt Pouch','15gp','Common Clothes',False,False,'Spy Contact')
 
 # Charlatan
     # Deception, Sleight of Hand
@@ -189,7 +190,7 @@ Spy = Background(['Deception','Stealth'],False,['Thieves Tools'],False,False,Fal
     # Fine clothes, disguise kit, belt pouch of 15gp
     # False Identity Feature
 
-Charlatan = Background(['Deception','Sleight of Hand'],False,['Disguise Kit','Forgery Kit'],False,False,False,False,['Disguise Kit'],False,False,False,'Belt Pouch','15gp','Fine Clothes',False,False,'False Identity')
+Charlatan = Background('Charlatan',['Deception','Sleight of Hand'],False,['Disguise Kit','Forgery Kit'],False,False,False,False,['Disguise Kit'],False,False,False,'Belt Pouch','15gp','Fine Clothes',False,False,'False Identity')
 
 # Acolyte
     # Insight, Religion
@@ -197,7 +198,7 @@ Charlatan = Background(['Deception','Sleight of Hand'],False,['Disguise Kit','Fo
     # Holy Symbol, Book, Common Clothes, Belt pouch of 15gp
     # Shelter of the Faithful Feature
 
-Acolyte = Background(['Insight','Religion'],2,False,False,False,False,False,False,False,False,False,'Belt Pouch','15gp','Common Clothes',False,False,'Shelter of the Faithful')
+Acolyte = Background('Acolyte',['Insight','Religion'],2,False,False,False,False,False,False,False,False,False,'Belt Pouch','15gp','Common Clothes',False,False,'Shelter of the Faithful')
 
 
 Background_Options = [Urchin,Soldier,Sailor,Pirate,Sage,Outlander,Noble,Knight,Hermit,Guild_Merchant1,Guild_Merchant2,Guild_Artisan,Folk_Hero,Gladiator,Entertainer,Criminal,Spy,Charlatan,Acolyte]
