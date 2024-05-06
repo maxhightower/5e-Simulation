@@ -1,40 +1,83 @@
 from random import randrange
 import numpy as np
 
+# ------------------------------- Defining the Dice Rolling Part ------------------------------- #
+############ First to create a way to roll dice ############
+
+# rolling any given number of dice for any type
+def Roll_Dice(Number_of_Dice,Dice_Type):
+  roll_results = []
+  for i in range(Number_of_Dice):
+    roll_results.append(randrange(1,Dice_Type))
+  print(roll_results)
+  return roll_results.sum()
+
+
+
+############ Defining the Main d20_Roll Class and Subclasses ##################
 
 class Roll:
-  def __init__(self,Entity_Making):
+  def __init__(self,Entity_Making,Dice_Type,Dice_Number):
     self.Entity_Making = Entity_Making
+
+    self.Dice_Type = Dice_Type
+    self.Dice_Number = Dice_Number
+
+    self.Modifiers = {            # currently debating how these modifiers should work
+      'Circumstances': [],
+      'Bonus': [],
+      'Penalties': []
+    }
+    
+class d20_Roll(Roll):
+  def __init__(self,Entity_Making,Dice_Type,Dice_Number):
+    super().__init__(Entity_Making,Dice_Type,Dice_Number)
     self.Dice_Type = 20
     self.Dice_Number = 1
-    self.Modifiers = []
-    
-    #self.Roll_Type = Roll_Type    # ['Attack Roll', 'Ability Check', 'Saving Throw']
-
 
 class Damage_Roll(Roll):
-  def __init__(self,Entity_Taking_Damage,Entity_Causing_Damage,Modifiers,Damage_Types):
+  def __init__(self,Dice_Type,Dice_Number,Entity_Making,Entity_Taking_Damage,Entity_Causing_Damage,Modifiers,Damage_Types):
+    super().__init__(Entity_Causing_Damage,Dice_Type,Dice_Number)
+
     self.Entity_Taking_Damage = Entity_Taking_Damage
     self.Entity_Causing_Damage = Entity_Causing_Damage
+
     self.Modifiers = Modifiers
     self.Damage_Types = Damage_Types
 
+    # final damage???
 
-class Ability_Check(Roll):
-  def __init__(self,Entity_Making,Score,Skill,Contested,Contested_Entity,Contested_Score,Contested_Skill,Modifiers):
-    super().__init__(Entity_Making)
-    self.Score = Score
-    self.Skill = Skill
-    self.Contested = Contested
+
+class Ability_Check(d20_Roll):
+  def __init__(self,Dice_Type,Dice_Number,Entity_Making,Ability_Score,Skill_Type,Contested,Contested_Entity,Contested_Score,Contested_Skill,Modifiers):
+    super().__init__(Entity_Making,Dice_Type,Dice_Number)
+
+    self.Ability_Score = Ability_Score
+    self.Skill_Type = Skill_Type
+    
+    self.Contested = bool()
+    
     self.Contested_Entity = Contested_Entity
     self.Contested_Score = Contested_Score
     self.Contested_Skill = Contested_Skill
+
     self.Modifiers = Modifiers
+    self.Circumstances = []
+
+class Saving_Throw(d20_Roll):
+  def __init__(self,Entity_Making,Save_Type,Entity_Imposing,DC,Modifiers):
+    super().__init__(Entity_Making)
+    self.Save_Type = Save_Type  # this is better than "Score" because Death saves don't include a score but some creatures get proficiency in them regardless
+    self.Entity_Imposing = Entity_Imposing
+    self.DC = DC
+    self.Modifiers = Modifiers
+
     self.Dice_Number = 1
     self.Dice_Type = 20
     self.Circumstances = []
 
-class Attack_Roll(Roll):
+
+class Attack_Roll(d20_Roll):
   def __init__(self,Entity_Making,Attack_Target,Modifiers):
     super().__init__(Entity_Making)
     self.Attack_Target = Attack_Target
@@ -46,18 +89,18 @@ class Attack_Roll(Roll):
 
     # the rolls need to be able to store Adv and Dis
 
-
+################# Defining the Subclasses of Attack_Roll #####################
 class Spell_Attack_Roll(Attack_Roll):
   def __init__(self,Entity_Making,Attack_Target,Modifiers,Spell):
     super().__init__(Entity_Making,Attack_Target,Modifiers)
     self.Spell = Spell
     self.Dice_Number = 1
     self.Dice_Type = 20
+
     # would this benefit from having the spell attribute?
     # what parts of the game would this require this?
         # any monster with Limited Magic Immunity will need to know the Spell Level
         # Counterspell
-        # 
 
 class Weapon_Attack_Roll(Attack_Roll):
   def __init__(self,Entity_Making,Attack_Target,Modifiers,Weapon):
@@ -75,7 +118,6 @@ class Weapon_Attack_Roll(Attack_Roll):
                   }
                   )
 
-
 class Ability_Attack_Roll(Attack_Roll):
   def __init__(self,Entity_Making,Attack_Target,Modifiers,Ability):
     super().__init__(Entity_Making,Attack_Target,Modifiers)
@@ -84,39 +126,27 @@ class Ability_Attack_Roll(Attack_Roll):
     self.Dice_Type = 20
 
 
-class Saving_Throw(Roll):
-  def __init__(self,Entity_Making,Save_Type,Entity_Imposing,DC,Modifiers):
-    super().__init__(Entity_Making)
-    self.Save_Type = Save_Type  # this is better than "Score" because Death saves don't include a score but some creatures get proficiency in them regardless
-    self.Entity_Imposing = Entity_Imposing
-    self.DC = DC
-    self.Modifiers = Modifiers
-
-    self.Dice_Number = 1
-    self.Dice_Type = 20
-    self.Circumstances = []
-
-
-
+###################### Defining How a Dice Roll is RUN ##########################
 
 def Run_Roll(Roll):
   for i in Roll.Modifiers:
     pass
 
   if Roll == Damage_Roll:
-    Roll_Dice(Roll.Dice_Number,Roll.Dice_Type)
+    dice_roll = Roll_Dice(Roll.Dice_Number,Roll.Dice_Type)
 
+    for i in Roll.Damage:
     if str(Roll.Damage_Type,'res') in Roll.Entity_Taking_Damage.WRI:
-      pass
+      dice_roll = dice_roll / 2
     elif str(Roll.Damage_Type,'immu') in Roll.Entity_Taking_Damage.WRI:
-      pass
+      dice_roll = 0
     elif str(Roll.Damage_Type,'vul') in Roll.Entity_Taking_Damage.WRI:
-      pass
-    else: pass
+      dice_roll = dice_roll * 2
 
   elif Roll == Saving_Throw:
     Roll_Dice(Roll.Dice_Number,Roll.Dice_Type)
-
+    Roll.Entity_Imposing
+    Roll.Entity_Making
 
   elif Roll == Attack_Roll:
     Roll_Dice(Roll.Dice_Number,Roll.Dice_Type)
@@ -147,15 +177,55 @@ def Reset_Current_Roll(Roll):
   Roll.Modifiers = []
 
 
-Current_Allied_Ability_Check = Ability_Check('Placeholder','Placeholder','Placeholder','Placeholder','Placeholder','Placeholder','Placeholder',[])
-Current_Allied_Attack_Roll = Attack_Roll('Placeholder','Placeholder',[])
-Current_Allied_Saving_Throw = Saving_Throw('Placeholder','Placeholder','Placeholder','Placeholder',[])
-Current_Allied_Damage_Roll = Damage_Roll('Placeholder','Placeholder',[],'Placeholder')
+#---------------------------------- Creating Current Checks for Game State ---------------------------------- #
 
-Current_Enemy_Ability_Check = Ability_Check('Placeholder','Placeholder','Placeholder','Placeholder','Placeholder','Placeholder','Placeholder',[])
-Current_Enemy_Attack_Roll = Attack_Roll('Placeholder','Placeholder',[])
-Current_Enemy_Saving_Throw = Saving_Throw('Placeholder','Placeholder','Placeholder','Placeholder',[])
-Current_Enemy_Damage_Roll = Damage_Roll('Placeholder','Placeholder',[],'Placeholder')
+Current_Allied_Ability_Check = Ability_Check('Dice_Type',
+                                             'Dice_Number',
+                                             'Entity_Making',
+                                             'Ability_Score',
+                                             'Skill_Type',
+                                             False,
+                                             'Contested_Entity',
+                                             'Contested_Score',
+                                             'Contested_Skill',
+                                              [])
+
+Current_Allied_Attack_Roll = Attack_Roll('Entity_Making',
+                                         'Attack_Target',
+                                         [])
+
+Current_Allied_Saving_Throw = Saving_Throw('Entity_Making',
+                                           'Save_Type',
+                                           'Entity_Imposing',
+                                           'DC',
+                                           [])
+
+Current_Allied_Damage_Roll = Damage_Roll('Dice_Type',
+                                         'Dice_Number',
+                                         'Entity_Making',
+                                         'Entity_Taking_Damage',
+                                         'Entity_Causing_Damage',
+                                         [],
+                                         [])
+
+Current_Enemy_Ability_Check = Ability_Check('Dice_Type',
+                                            'Dice_Number',
+                                            'Entity_Making',
+                                            'Ability_Score',
+                                            'Skill_Type',
+                                            False,
+                                            'Contested_Entity',
+                                            'Contested_Score',
+                                            'Contested_Skill',
+                                            [])
+
+
+Current_Enemy_Attack_Roll = Attack_Roll('Entity_Making',
+                                        'Attack_Target',
+                                        [])
+
+Current_Enemy_Saving_Throw = Saving_Throw('Entity_Making','Save_Type','Entity_Imposing','DC',[])
+Current_Enemy_Damage_Roll = Damage_Roll('Dice_Type','Dice_Number','Entity_Making','Entity_Taking_Damage','Entity_Causing_Damage',[],[])
 
 
 
@@ -197,10 +267,6 @@ def Average_Roll(Number_of_Dice,Dice_Type,Bonus,Bonus2):
   sequence_B = [Dice_Type,1]
   sequence = [Number_of_Dice * (sum(sequence_B)/2),Bonus,Bonus2_Num]
   return sum(sequence)
-
-# rolling any given number of dice for any type??? Assuming I can do that
-def Roll_Dice(Number_of_Dice,Dice_Type):
-  return randrange(Number_of_Dice,Number_of_Dice * Dice_Type,1)
 
 
 

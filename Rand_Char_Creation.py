@@ -20,7 +20,20 @@ import Wizard
 import Establishing_Hierarchy
 import CHARACTER_CREATOR
 
-Class_List = [Barbarian.Barbarian,Cleric.Cleric,Artificer.Artificer,Bard.Bard,Druid.Druid,Fighter.Fighter,Paladin.Paladin,Monk.Monk,Rogue.Rogue,Ranger.Ranger,Sorcerer.Sorcerer,Warlock.Warlock,Wizard.Wizard]
+Class_List = [Barbarian.Barbarian,
+              Cleric.Cleric,
+              Artificer.Artificer,
+              Bard.Bard,
+              Druid.Druid,
+              Fighter.Fighter,
+              Paladin.Paladin,
+              Monk.Monk,
+              Rogue.Rogue,
+              Ranger.Ranger,
+              Sorcerer.Sorcerer,
+              Warlock.Warlock,
+              Wizard.Wizard]
+
 Class_Subclass_Level = {
     'Artificer': 3,
     'Barbarian': 3,

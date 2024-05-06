@@ -1,26 +1,4 @@
-import Establishing_Hierarchy
-import Spell_Data
-import Spells
-import Effects
-import Character_Functions
-import Character_Actions
-import Armor_and_Weapons
-import Dice_Rolls
-import Backgrounds
 
-import random
-
-from Dice_Rolls import Current_Allied_Ability_Check
-from Dice_Rolls import Current_Allied_Attack_Roll
-from Dice_Rolls import Current_Allied_Saving_Throw
-from Dice_Rolls import Current_Allied_Damage_Roll
-
-from Dice_Rolls import Current_Enemy_Ability_Check
-from Dice_Rolls import Current_Enemy_Attack_Roll
-from Dice_Rolls import Current_Enemy_Saving_Throw
-from Dice_Rolls import Current_Enemy_Damage_Roll
-
-import pandas
 
 Armor = [['Studded Leather'],['Scale Mail']]
 Weapons = [['Simple Weapon','Simple Weapon']]
@@ -515,6 +493,8 @@ def Choose_Infusion(Player_Character):
   Infusion = input('Which Infusion: ')
   return Infusion
 
+def Randomly_Pick_Infusions(Player_Character):
+  pass
 
 def Infuse_Item(Player_Character):
   Infuse_Item_Effect = Effects.Create_Item_Effect(str(Choose_Infusion(Player_Character)),False,False,'Permanent',Player_Character.Inventory,'Armor',True,0,0,False,False,False,False,False,False)
@@ -594,13 +574,20 @@ def Apply_Spell_Storing_Item(Player_Character):
   for Spell in range(0,len(Player_Character.Spellcasting_Prepared['Artificer']),1):
     print(Player_Character.Spellcasting_Prepared['Artificer'][Spell].Name)
     print(Player_Character.Spellcasting_Prepared['Artificer'][Spell].Base_Level)
+
     if Player_Character.Spellcasting_Prepared['Artificer'][Spell].Base_Level < 3:
       Spells_Storable.append(Player_Character.Spellcasting_Prepared['Artificer'][Spell])
     
     else:
-      pass
+      print('Spell Not Storable')
 
-  def Store_Spell_in_Item(Player_Character):
+  def Randomly_Store_Spell_in_Item(Player_Character):
+    Item_Choice = random.choice(Items_Usable)
+    Spell_Choice = random.choice(Spells_Storable)
+
+    Effects.Enchant_Item_Effect(Item_Choice,False,'Permanent',False,False,False,False,False,False,False,False,Spell_Choice)
+
+  def Manual_Store_Spell_in_Item(Player_Character):
     print(Items_Usable)
     Item_Choice = input('Which Item do you Infuse: ')
     print(Spells_Storable)
@@ -608,7 +595,7 @@ def Apply_Spell_Storing_Item(Player_Character):
 
     Effects.Enchant_Item_Effect(Item_Choice,False,'Permanent',False,False,False,False,False,False,False,False,Spell_Choice)
 
-  Player_Character.Long_Rest_Options['Store_Spell_in_Item'] = Store_Spell_in_Item(Player_Character)      # Change this to Player_Characters.Long_Rests
+  Player_Character.Long_Rest_Options['Store_Spell_in_Item'] = Manual_Store_Spell_in_Item(Player_Character)      # Change this to Player_Characters.Long_Rests
 
 
   def Hold_Spell_Stored_Item(Wielder):
@@ -866,8 +853,6 @@ def Battle_Smith_Spells(Player_Character):
     Player_Character.Spellcasting_Prepared = {
       'Artificer': [Spells.Shield_Spell,Spells.Thunderwave_Spell,Spells.Spells_Dict["Scorching Ray"],Spells.Spells_Dict["Shatter"],Spells.Spells_Dict["Fireball"],Spells.Spells_Dict["Wind Wall"],Spells.Spells_Dict["Wall of Ice"],Spells.Spells_Dict["Wall of Fire"],Spells.Spells_Dict["Cone of Cold"],Spells.Spells_Dict["Wall of Force"]]
     }
-
-
 
 
 #Battle_Ready

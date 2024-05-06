@@ -207,8 +207,6 @@ def Cleric_Choose_Subclass(Player_Character):
     print('Cleric Subclass Not Found')
   return Subclass
 
-global Subclass
-
 
 
 def Cleric_Level_One(Player_Character):
