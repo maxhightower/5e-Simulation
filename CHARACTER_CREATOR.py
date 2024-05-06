@@ -1,6 +1,6 @@
 import Establishing_Hierarchy
 #import Character_Functions
-
+import random
 import Backgrounds
 import Species as s
 import Armor_and_Weapons
@@ -49,7 +49,14 @@ import Wizard
 from Wizard import Run_Wizard
 
 
-
+def calc_health(character):
+    #print('Calculating Health')
+    if character.Levels[0] == Barbarian.Barbarian:
+        HP = 12 + Establishing_Hierarchy.abilityScoreToModifier(character.Con_Score)
+    else:
+        HP = 10 + Establishing_Hierarchy.abilityScoreToModifier(character.Con_Score)
+    #print('HP:',HP)
+    character.HP = HP
 
 # Testing Character Creation
 
@@ -128,7 +135,7 @@ def Use_Kamikaze():
 
 #print('Error After Score Generation Methods')
 
-def Create_Character(Name,Score_Generation_Method,Species,Subspecies,Class,Background,Level):
+def Create_Character(character_name,Score_Generation_Method,Species,Subspecies,Class,Background,Level):
     #print('Error after defining Create Character')
     # x = 'name = "John"\nprint(name)'
     # exec(x)
@@ -169,42 +176,47 @@ def Create_Character(Name,Score_Generation_Method,Species,Subspecies,Class,Backg
         'Wizard': ['Intelligence','Constitution','Dexterity','Wisdom','Charisma','Strength']}
 
     for x, y in Quick_Builds.items():
-        if x == Class.Name:
+        if x == Class:
             for i in range(len(y)):
                 #print(i)
                 if y[i] == 'Strength':
-                    global Strength
                     Strength = int(listl[i])
                     #print('Strength = ',Strength)
                 elif y[i] == 'Dexterity':
-                    global Dexterity
                     Dexterity = int(listl[i])
                     #print('Dexterity = ',Dexterity)
                 elif y[i] == 'Constitution':
-                    global Constitution
                     Constitution = int(listl[i])
                     #print('Constitution = ',Constitution)
                 elif y[i] == 'Intelligence':
-                    global Intelligence
                     Intelligence = int(listl[i])
                     #print('Intelligence = ',Intelligence)
                 elif y[i] == 'Wisdom':
-                    global Wisdom
                     Wisdom = int(listl[i])
                     #print('Wisdom = ',Wisdom)
                 elif y[i] == 'Charisma':
-                    global Charisma
                     Charisma = int(listl[i])
                     #print('Charisma = ',Charisma)
                 else:
-                    pass
+                    Strength = 10
+                    Dexterity = 10
+                    Constitution = 10
+                    Intelligence = 10
+                    Wisdom = 10
+                    Charisma = 10
+
         else:
-            pass
+             Strength = 10
+             Dexterity = 10
+             Constitution = 10
+             Intelligence = 10
+             Wisdom = 10
+             Charisma = 10
 
     #print('Error after Quick Builds')
 
-    Name = Establishing_Hierarchy.Player_Character(
-        Name,
+    character_name = Establishing_Hierarchy.Player_Character(
+        character_name,
         Class,    # I need to put a function that accesses the class from the appropriate file
         Species,
         Subspecies,
@@ -229,114 +241,116 @@ def Create_Character(Name,Score_Generation_Method,Species,Subspecies,Class,Backg
         True  # Related Stat Blocks
         )
 
+    calc_health(character_name)
 
-    Name.Actions['Don Shield'] = Armor_and_Weapons.Don_Armor(Armor_and_Weapons.Shield,Name)
-    Name.Actions['Doff Shield'] = Armor_and_Weapons.Doff_Armor(Armor_and_Weapons.Shield,Name)
+    character_name.Actions['Don Shield'] = Armor_and_Weapons.Don_Armor(Armor_and_Weapons.Shield,character_name)
+    character_name.Actions['Doff Shield'] = Armor_and_Weapons.Doff_Armor(Armor_and_Weapons.Shield,character_name)
     
     #Name.Bonus_Actions[]
     #Name.Reactions[]
-    Name.One_Minute_Options['Unlimited']
+    character_name.One_Minute_Options['Unlimited']
 
     for i in range(Level):
         if Class == Artificer.Artificer:
-            Name.Levels[i] = Artificer.Artificer
+            character_name.Levels[i] = Artificer.Artificer
 
         elif Class == Barbarian.Barbarian:
-            Name.Levels[i] = Barbarian.Barbarian
+            character_name.Levels[i] = Barbarian.Barbarian
             #print('Assigning Class:',i)
 
         elif Class == Bard.Bard:
-            Name.Levels[i] = Bard.Bard
+            character_name.Levels[i] = Bard.Bard
             #print('Assigning Class:',i)
 
         elif Class == Cleric.Cleric:
-            Name.Levels[i] = Cleric.Cleric
+            character_name.Levels[i] = Cleric.Cleric
             #print('Assigning Class:',i)
 
         elif Class == Druid.Druid:
-            Name.Levels[i] = Druid.Druid
+            character_name.Levels[i] = Druid.Druid
 
         elif Class == Fighter.Fighter:
-            Name.Levels[i] = Fighter.Fighter
+            character_name.Levels[i] = Fighter.Fighter
         elif Class == Monk.Monk:
-            Name.Levels[i] = Monk.Monk
+            character_name.Levels[i] = Monk.Monk
         elif Class == Paladin.Paladin:
-            Name.Levels[i] = Paladin.Paladin
+            character_name.Levels[i] = Paladin.Paladin
         elif Class == Ranger.Ranger:
-            Name.Levels[i] = Ranger.Ranger
+            character_name.Levels[i] = Ranger.Ranger
         elif Class == Rogue.Rogue:
-            Name.Levels[i] = Rogue.Rogue
+            character_name.Levels[i] = Rogue.Rogue
         elif Class == Sorcerer.Sorcerer:
-            Name.Levels[i] = Sorcerer.Sorcerer
+            character_name.Levels[i] = Sorcerer.Sorcerer
         elif Class == Warlock.Warlock:
-            Name.Levels[i] = Warlock.Warlock
+            character_name.Levels[i] = Warlock.Warlock
         elif Class == Wizard.Wizard:
-            Name.Levels[i] = Wizard.Wizard
+            character_name.Levels[i] = Wizard.Wizard
         else:
             pass
 
-    Name.HP = Establishing_Hierarchy.Predicted_Hit_Points(Name)
-    Name.Prof_Bonus = Establishing_Hierarchy.levelToProficiency(Name)
+    #character_name.HP = Establishing_Hierarchy.Predicted_Hit_Points(character_name)
+    character_name.Prof_Bonus = Establishing_Hierarchy.levelToProficiency(character_name)
     #Name.AC = 
 
     #print('Error After for i in Name.Levels')
 
 
     # need to make a series of if else statements to determine which run_class functions to use
-    Artificer_Levels = Name.Levels.count(Artificer.Artificer)
-    Barbarian_Levels = Name.Levels.count(Barbarian.Barbarian)
+    Artificer_Levels = character_name.Levels.count(Artificer.Artificer)
+    Barbarian_Levels = character_name.Levels.count(Barbarian.Barbarian)
     #print('Barbarian Levels:',Barbarian_Levels)
-    Bard_Levels = Name.Levels.count(Bard.Bard)
-    Cleric_Levels = Name.Levels.count(Cleric.Cleric)
-    Druid_Levels = Name.Levels.count(Druid.Druid)
-    Fighter_Levels = Name.Levels.count(Fighter.Fighter)
-    Monk_Levels = Name.Levels.count(Monk.Monk)
-    Paladin_Levels = Name.Levels.count(Paladin.Paladin)
-    Ranger_Levels = Name.Levels.count(Ranger.Ranger)
-    Rogue_Levels = Name.Levels.count(Rogue.Rogue)
-    Sorcerer_Levels = Name.Levels.count(Sorcerer.Sorcerer)
-    Warlock_Levels = Name.Levels.count(Warlock.Warlock)
-    Wizard_Levels = Name.Levels.count(Wizard.Wizard)
+    Bard_Levels = character_name.Levels.count(Bard.Bard)
+    Cleric_Levels = character_name.Levels.count(Cleric.Cleric)
+    Druid_Levels = character_name.Levels.count(Druid.Druid)
+    Fighter_Levels = character_name.Levels.count(Fighter.Fighter)
+    Monk_Levels = character_name.Levels.count(Monk.Monk)
+    Paladin_Levels = character_name.Levels.count(Paladin.Paladin)
+    Ranger_Levels = character_name.Levels.count(Ranger.Ranger)
+    Rogue_Levels = character_name.Levels.count(Rogue.Rogue)
+    Sorcerer_Levels = character_name.Levels.count(Sorcerer.Sorcerer)
+    Warlock_Levels = character_name.Levels.count(Warlock.Warlock)
+    Wizard_Levels = character_name.Levels.count(Wizard.Wizard)
 
 
     #print('Error After Class_Levels defining')
 
     if Artificer_Levels > 0:
-        Run_Artificer(Name,Artificer_Levels)
+        Run_Artificer(character_name,Artificer_Levels)
     if Barbarian_Levels > 0:
-        Run_Barbarian(Name,Barbarian_Levels)
+        Run_Barbarian(character_name,Barbarian_Levels)
     if Bard_Levels > 0:
-        Run_Bard(Name,Bard_Levels)
+        Run_Bard(character_name,Bard_Levels)
     if Cleric_Levels > 0:
-        Run_Cleric(Name,Cleric_Levels)
+        Run_Cleric(character_name,Cleric_Levels)
     if Druid_Levels > 0:        
-        Run_Druid(Name,Druid_Levels)
+        Run_Druid(character_name,Druid_Levels)
     if Fighter_Levels > 0:
-        Run_Fighter(Name,Fighter_Levels)
+        Run_Fighter(character_name,Fighter_Levels)
     if Monk_Levels > 0:
-        Run_Monk(Name,Monk_Levels)
+        Run_Monk(character_name,Monk_Levels)
     if Paladin_Levels > 0:
-        Run_Paladin(Name,Paladin_Levels)
+        Run_Paladin(character_name,Paladin_Levels)
     if Ranger_Levels > 0:
-        Run_Ranger(Name,Ranger_Levels)
+        Run_Ranger(character_name,Ranger_Levels)
     if Rogue_Levels > 0:
-        Run_Rogue(Name,Rogue_Levels)
+        Run_Rogue(character_name,Rogue_Levels)
     if Sorcerer_Levels > 0:
-        Run_Sorcerer(Name,Sorcerer_Levels)
+        Run_Sorcerer(character_name,Sorcerer_Levels)
     if Warlock_Levels > 0:
-        Run_Warlock(Name,Warlock_Levels)
+        Run_Warlock(character_name,Warlock_Levels)
     if Wizard_Levels > 0:
-        Run_Wizard(Name,Wizard_Levels)
+        Run_Wizard(character_name,Wizard_Levels)
     
     #print('Applied Barbarian!')
 
-    Backgrounds.Take_Background(Background,Name)
+    Backgrounds.Take_Background(Background,character_name)
     #print('Applied Background!')
 
     #print('Error After Take_Background()')
 
-    s.Apply_Species(Species,Name)
+    s.Apply_Species(Species,character_name)
     #print('Applied Species!')
+
 
     #print('Error After Apply_Species()')
 
@@ -359,7 +373,7 @@ def Create_Character(Name,Score_Generation_Method,Species,Subspecies,Class,Backg
     
     #print('Error in Create_Character')
     
-    return Name
+    return character_name
 
 Omaro = Create_Character('Omaro','Standard Array',s.Human,False,Barbarian.Barbarian,Backgrounds.Acolyte,3)
 
@@ -430,3 +444,29 @@ def Find_the_Best_Armor(Player_Character):
                         AC_Possibilities['AC'].append(i.Base_AC)
                         print('AC:',AC_Possibilities)
         #print('AC:',AC_Possibilities)
+
+available_species = [s.Human,s.Dwarf,s.Elf] #s.Halfling,s.Dragonborn,s.Gnome,s.Half_Elf,s.Half_Orc,s.Tiefling]
+available_subspecies = []
+available_classes = [Artificer, Barbarian, Bard]
+available_backgrounds = [Backgrounds.Acolyte,Backgrounds.Criminal,Backgrounds.Folk_Hero,Backgrounds.Noble,Backgrounds.Sage,Backgrounds.Soldier]
+available_levels = [1]
+
+# create a function that randomly creates level one characters
+def Random_Character():
+    #print('Creating Random Character...')
+    # generate a random name using 'a' and four random numbers
+    name = 'a' + str(random.randint(1000,9999))
+    # randomly 
+    species = random.choice(available_species)
+    sub_species = False
+    class_choice = random.choice(available_classes)
+    background = random.choice(available_backgrounds)
+    level = 1
+
+    #print('Generated ',name)
+    #print('Class: ',class_choice)
+    return Create_Character(name,'Standard Array',species,sub_species,class_choice,background,level)
+
+
+# test the Random_Character function
+Random_Character()

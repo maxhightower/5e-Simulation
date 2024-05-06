@@ -5,8 +5,12 @@ def to_1D(series):
 
 import Establishing_Hierarchy
 
+
 Creatures = pd.read_excel(r'C:\Users\maxhi\OneDrive\Desktop\Python Project\Python 5e Project Data.xlsx',sheet_name='Creatures')
 Actions = pd.read_excel(r'C:\Users\maxhi\OneDrive\Desktop\Python Project\Python 5e Project Data.xlsx',sheet_name='Actions')
+#except:
+  #Creatures = pd.read_excel(r"C:\Users\maxhi\Desktop\Python Project\Python 5e Project Data.xlsx",sheet_name='Creatures')
+  #Actions = pd.read_excel(r"C:\Users\maxhi\Desktop\Python Project\Python 5e Project Data.xlsx",sheet_name='Actions',encoding='encoding')
 
 # will need to go through for armor source and add to inventory
 

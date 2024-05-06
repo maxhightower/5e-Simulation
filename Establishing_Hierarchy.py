@@ -30,7 +30,7 @@ d6_Classes = [12,10]
 d8_Classes = [0,2,3,4,6,9,11]
 d10_Classes = [5,8,7]
 d12_Classes = [2]
-
+'''
 def Predicted_Hit_Points(Player_Character):
   # the first level the character gets their full hit dice plus con modifier
   First_Level_Hitpoints = 0
@@ -48,7 +48,7 @@ def Predicted_Hit_Points(Player_Character):
       pass
   #print(Total_Average_Hit_Points)
   return Total_Average_Hit_Points
-
+'''
 
 
 
@@ -283,6 +283,41 @@ def Saving_Throw(Creature,Save):
 
   print(Roll)
   print(Result)
+
+
+
+class Class:
+  def __init__(self,Name,Hit_Dice,Saving_Throws,Starting_Skill_Number,Armor_Profs,Weapon_Profs,Skill_Profs,Tool_Profs,Spellcasting_Ability,Subclasses,Features,MultiClassing_Requirement,Spell_List,Caster_Type,Starting_Equipment):
+    self.Name = Name
+    self.Hit_Dice = Hit_Dice
+    self.Saving_Throws = []     # need to make sure the saving throws get appended to the 
+    self.Starting_Skill_Number = Starting_Skill_Number
+    self.Armor_Profs = []
+    self.Weapon_Profs = []
+    self.Skill_Profs = []
+    self.Tool_Profs = []
+    self.Spellcasting_Ability = Spellcasting_Ability
+    self.Subclasses = []
+    self.Features = []
+    self.MultiClassing_Requirement = []
+    self.Spell_List = []
+    self.Caster_Type = Caster_Type
+    self.Starting_Equipment = {
+      'Armor': [],
+      'Weapons': [],
+      'Packs': [],
+      'Tools': [],
+      'Instruments': []}
+    #Player_Character.Spell_Save_DC = abilityScoreToModifier(Spellcasting_Ability) + Prof_Bonus + 8
+
+
+
+class Subclass(Class):
+  def __init__(self,Class,Name,Feature,Spellcasting_Ability):
+    self.Class = Class
+    self.Name = Name
+    self.Feature = Feature
+    self.Spellcasting_Ability = Spellcasting_Ability
 
 
 
@@ -621,7 +656,7 @@ class Player_Character:
     ]
 
     self.Hit_Dice_Types = [
-      First_Class.Hit_Dice,
+      False,
       False,
       False,
       False,
@@ -643,7 +678,7 @@ class Player_Character:
       False
     ]
     self.Hit_Dice_Number = len(self.Hit_Dice_Types)
-    self.HP = Predicted_Hit_Points(self)
+    self.HP = 0
     self.Temp_HP = 0
     self.Current_HP = self.HP
     self.Allow_for_More_than_Max_HP = False

@@ -65,21 +65,19 @@ class Ability_Check(d20_Roll):
     self.Circumstances = []
 
 class Saving_Throw(d20_Roll):
-  def __init__(self,Entity_Making,Save_Type,Entity_Imposing,DC,Modifiers):
-    super().__init__(Entity_Making)
+  def __init__(self, Entity_Making, Save_Type, Entity_Imposing, DC, Modifiers):
+    super().__init__(Entity_Making, Entity_Imposing, DC)
     self.Save_Type = Save_Type  # this is better than "Score" because Death saves don't include a score but some creatures get proficiency in them regardless
     self.Entity_Imposing = Entity_Imposing
     self.DC = DC
     self.Modifiers = Modifiers
 
-    self.Dice_Number = 1
-    self.Dice_Type = 20
     self.Circumstances = []
 
 
 class Attack_Roll(d20_Roll):
   def __init__(self,Entity_Making,Attack_Target,Modifiers):
-    super().__init__(Entity_Making)
+    super().__init__(Entity_Making, Attack_Target, Modifiers)
     self.Attack_Target = Attack_Target
     self.Modifiers = Modifiers
     self.Dice_Number = 1
@@ -136,12 +134,12 @@ def Run_Roll(Roll):
     dice_roll = Roll_Dice(Roll.Dice_Number,Roll.Dice_Type)
 
     for i in Roll.Damage:
-    if str(Roll.Damage_Type,'res') in Roll.Entity_Taking_Damage.WRI:
-      dice_roll = dice_roll / 2
-    elif str(Roll.Damage_Type,'immu') in Roll.Entity_Taking_Damage.WRI:
-      dice_roll = 0
-    elif str(Roll.Damage_Type,'vul') in Roll.Entity_Taking_Damage.WRI:
-      dice_roll = dice_roll * 2
+      if str(Roll.Damage_Type,'res') in Roll.Entity_Taking_Damage.WRI:
+        dice_roll = dice_roll / 2
+      elif str(Roll.Damage_Type,'immu') in Roll.Entity_Taking_Damage.WRI:
+        dice_roll = 0
+      elif str(Roll.Damage_Type,'vul') in Roll.Entity_Taking_Damage.WRI:
+        dice_roll = dice_roll * 2
 
   elif Roll == Saving_Throw:
     Roll_Dice(Roll.Dice_Number,Roll.Dice_Type)
@@ -190,9 +188,7 @@ Current_Allied_Ability_Check = Ability_Check('Dice_Type',
                                              'Contested_Skill',
                                               [])
 
-Current_Allied_Attack_Roll = Attack_Roll('Entity_Making',
-                                         'Attack_Target',
-                                         [])
+Current_Allied_Attack_Roll = Attack_Roll('Entity_Making','Attack_Target',[])
 
 Current_Allied_Saving_Throw = Saving_Throw('Entity_Making',
                                            'Save_Type',

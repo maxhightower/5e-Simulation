@@ -1,4 +1,27 @@
 
+import Establishing_Hierarchy
+import Spell_Data
+import Spells
+import Effects
+import Character_Functions
+import Character_Actions
+import Armor_and_Weapons
+import Dice_Rolls
+import Backgrounds
+
+import random
+
+from Dice_Rolls import Current_Allied_Ability_Check
+from Dice_Rolls import Current_Allied_Attack_Roll
+from Dice_Rolls import Current_Allied_Saving_Throw
+from Dice_Rolls import Current_Allied_Damage_Roll
+
+from Dice_Rolls import Current_Enemy_Ability_Check
+from Dice_Rolls import Current_Enemy_Attack_Roll
+from Dice_Rolls import Current_Enemy_Saving_Throw
+from Dice_Rolls import Current_Enemy_Damage_Roll
+
+
 
 Armor = [['Studded Leather'],['Scale Mail']]
 Weapons = [['Simple Weapon','Simple Weapon']]
