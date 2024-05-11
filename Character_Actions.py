@@ -58,82 +58,78 @@ def Check_Save_Proficiencies(Creature,Save):
 
 
 
-# Attack Roll
-def Weapon_Attack(Attacker,Defender,Weapon):
-  Attack_Modifier = Establishing_Hierarchy.Attack_Score(Attacker) + Attacker.Prof_Bonus
-  Armor_Class = Defender.AC
-  #print('Target AC:',Armor_Class)
 
-  if Attacker.Circumstances['Attack Rolls'] == 'Advantage':
-    #print('Advantage')
+def Choose_Best_Weapon(Actor,Target):
+  pass
+  # returns to change the Weapon Equipped if need be
+
+def Attack_Action(Actor,Combat_Situation):
+  Weapon = Actor.Weapon_Equipped[0]
+  Target = Dice_Rolls.Choose_Target_Offense(Actor,Combat_Situation)
+  return Enact_Attack(Actor,Target,Weapon,Combat_Situation)
+
+def Enact_Attack(Actor,Target,Weapon,Combat_Situation):
+  Attack_Modifier = Establishing_Hierarchy.Attack_Score(Actor) + Actor.Prof_Bonus
+  Armor_Class = Target.AC
+
+  if Actor.Circumstances['Attack Rolls'] == 'Advantage':
     Roll = Dice_Rolls.d20_Advantage()
-    #print(Roll)
 
-  elif Attacker.Circumstances['Attack Rolls'] == 'Disadvantage':
-    #print('Disadvantage')
+  elif Actor.Circumstances['Attack Rolls'] == 'Disadvantage':
     Roll = Dice_Rolls.d20_Disadvantage()
-    #print(Roll)
 
   else:
-    #print('Rolling Normally')
     Roll = Dice_Rolls.d20()
-    #print('Roll:',Roll)
 
   Establishing_Hierarchy.Current_Attack_Roll = Roll + Attack_Modifier
-  #print(Establishing_Hierarchy.Current_Attack_Roll)
-
-  #for i in Attacker.Effects['Self_Attacking']['Rolling'][Weapon.Type]:
-  #  if i == ''
 
 
-  x = Dice_Rolls.Roll(Weapon.Dice_Num,Weapon.Dice_Type) + Establishing_Hierarchy.Attack_Score(Attacker)
-  #print('Initial Damage Roll:',x)
+  #for i in Actor.Effects['Self_Attacking']['Rolling'][Weapon.Type]:
+    # check if any effects can be added
+
+
+  x = Dice_Rolls.Roll(Weapon.Dice_Num,Weapon.Dice_Type) + Establishing_Hierarchy.Attack_Score(Actor)
   y = Attack_Modifier
 
-  #print(Attacker.Effects)
 
   if Weapon.Damage_Type == 'Bludgeoning' or Weapon.Damage_Type == 'Piercing' or Weapon.Damage_Type == 'Slashing':
-    x = x + Attacker.Effects['Self_Dealing_Damage']['Bludgeoning'][0].Bonus
+    x = x + Actor.Effects['Self_Dealing_Damage']['Bludgeoning'][0].Bonus
   
-  #for i in Attacker.Effects['Self_Dealing_Damage'][Weapon.Dmg_Type]:
-  #  x = x + Attacker.Effects['Self_Dealing_Damage'][Weapon.Dmg_Type][i]
+  #for i in Actor.Effects['Self_Dealing_Damage'][Weapon.Dmg_Type]:
+  #  x = x + Actor.Effects['Self_Dealing_Damage'][Weapon.Dmg_Type][i]
   
   if Establishing_Hierarchy.Current_Attack_Roll > Armor_Class:
-    if Roll in Attacker.Crit:
+    if Roll in Actor.Crit:
       damage = (x * 2) + y
     
-      if str(Weapon.Dmg_Type.lower(),'res') in Defender.WRI:
+      if str(Weapon.Dmg_Type.lower(),'res') in Target.WRI:
         damage = damage/2
-      elif str(Weapon.Dmg_Type.lower(),'immue') in Defender.WRI:
+      elif str(Weapon.Dmg_Type.lower(),'immue') in Target.WRI:
         damage = 0
       else: pass
-      
-      #print('Crit for',damage)
+
 
     else:
       damage = x + y
-      if str(Weapon.Damage_Type.lower()+'res') in Defender.WRI:
+      if str(Weapon.Damage_Type.lower()+'res') in Target.WRI:
         damage = damage/2
-      elif str(Weapon.Damage_Type.lower()+'immue') in Defender.WRI:
+      elif str(Weapon.Damage_Type.lower()+'immue') in Target.WRI:
         damage = 0
       else: pass
 
-      #print('Hit for',damage)
-  
   elif Establishing_Hierarchy.Current_Attack_Roll == Armor_Class:
     damage = (x + y)/2
-    if str(Weapon.Damage_Type.lower()+'res') in Defender.WRI:
+    if str(Weapon.Damage_Type.lower()+'res') in Target.WRI:
       damage = damage/2
-    elif str(Weapon.Damage_Type.lower()+'immue') in Defender.WRI:
+    elif str(Weapon.Damage_Type.lower()+'immue') in Target.WRI:
         damage = 0
     else: pass
-
-
-    #print('Glancing Blow for',damage)
-
   else:
       #print('Miss')
-      return 0
+      damage = 0
+  
+   # it's going to return the information needed to update the combat log
+  return 'Action','Attack','Offense',Target, damage
 
 
 
@@ -315,8 +311,8 @@ def None_Action():
   pass
 
 
-def Two_Weapon_Fighting_Attack_Bonus_Action(Attacker,Defender,Weapon):
-  Weapon_Attack(Attacker,Defender,Weapon)
+#def Two_Weapon_Fighting_Attack_Bonus_Action(Attacker,Defender,Weapon):
+#  Weapon_Attack(Attacker,Defender,Weapon)
 
 def Cast_Action(Target,Spell):
   pass

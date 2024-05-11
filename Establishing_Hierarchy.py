@@ -591,7 +591,7 @@ class Memory_Fragment:
 
 
 class Player_Character:
-  def __init__(self,Name,First_Class,Species,Subspecies,Levels,Background,Skill_Profs,Skill_Expertise,Tool_Profs,Weapon_Equipped,Armor_Equipped,Language_Profs,Senses,Str_Score,Dex_Score,Con_Score,Int_Score,Wis_Score,Cha_Score,Spellcasting_Prepared,Item_Attunements,Inventory,Related_Stat_Blocks):
+  def __init__(self,Name,First_Class,Species,Subspecies,Levels,Background,Skill_Profs,Skill_Expertise,Tool_Profs,Weapon_Equipped,Armor_Equipped,Senses,Str_Score,Dex_Score,Con_Score,Int_Score,Wis_Score,Cha_Score,Spellcasting_Prepared,Item_Attunements,Inventory,Related_Stat_Blocks):
     self.Name = Name
     self.First_Class = First_Class
     
@@ -704,20 +704,20 @@ class Player_Character:
     
     self.Armor_Profs = []
     self.Armor_Equipped = []
-    self.Apperal_Adorned = []
+    #self.Apperal_Adorned = []
     
     self.Language_Profs = []
-    self.Senses = {
-      'Precise': {
-        'Sight': 2000,
-      },
-      'Imprecise': {
-        'Hearing': 70,
-      },
-      'Vague': {
-        'Smell': 20,
-      }
-    }         
+    #self.Senses = {
+    #  'Precise': {
+    #    'Sight': 2000,
+    #  },
+    #  'Imprecise': {
+    #    'Hearing': 70,
+    #  },
+    #  'Vague': {
+    #    'Smell': 20,
+    #  }
+    #}         
     
     
 
@@ -886,11 +886,6 @@ class Player_Character:
 
     self.Active_Conditions = {
       'Self': [],
-
-      'Others': {
-        'Attack_Rolls': [],
-        'Ability_Checks': []
-      }
     }         # should be a dictionary for conditions on self and on certain creatures however I'm unsure how to make that work without a relevant environment 
 
     self.Circumstances = {

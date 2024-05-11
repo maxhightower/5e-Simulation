@@ -227,8 +227,6 @@ def Create_Character(character_name,Score_Generation_Method,Species,Subspecies,C
         True,     # tool profs
         True,     # weapon equipped
         True,     # armor equipped
-        True,     # language prof
-        True,     # senses
         Strength,                  # For the ability scores, I need to know how they're getting AND allocating the scores 
         Dexterity,
         Constitution,
@@ -238,7 +236,9 @@ def Create_Character(character_name,Score_Generation_Method,Species,Subspecies,C
         True, # Spellcasting Prepared
         True, # Item Attunements
         True, # Inventory
-        True  # Related Stat Blocks
+        True,
+        True, 
+        #True # Related Stat Blocks
         )
 
     calc_health(character_name)
@@ -375,7 +375,7 @@ def Create_Character(character_name,Score_Generation_Method,Species,Subspecies,C
     
     return character_name
 
-Omaro = Create_Character('Omaro','Standard Array',s.Human,False,Barbarian.Barbarian,Backgrounds.Acolyte,3)
+#Omaro = Create_Character('Omaro','Standard Array',s.Human,False,Barbarian.Barbarian,Backgrounds.Acolyte,3)
 
 # I can currently run Barbarian upto until Brutal Critical
 #print('Actions:',Omaro.Actions)

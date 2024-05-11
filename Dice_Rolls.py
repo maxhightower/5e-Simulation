@@ -335,33 +335,22 @@ class Natural_Weapon(Attack):
 # except that some Target effects are used in multiattacks, so even if they're not attacks, they get treated as them...
 
 
-def Choose_Target(Creature,World):
-  
-  if Creature in World:
-    Target = World[randrange(0,len())]
+def Choose_Target_Offense(Actor,Combat_Situation):
+  # randomly choose a creature in the list Combat_Situation that isn't Actor
+  target = np.random.choice(Combat_Situation.remove(Actor))
+  return target
 
-    # need to check to make sure that we're not targeting ourselves
-#    if monster_instances[Target].Instance == monster_instances[Creature].Instance and monster_instances[Target].Monster_ID == monster_instances[Creature].Monster_ID
-    if Target == Creature:
-      #will need to turn this into a more efficient code eventually, I just don't know how to do that right now
-      Target = World[randrange(0,len())]
-      return Target
-    else:
-      pass
-
-  else:
-    pass
-# how should choosing a target work? should it really be random?
-# perhaps this should be based on the payoff matrix instead of simply a function
-# where it chooses both the action, bonus action, movement, and target that has the highest payoff
-
-
+def Choose_Target_Support(Actor,Combat_Situation):
+  # randomly choose a creature in the list Combat_Situation that isn't Actor
+  target = np.random.choice(Combat_Situation)
+  return target
 
 # Need to add this to the new attack function
 # where this checks if the target has a condition that grants advantage or disadvantage
 # and then if both are in play, they cancel out
-def Check_Target_Conditions(Target,Player_Character):
-  if 'Restrained' in Target.Conditions:
+def Check_Target_Conditions(Actor,Target):
+  if 'Restrained' in Target.Conditions['Self']:
+    # restrained results in attacks against target having advantage and disadvantage on dexterity saves
     pass
 
   elif 'Grappled' in Target.Conditions:
