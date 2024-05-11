@@ -3,6 +3,7 @@ import Establishing_Hierarchy
 import Character_Functions
 #import Effects
 import operator
+import random
 
 
 # let's split the different options for builds for each class
@@ -56,11 +57,34 @@ def Check_Save_Proficiencies(Creature,Save):
   return Result
 
 
+def Choose_Random_Weapon(Actor):
+  weapons = Actor.Inventory['Weapons']
+  # choose a random weapon from the list of weapons
+  weapon_pick = random.choice(weapons)
+  return weapon_pick
+
+def Equip_Weapon(Actor,Weapon):
+  # if there is a weapon already equipped, unequip it
+  if Actor.Weapon_Equipped != []:
+    Actor.Inventory['Weapons'].append(Actor.Weapon_Equipped)
+    # this costs a action type I'm sure
+  Actor.Weapon_Equipped = Weapon
+  Actor.Inventory['Weapons'].remove(Weapon)
 
 
 
-def Choose_Best_Weapon(Actor,Target):
-  pass
+
+
+def Choose_Best_Weapon(Actor):
+  best_weapon = Actor.Inventory['Weapons'][0]
+  weapons = Actor.Inventory['Weapons']
+  # remove weapons that are not proficient
+
+  for i in Actor.Inventory['Weapons']:
+    if Dice_Rolls.Average_Roll(i.Dice_Num,i.Dice_Type) > Dice_Rolls.Average_Roll(best_weapon.Dice_Num,best_weapon.Dice_Type):
+      # will need 
+      best_weapon = i 
+  return best_weapon
   # returns to change the Weapon Equipped if need be
 
 def Attack_Action(Actor,Combat_Situation):
