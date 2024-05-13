@@ -1,3 +1,4 @@
+import random
 from random import randrange
 import numpy as np
 
@@ -337,7 +338,7 @@ class Natural_Weapon(Attack):
 
 def Choose_Target_Offense(Actor,Combat_Situation):
   # randomly choose a creature in the list Combat_Situation that isn't Actor
-  target = np.random.choice(Combat_Situation.remove(Actor))
+  target = random.choice(Combat_Situation)
   return target
 
 def Choose_Target_Support(Actor,Combat_Situation):
