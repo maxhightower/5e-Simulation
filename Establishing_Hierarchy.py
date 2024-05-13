@@ -951,16 +951,16 @@ class Player_Character:
 
 
     self.Inventory = {    # calculate the weight
+      'Armor': [],
+      'Weapons': [],
+      'Treasure': [],
+
       'Magic Items': {
         'Armor': [],
         'Weapons': [],
         'Other': []
       },
-
-      'Armor': [],
-      'Weapons': [],
-      'Treasure': [],
-
+      
       'Vehicles': [],
       'Instruments': [],
       'Tools': [],
