@@ -106,12 +106,10 @@ def Enact_Attack(Actor,Target,Weapon,Combat_Situation):
 
   Establishing_Hierarchy.Current_Attack_Roll = Roll + Attack_Modifier
 
-
   #for i in Actor.Effects['Self_Attacking']['Rolling'][Weapon.Type]:
     # check if any effects can be added
 
-
-  x = Dice_Rolls.Roll(Actor,Weapon.Dice_Num,Weapon.Dice_Type) + Establishing_Hierarchy.Attack_Score(Actor)
+  x = Dice_Rolls.Damage_Roll(Weapon.Dice_Type,Weapon.Dice_Num,Actor,Target,Weapon,Establishing_Hierarchy.Attack_Score(Actor),Weapon.Damage_Type)
   y = Attack_Modifier
 
 

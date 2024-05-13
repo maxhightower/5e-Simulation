@@ -29,6 +29,7 @@ class Roll:
       'Bonus': [],
       'Penalties': []
     }
+
     
 class d20_Roll(Roll):
   def __init__(self,Entity_Making,Dice_Type,Dice_Number):
@@ -46,7 +47,8 @@ class Damage_Roll(Roll):
     self.Modifiers = Modifiers
     self.Damage_Types = Damage_Types
 
-    # final damage???
+    def Apply_Damage_to_Target(Damage_Roll,Combat_Sitaution):
+      pass
 
 
 class Ability_Check(d20_Roll):
