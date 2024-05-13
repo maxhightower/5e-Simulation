@@ -111,7 +111,7 @@ def Enact_Attack(Actor,Target,Weapon,Combat_Situation):
     # check if any effects can be added
 
 
-  x = Dice_Rolls.Roll(Weapon.Dice_Num,Weapon.Dice_Type) + Establishing_Hierarchy.Attack_Score(Actor)
+  x = Dice_Rolls.Roll(Actor,Weapon.Dice_Num,Weapon.Dice_Type) + Establishing_Hierarchy.Attack_Score(Actor)
   y = Attack_Modifier
 
 
