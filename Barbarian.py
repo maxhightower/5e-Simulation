@@ -47,6 +47,7 @@ Barbarian = Establishing_Hierarchy.Class("Barbarian",12,['Constitution', 'Streng
 
 
 def Barbarian_First_Level(Player_Character):
+  print('Barbarian First Level')
   Player_Character.Saving_Throws.append('Constitution')
   Player_Character.Saving_Throws.append('Strength')
 
@@ -55,6 +56,7 @@ def Barbarian_First_Level(Player_Character):
 
 
 def Barbarian_Add_Inventory(Player_Character):
+  print('Barbarian Starting Inventory')
   # step one: choose items or gold
   # lets assume items for now
   # no armor, so the next step is weapons
@@ -423,6 +425,7 @@ def Barbarian_Level_Twenty(Player_Character):
 Barbarian_Features = [Barbarian_Level_One, Barbarian_Level_Two, Barbarian_Level_Three, Barbarian_Level_Four, Barbarian_Level_Five, Barbarian_Level_Six, Barbarian_Level_Seven, Barbarian_Level_Eight, Barbarian_Level_Nine, Barbarian_Level_Ten, Barbarian_Level_Eleven, Barbarian_Level_Twelve, Barbarian_Level_Thirteen, Barbarian_Level_Fourteen, Barbarian_Level_Fifteen, Barbarian_Level_Sixteen, Barbarian_Level_Seventeen, Barbarian_Level_Eighteen, Barbarian_Level_Nineteen, Barbarian_Level_Twenty]
 
 def Run_Barbarian(Player_Character,Level):
+  print('Barbarian Class - Run Barbarian Function')
   #print('here 0')
   if Player_Character.First_Class == Barbarian:
     #print('here 1')

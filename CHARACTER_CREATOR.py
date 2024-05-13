@@ -460,6 +460,7 @@ def Random_Character():
     species = random.choice(available_species)
     sub_species = False
     class_choice = random.choice(available_classes)
+    print('Character_Creator - Random Character Function - Class Choice: ',class_choice)
     background = random.choice(available_backgrounds)
     level = 1
 

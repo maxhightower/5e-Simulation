@@ -4,7 +4,7 @@ import Character_Functions
 #import Effects
 import operator
 import random
-
+import Armor_and_Weapons
 
 # let's split the different options for builds for each class
 # Artificer
@@ -75,7 +75,10 @@ def Equip_Weapon(Actor,Weapon):
 
 
 def Choose_Best_Weapon(Actor):
-  best_weapon = Actor.Inventory['Weapons'][0]
+  try:
+    best_weapon = Actor.Inventory['Weapons'][0]
+  except:
+    best_weapon = Armor_and_Weapons.Dagger
   #weapons = Actor.Inventory['Weapons']
   # remove weapons that are not proficient
 

@@ -44,6 +44,7 @@ Artificer = Establishing_Hierarchy.Class("Artificer",8,["Constitution","Intellig
 
 
 def Artificer_Inventory(Player_Character):
+  print('Artificer Class - Artificer Starting Inventory Function')
   #Artificer.Starting_Equipment
     # step one: choose items or gold
   # lets assume items for now
@@ -59,6 +60,7 @@ def Artificer_Starting_Skills(Player_Character):
   print(Player_Character.Skill_Profs)
 
 def Artificer_First_Level(Player_Character):
+  print('Artificer Class - Artificer First Level Function')
   Player_Character.Saving_Throws.append(Artificer.Saving_Throws)
   Artificer_Starting_Skills(Player_Character)
   Artificer_Inventory(Player_Character)
@@ -723,6 +725,7 @@ def Artificer_Run_Subclass(Player_Character,Subclass):
 
 
 def Artificer_Level_One(Player_Character):
+  print('Artificer Class - Artificer Level One Function')
   #Apply_Magical_Tinkering(Player_Character)
   Artificer_Spellcasting(Player_Character)
   # need to add a function that applies the saving throws from the class to the character
@@ -810,6 +813,7 @@ def Artificer_Level_Twenty(Player_Character):
 Artificer_Features = [Artificer_Level_One, Artificer_Level_Two, Artificer_Level_Seven, Artificer_Level_Ten, Artificer_Level_Eleven, Artificer_Level_Eighteen, Artificer_Level_Twenty]
 
 def Run_Artificer(Player_Character,Level,Subclass):
+  print('Artificer Class - Run Artificer Function')
   Player_Character.Class_Resources['Artificer'] = {}
   if Player_Character.First_Class == Artificer:
     Artificer_First_Level(Player_Character)

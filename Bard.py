@@ -53,15 +53,16 @@ def Bard_Starting_Skills(Player_Character):
   #print(Player_Character.Skill_Profs)
 
 def Bard_Starting_Items(Player_Character):
-   
+  print('Bard Starting Items')
   Player_Character.Inventory['Weapons'].append(Armor_and_Weapons.Rapier)
   Player_Character.Inventory['Armor'].append(Armor_and_Weapons.Leather)
   Player_Character.Inventory['Weapons'].append(Armor_and_Weapons.Dagger)
   Player_Character.Inventory['Instruments'].append('Lute')
-  
+
 
 
 def Bard_First_Level(Player_Character):
+  print('Bard First Level')
   Player_Character.Saving_Throws.append(Bard.Saving_Throws)
   Bard_Starting_Items(Player_Character)
   Bard_Starting_Skills(Player_Character)
@@ -290,6 +291,7 @@ Bard_Features = [Bard_Level_One, Bard_Level_Two, Bard_Level_Seven, Bard_Level_Te
 #    Player_Character.Level(Player_Character)
 
 def Run_Bard(Player_Character,Level):
+  print('Bard Class - Run Bard Function')
   #print('here 0')
   if Player_Character.First_Class == Bard:
     #print('here 1')
