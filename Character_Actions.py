@@ -64,13 +64,8 @@ def Choose_Random_Weapon(Actor):
   return weapon_pick
 
 def Equip_Weapon(Actor,Weapon):
-  if Actor.Weapon_Equipped != []:
-    Actor.Inventory['Weapons'].append(Actor.Weapon_Equipped)
+    Actor.Weapon_Equipped.append(Weapon)
     # this costs a action type I'm sure
-  Actor.Weapon_Equipped = Weapon
-  Actor.Inventory['Weapons'].remove(Weapon)
-
-
 
 
 
