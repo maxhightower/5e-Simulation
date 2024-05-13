@@ -79,6 +79,7 @@ def Choose_Best_Weapon(Actor):
     best_weapon = Actor.Inventory['Weapons'][0]
   except:
     best_weapon = Armor_and_Weapons.Dagger
+    Actor.Inventory['Weapons'].append(Armor_and_Weapons.Dagger)
   #weapons = Actor.Inventory['Weapons']
   # remove weapons that are not proficient
 
