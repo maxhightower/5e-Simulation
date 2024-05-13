@@ -76,13 +76,13 @@ def Equip_Weapon(Actor,Weapon):
 
 def Choose_Best_Weapon(Actor):
   best_weapon = Actor.Inventory['Weapons'][0]
-  weapons = Actor.Inventory['Weapons']
+  #weapons = Actor.Inventory['Weapons']
   # remove weapons that are not proficient
 
-  for i in Actor.Inventory['Weapons']:
-    if Dice_Rolls.Average_Roll(i.Dice_Num,i.Dice_Type) > Dice_Rolls.Average_Roll(best_weapon.Dice_Num,best_weapon.Dice_Type):
-      # will need 
-      best_weapon = i 
+  #for i in Actor.Inventory['Weapons']:
+  #  if Dice_Rolls.Average_Roll(i.Dice_Num,i.Dice_Type) > Dice_Rolls.Average_Roll(best_weapon.Dice_Num,best_weapon.Dice_Type):
+  #    # will need 
+  #    best_weapon = i 
   return best_weapon
   # returns to change the Weapon Equipped if need be
 
