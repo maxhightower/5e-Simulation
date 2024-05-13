@@ -294,6 +294,7 @@ def Run_Bard(Player_Character,Level):
   if Player_Character.First_Class == Bard:
     #print('here 1')
     Bard_First_Level(Player_Character)
+    
   else:
     #print('here 2')
     pass
