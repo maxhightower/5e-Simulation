@@ -49,8 +49,8 @@ def Artificer_Inventory(Player_Character):
   # lets assume items for now
   # no armor, so the next step is weapons
   
-  Player_Character.Armor_Equipped.append(Armor_and_Weapons.Scale_Mail)
-  Player_Character.Weapon_Equipped.append(Armor_and_Weapons.Shortsword)
+  Player_Character.Inventory['Armor'].append(Armor_and_Weapons.Scale_Mail)
+  Player_Character.Inventory['Weapons'].append(Armor_and_Weapons.Shortsword)
   Player_Character.Inventory['Tools'].append('Thieves Tools')
   
 # Skills

@@ -59,7 +59,7 @@ def Barbarian_Add_Inventory(Player_Character):
   # lets assume items for now
   # no armor, so the next step is weapons
   
-  Player_Character.Weapon_Equipped.append(Armor_and_Weapons.Greataxe)
+  Player_Character.Inventory['Weapons'].append(Armor_and_Weapons.Greataxe)
   Player_Character.Inventory['Weapons'].append(Armor_and_Weapons.Javelin)
   Player_Character.Inventory['Weapons'].append(Armor_and_Weapons.Javelin)
   Player_Character.Inventory['Weapons'].append(Armor_and_Weapons.Javelin)

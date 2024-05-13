@@ -54,8 +54,8 @@ def Bard_Starting_Skills(Player_Character):
 
 def Bard_Starting_Items(Player_Character):
    
-  Player_Character.Weapon_Equipped.append(Armor_and_Weapons.Rapier)
-  Player_Character.Armor_Equipped.append(Armor_and_Weapons.Leather)
+  Player_Character.Inventory['Weapons'].append(Armor_and_Weapons.Rapier)
+  Player_Character.Inventory['Armor'].append(Armor_and_Weapons.Leather)
   Player_Character.Inventory['Weapons'].append(Armor_and_Weapons.Dagger)
   Player_Character.Inventory['Instruments'].append('Lute')
   

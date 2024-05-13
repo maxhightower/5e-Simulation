@@ -64,7 +64,6 @@ def Choose_Random_Weapon(Actor):
   return weapon_pick
 
 def Equip_Weapon(Actor,Weapon):
-  # if there is a weapon already equipped, unequip it
   if Actor.Weapon_Equipped != []:
     Actor.Inventory['Weapons'].append(Actor.Weapon_Equipped)
     # this costs a action type I'm sure
@@ -88,6 +87,7 @@ def Choose_Best_Weapon(Actor):
   # returns to change the Weapon Equipped if need be
 
 def Attack_Action(Actor,Combat_Situation):
+  Equip_Weapon(Actor,Choose_Best_Weapon(Actor))
   Weapon = Actor.Weapon_Equipped[0]
   Target = Dice_Rolls.Choose_Target_Offense(Actor,Combat_Situation)
   return Enact_Attack(Actor,Target,Weapon,Combat_Situation)
