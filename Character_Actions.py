@@ -101,12 +101,12 @@ def Choose_Best_Weapon(Actor):
   return best_weapon
   # returns to change the Weapon Equipped if need be
 
-def Attack_Action(Actor,Combat_Situation):
+def Attack_Action(Actor,Combat_Situation,combat_log):
   Equip_Weapon(Actor,Choose_Best_Weapon(Actor))
   Weapon = Actor.Weapon_Equipped[0]
   Target = Dice_Rolls.Choose_Target_Offense(Actor,Combat_Situation)
   Actor.Target_List.append(Target)
-  return Enact_Attack(Actor,Target,Weapon,Combat_Situation)
+  return Enact_Attack(Actor,Target,Weapon,Combat_Situation,combat_log)
 
 def Enact_Attack(Actor,Target,Weapon,combat_situation,combat_log):
   Attack_Modifier = Establishing_Hierarchy.Attack_Score(Actor) + Actor.Prof_Bonus
