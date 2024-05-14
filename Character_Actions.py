@@ -201,10 +201,24 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
                 'Current Enemy Attack Roll': Dice_Rolls.Current_Enemy_Attack_Roll,
                 'Current Enemy Saving Throw': Dice_Rolls.Current_Enemy_Saving_Throw,
                 'Current Enemy Damage Roll': Dice_Rolls.Current_Enemy_Damage_Roll,
-                } 
-    
+                }
+  
+  # using Actor.Name create  new columns for Acting True and add them to the dict
+  new_round[Actor.Name + ' Acting True'] = 1
+  # using combat_situation create new columns for Acting False and add them to the dict
+  for i in combat_situation:
+    if i == Actor:
+      pass
+    else:
+      new_round[i.Name + ' Acting True'] = 0
+      new_round[i.Name + ' Current_HP'] = i.Current_HP
+      new_round[i.Name + ' Temp_HP'] = i.Temp_HP
+
+  
   # attach the new_round dictionary to the combat_log_new dataframe using concat
-  return new_round
+  new_combat_log = pd.concat([combat_log,pd.DataFrame(new_round,index=[0])],ignore_index=True)
+
+  return new_combat_log
 
 
 
