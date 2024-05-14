@@ -146,7 +146,7 @@ def Create_Character(character_name,Score_Generation_Method,Species,Subspecies,C
     
     # I may have to run the whole thing in an exec function 
 
-
+    print('Create Character Function - Class:',Class)
     if Score_Generation_Method == 'Standard Array':
         listl = Use_Standard_Array()
     elif Score_Generation_Method == 'Point Buy':
