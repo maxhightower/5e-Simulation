@@ -108,6 +108,7 @@ def Attack_Action(Actor,Combat_Situation,combat_log):
   Actor.Target_List.append(Target)
   return Enact_Attack(Actor,Target,Weapon,Combat_Situation,combat_log)
 
+
 def Enact_Attack(Actor,Target,Weapon,combat_situation,combat_log):
   Attack_Modifier = Establishing_Hierarchy.Attack_Score(Actor) + Actor.Prof_Bonus
   Armor_Class = Target.AC
@@ -181,6 +182,7 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,combat_log):
   action_name = 'Attack'
   action_type = 'Offense'
   # the target is the last entity in the Actor.Target_List
+  print(combat_situation[Actor].Target_List)
   target = combat_situation[Actor].Target_List[-1]
 
   # create a dictionary called new_round
