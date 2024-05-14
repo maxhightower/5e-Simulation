@@ -335,9 +335,7 @@ def Dodge_Action(Actor,Combat_Situation,Combat_Log):
   action_time = 'Action'
   action_name = 'Dodge'
   action_type = 'Defense'
-  # the target is the last entity in the Actor.Target_List
-  print(Actor)
-  target = Actor.Target_List[-1].Name
+
 
   # create a dictionary called new_round
   new_round = {'Combat Round': combat_round,
@@ -345,7 +343,7 @@ def Dodge_Action(Actor,Combat_Situation,Combat_Log):
                 'Action Time': action_time,
                 'Action Name': action_name,
                 'Action Type': action_type,
-                'Target': target,
+                'Target': Actor,
                 'Action Result': 'Dodge',
                 'Current Allied Ability Check': Dice_Rolls.Current_Allied_Ability_Check,
                 'Current Allied Attack Roll': Dice_Rolls.Current_Allied_Attack_Roll,
