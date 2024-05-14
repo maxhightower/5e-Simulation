@@ -176,6 +176,8 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
   else:
     combat_round = combat_round + 1
         
+  Target.Current_HP = Target.Current_HP - damage
+  
   action_number = 'Undetermined'
   
   action_time = 'Action'
