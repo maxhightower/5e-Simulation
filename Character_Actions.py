@@ -176,18 +176,17 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
   else:
     combat_round = combat_round + 1
         
-  action_number = Actor
+  action_number = 'Undetermined'
   
   action_time = 'Action'
   action_name = 'Attack'
   action_type = 'Offense'
   # the target is the last entity in the Actor.Target_List
   print(Actor)
-  target = Actor.Target_List[-1]
+  target = Actor.Target_List[-1].Name
 
   # create a dictionary called new_round
-  new_round = {'Index': log_id,
-                'Combat Round': combat_round,
+  new_round = {'Combat Round': combat_round,
                 'Action Number': action_number,
                 'Action Time': action_time,
                 'Action Name': action_name,
@@ -205,6 +204,19 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
   
   # using Actor.Name create  new columns for Acting True and add them to the dict
   new_round[Actor.Name + ' Acting True'] = 1
+  new_round[Actor.Name + ' Current_HP'] = Actor.Current_HP
+  new_round[Actor.Name + ' Temp_HP'] = Actor.Temp_HP
+  new_round[Actor.Name + ' Size'] = Actor.Size
+  new_round[Actor.Name + ' Walking Speed'] = Actor.Walking_Speed
+  new_round[Actor.Name + ' Flying Speed'] = Actor.Flying_Speed
+  new_round[Actor.Name + ' Str_Score'] = Actor.Str_Score
+  new_round[Actor.Name + ' Dex_Score'] = Actor.Dex_Score
+  new_round[Actor.Name + ' Con_Score'] = Actor.Con_Score
+  new_round[Actor.Name + ' Int_Score'] = Actor.Int_Score
+  new_round[Actor.Name + ' Wis_Score'] = Actor.Wis_Score
+  new_round[Actor.Name + ' Cha_Score'] = Actor.Cha_Score
+  new_round[Actor.Name + ' Active_Conditions'] = Actor.Active_Conditions
+  new_round[Actor.Name + ' Concentrating'] = Actor.Concentrating
   # using combat_situation create new columns for Acting False and add them to the dict
   for i in combat_situation:
     if i == Actor:
@@ -213,6 +225,18 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
       new_round[i.Name + ' Acting True'] = 0
       new_round[i.Name + ' Current_HP'] = i.Current_HP
       new_round[i.Name + ' Temp_HP'] = i.Temp_HP
+      new_round[i.Name + ' Size'] = i.Size
+      new_round[i.Name + ' Walking Speed'] = i.Walking_Speed
+      new_round[i.Name + ' Flying Speed'] = i.Flying_Speed
+      new_round[i.Name + ' Str_Score'] = i.Str_Score
+      new_round[i.Name + ' Dex_Score'] = i.Dex_Score
+      new_round[i.Name + ' Con_Score'] = i.Con_Score
+      new_round[i.Name + ' Int_Score'] = i.Int_Score
+      new_round[i.Name + ' Wis_Score'] = i.Wis_Score
+      new_round[i.Name + ' Cha_Score'] = i.Cha_Score
+      new_round[i.Name + ' Active_Conditions'] = i.Active_Conditions
+      new_round[i.Name + ' Concentrating'] = i.Concentrating
+      
 
   
   # attach the new_round dictionary to the combat_log_new dataframe using concat
