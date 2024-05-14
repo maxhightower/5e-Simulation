@@ -207,8 +207,8 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
   new_round[Actor.Name + ' Current_HP'] = Actor.Current_HP
   new_round[Actor.Name + ' Temp_HP'] = Actor.Temp_HP
   new_round[Actor.Name + ' Size'] = Actor.Size
-  new_round[Actor.Name + ' Walking Speed'] = Actor.Walking_Speed
-  new_round[Actor.Name + ' Flying Speed'] = Actor.Flying_Speed
+  new_round[Actor.Name + ' Walking Speed'] = Actor.Speed['Walking_Speed']
+  new_round[Actor.Name + ' Flying Speed'] = Actor.Speed['Flying_Speed']
   new_round[Actor.Name + ' Str_Score'] = Actor.Str_Score
   new_round[Actor.Name + ' Dex_Score'] = Actor.Dex_Score
   new_round[Actor.Name + ' Con_Score'] = Actor.Con_Score
@@ -226,8 +226,8 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
       new_round[i.Name + ' Current_HP'] = i.Current_HP
       new_round[i.Name + ' Temp_HP'] = i.Temp_HP
       new_round[i.Name + ' Size'] = i.Size
-      new_round[i.Name + ' Walking Speed'] = i.Walking_Speed
-      new_round[i.Name + ' Flying Speed'] = i.Flying_Speed
+      new_round[i.Name + ' Walking Speed'] = i.Speed['Walking_Speed']
+      new_round[i.Name + ' Flying Speed'] = i.Speed['Flying_Speed']
       new_round[i.Name + ' Str_Score'] = i.Str_Score
       new_round[i.Name + ' Dex_Score'] = i.Dex_Score
       new_round[i.Name + ' Con_Score'] = i.Con_Score
