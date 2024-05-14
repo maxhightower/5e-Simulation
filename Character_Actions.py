@@ -191,7 +191,7 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
   action_name = 'Attack'
   action_type = 'Offense'
   # the target is the last entity in the Actor.Target_List
-  print(Actor)
+
   target = Actor.Target_List[-1].Name
 
   # create a dictionary called new_round
@@ -389,8 +389,6 @@ def Dodge_Action(Actor,Combat_Situation,Combat_Log):
       new_round[i.Name + ' Cha_Score'] = i.Cha_Score
       new_round[i.Name + ' Active_Conditions'] = i.Active_Conditions
       new_round[i.Name + ' Concentrating'] = i.Concentrating
-      
-
   
   # attach the new_round dictionary to the combat_log_new dataframe using concat
   new_combat_log = pd.concat([combat_log,pd.DataFrame(new_round,index=[0])],ignore_index=True)
