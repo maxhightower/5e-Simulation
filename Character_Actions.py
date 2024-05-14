@@ -207,8 +207,8 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
   new_round[Actor.Name + ' Current_HP'] = Actor.Current_HP
   new_round[Actor.Name + ' Temp_HP'] = Actor.Temp_HP
   new_round[Actor.Name + ' Size'] = Actor.Size
-  new_round[Actor.Name + ' Walking Speed'] = Actor.Speed['Walking Speed']
-  new_round[Actor.Name + ' Flying Speed'] = Actor.Speed['Flying Speed']
+  new_round[Actor.Name + ' Walking Speed'] = Actor.Speed['Walking']
+  new_round[Actor.Name + ' Flying Speed'] = Actor.Speed['Flying']
   new_round[Actor.Name + ' Str_Score'] = Actor.Str_Score
   new_round[Actor.Name + ' Dex_Score'] = Actor.Dex_Score
   new_round[Actor.Name + ' Con_Score'] = Actor.Con_Score
