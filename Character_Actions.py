@@ -126,7 +126,7 @@ def Enact_Attack(Actor,Target,Weapon,Combat_Situation):
   
   if Establishing_Hierarchy.Current_Attack_Roll > Armor_Class:
     if Roll in Actor.Crit:
-      damage = (x * 2) + y
+      damage = (damage_roll * 2) + y
     
       if str(Weapon.Dmg_Type.lower(),'res') in Target.WRI:
         damage = damage/2
@@ -136,7 +136,7 @@ def Enact_Attack(Actor,Target,Weapon,Combat_Situation):
 
 
     else:
-      damage = x + y
+      damage = damage_roll + y
       if str(Weapon.Damage_Type.lower()+'res') in Target.WRI:
         damage = damage/2
       elif str(Weapon.Damage_Type.lower()+'immue') in Target.WRI:
@@ -144,7 +144,7 @@ def Enact_Attack(Actor,Target,Weapon,Combat_Situation):
       else: pass
 
   elif Establishing_Hierarchy.Current_Attack_Roll == Armor_Class:
-    damage = (x + y)/2
+    damage = (damage_roll + y)/2
     if str(Weapon.Damage_Type.lower()+'res') in Target.WRI:
       damage = damage/2
     elif str(Weapon.Damage_Type.lower()+'immue') in Target.WRI:
