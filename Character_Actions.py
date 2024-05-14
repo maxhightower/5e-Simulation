@@ -140,29 +140,32 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
   
   if Establishing_Hierarchy.Current_Attack_Roll > Armor_Class:
     if Roll in Actor.Crit:
+      result = 'Critical Hit'
       damage = (damage_roll * 2) + y
       if str(Weapon.Dmg_Type.lower(),'res') in Target.WRI:
         damage = damage/2
       elif str(Weapon.Dmg_Type.lower(),'immue') in Target.WRI:
         damage = 0
       else: pass
-      result = 'Critical Hit'
+     
     else:
+      result = 'Hit'
       damage = damage_roll + y
       if str(Weapon.Damage_Type.lower()+'res') in Target.WRI:
         damage = damage/2
       elif str(Weapon.Damage_Type.lower()+'immue') in Target.WRI:
         damage = 0
       else: pass
-      result = 'Hit'
+      
   elif Establishing_Hierarchy.Current_Attack_Roll == Armor_Class:
+    result = 'Glancing Blow'
     damage = (damage_roll + y)/2
     if str(Weapon.Damage_Type.lower()+'res') in Target.WRI:
       damage = damage/2
     elif str(Weapon.Damage_Type.lower()+'immue') in Target.WRI:
         damage = 0
     else: pass
-    result = 'Glancing Blow'
+    
   else:
       damage = 0
       result = 'Miss'
@@ -313,9 +316,88 @@ def Hide_Action(Creature,Location,World):
   Dice_Rolls.Ability_Check(Creature,'Stealth','Dexterity')
 
 # Dodge
-def Dodge_Action(Creature):
-  pass
+def Dodge_Action(Actor,Combat_Situation,Combat_Log):
+  Actor.Circumstances['Attack Rolls'] = 'Disadvantage'
+  Actor.Circumstances['Saving Throws'] = 'Advantage'
 
+  if len(combat_log) == 0:
+    log_id = 0
+  else:
+    log_id = log_id + 1
+        
+  if len(combat_log) == 0:
+    combat_round = 0
+  else:
+    combat_round = combat_round + 1
+
+  action_number = 'Undetermined'
+  
+  action_time = 'Action'
+  action_name = 'Dodge'
+  action_type = 'Defense'
+  # the target is the last entity in the Actor.Target_List
+  print(Actor)
+  target = Actor.Target_List[-1].Name
+
+  # create a dictionary called new_round
+  new_round = {'Combat Round': combat_round,
+                'Action Number': action_number,
+                'Action Time': action_time,
+                'Action Name': action_name,
+                'Action Type': action_type,
+                'Target': target,
+                'Action Result': 'Dodge',
+                'Current Allied Ability Check': Dice_Rolls.Current_Allied_Ability_Check,
+                'Current Allied Attack Roll': Dice_Rolls.Current_Allied_Attack_Roll,
+                'Current Allied Saving Throw': Dice_Rolls.Current_Allied_Saving_Throw,
+                'Current Allied Damage Roll': Dice_Rolls.Current_Allied_Damage_Roll,
+                'Current Enemy Ability Check': Dice_Rolls.Current_Enemy_Ability_Check,
+                'Current Enemy Attack Roll': Dice_Rolls.Current_Enemy_Attack_Roll,
+                'Current Enemy Saving Throw': Dice_Rolls.Current_Enemy_Saving_Throw,
+                'Current Enemy Damage Roll': Dice_Rolls.Current_Enemy_Damage_Roll,
+                }
+  
+  # using Actor.Name create  new columns for Acting True and add them to the dict
+  new_round[Actor.Name + ' Acting True'] = 1
+  new_round[Actor.Name + ' Current_HP'] = Actor.Current_HP
+  new_round[Actor.Name + ' Temp_HP'] = Actor.Temp_HP
+  new_round[Actor.Name + ' Size'] = Actor.Size
+  new_round[Actor.Name + ' Walking Speed'] = Actor.Speed['Walking']
+  new_round[Actor.Name + ' Flying Speed'] = Actor.Speed['Flying']
+  new_round[Actor.Name + ' Str_Score'] = Actor.Str_Score
+  new_round[Actor.Name + ' Dex_Score'] = Actor.Dex_Score
+  new_round[Actor.Name + ' Con_Score'] = Actor.Con_Score
+  new_round[Actor.Name + ' Int_Score'] = Actor.Int_Score
+  new_round[Actor.Name + ' Wis_Score'] = Actor.Wis_Score
+  new_round[Actor.Name + ' Cha_Score'] = Actor.Cha_Score
+  new_round[Actor.Name + ' Active_Conditions'] = Actor.Active_Conditions
+  new_round[Actor.Name + ' Concentrating'] = Actor.Concentrating
+  # using combat_situation create new columns for Acting False and add them to the dict
+  for i in Combat_Situation:
+    if i == Actor:
+      pass
+    else:
+      new_round[i.Name + ' Acting True'] = 0
+      new_round[i.Name + ' Current_HP'] = i.Current_HP
+      new_round[i.Name + ' Temp_HP'] = i.Temp_HP
+      new_round[i.Name + ' Size'] = i.Size
+      new_round[i.Name + ' Walking Speed'] = i.Speed['Walking']
+      new_round[i.Name + ' Flying Speed'] = i.Speed['Flying']
+      new_round[i.Name + ' Str_Score'] = i.Str_Score
+      new_round[i.Name + ' Dex_Score'] = i.Dex_Score
+      new_round[i.Name + ' Con_Score'] = i.Con_Score
+      new_round[i.Name + ' Int_Score'] = i.Int_Score
+      new_round[i.Name + ' Wis_Score'] = i.Wis_Score
+      new_round[i.Name + ' Cha_Score'] = i.Cha_Score
+      new_round[i.Name + ' Active_Conditions'] = i.Active_Conditions
+      new_round[i.Name + ' Concentrating'] = i.Concentrating
+      
+
+  
+  # attach the new_round dictionary to the combat_log_new dataframe using concat
+  new_combat_log = pd.concat([combat_log,pd.DataFrame(new_round,index=[0])],ignore_index=True)
+
+  return new_combat_log
 
 #Dash
 def Dash_Action(Creature):
