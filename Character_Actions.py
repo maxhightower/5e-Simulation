@@ -176,9 +176,7 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,combat_log):
     combat_round = combat_round + 1
         
   action_number = Actor
-
-  combat_situation[Actor].Actions['Attack']
-        
+  
   action_time = 'Action'
   action_name = 'Attack'
   action_type = 'Offense'
