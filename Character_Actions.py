@@ -5,7 +5,7 @@ import Character_Functions
 import operator
 import random
 import Armor_and_Weapons
-
+import pandas as pd
 # let's split the different options for builds for each class
 # Artificer
   # Caster: Studded Leather, Ranged Simple Weapon, Melee Simple Weapon, Thieves Tools, Dungoneers Pack
@@ -37,6 +37,22 @@ import Armor_and_Weapons
 
 # Druid
 
+combat_log = pd.DataFrame(columns=['Log Entry ID',
+                                   'Combat Round',
+                                   'Action Number',
+                                   'Action Time', # action, bonus action, reaction, etc
+                                   'Action Name', # attack, cast spell, dodge, etc
+                                   'Action Type', # attack, support, heal, control, etc
+                                   'Target',
+                                   'Current Allied Ability Check',
+                                   'Current Allied Attack Roll',
+                                   'Current Allied Saving Throw',
+                                   'Current Allied Damage Roll',
+                                   'Current Enemy Ability Check',
+                                   'Current Enemy Attack Roll',
+                                   'Current Enemy Saving Throw',
+                                   'Current Enemy Damage Roll',
+                                   ])
 
 
 
@@ -92,16 +108,14 @@ def Attack_Action(Actor,Combat_Situation):
   Actor.Target_List.append(Target)
   return Enact_Attack(Actor,Target,Weapon,Combat_Situation)
 
-def Enact_Attack(Actor,Target,Weapon,Combat_Situation):
+def Enact_Attack(Actor,Target,Weapon,combat_situation,combat_log):
   Attack_Modifier = Establishing_Hierarchy.Attack_Score(Actor) + Actor.Prof_Bonus
   Armor_Class = Target.AC
 
   if Actor.Circumstances['Attack Rolls'] == 'Advantage':
     Roll = Dice_Rolls.d20_Advantage()
-
   elif Actor.Circumstances['Attack Rolls'] == 'Disadvantage':
     Roll = Dice_Rolls.d20_Disadvantage()
-
   else:
     Roll = Dice_Rolls.d20()
 
@@ -126,14 +140,11 @@ def Enact_Attack(Actor,Target,Weapon,Combat_Situation):
   if Establishing_Hierarchy.Current_Attack_Roll > Armor_Class:
     if Roll in Actor.Crit:
       damage = (damage_roll * 2) + y
-    
       if str(Weapon.Dmg_Type.lower(),'res') in Target.WRI:
         damage = damage/2
       elif str(Weapon.Dmg_Type.lower(),'immue') in Target.WRI:
         damage = 0
       else: pass
-
-
     else:
       damage = damage_roll + y
       if str(Weapon.Damage_Type.lower()+'res') in Target.WRI:
@@ -141,7 +152,6 @@ def Enact_Attack(Actor,Target,Weapon,Combat_Situation):
       elif str(Weapon.Damage_Type.lower()+'immue') in Target.WRI:
         damage = 0
       else: pass
-
   elif Establishing_Hierarchy.Current_Attack_Roll == Armor_Class:
     damage = (damage_roll + y)/2
     if str(Weapon.Damage_Type.lower()+'res') in Target.WRI:
@@ -150,12 +160,52 @@ def Enact_Attack(Actor,Target,Weapon,Combat_Situation):
         damage = 0
     else: pass
   else:
-      #print('Miss')
       damage = 0
   
    # it's going to return the information needed to update the combat log
-  return 'Action','Attack','Offense',Target, damage
+  #return 'Action','Attack','Offense',Target, damage
 
+  if len(combat_log) == 0:
+    log_id = 0
+  else:
+    log_id = log_id + 1
+        
+  if len(combat_log) == 0:
+    combat_round = 0
+  else:
+    combat_round = combat_round + 1
+        
+  action_number = Actor
+
+  combat_situation[Actor].Actions['Attack']
+        
+  action_time = 'Action'
+  action_name = 'Attack'
+  action_type = 'Offense'
+  # the target is the last entity in the Actor.Target_List
+  target = combat_situation[Actor].Target_List[-1]
+
+  # create a dictionary called new_round
+  new_round = {'Log Entry ID': log_id,
+                'Combat Round': combat_round,
+                'Action Number': action_number,
+                'Action Time': action_time,
+                'Action Name': action_name,
+                'Action Type': action_type,
+                'Target': target,
+                'Current Allied Ability Check': Dice_Rolls.Current_Allied_Ability_Check,
+                'Current Allied Attack Roll': Dice_Rolls.Current_Allied_Attack_Roll,
+                'Current Allied Saving Throw': Dice_Rolls.Current_Allied_Saving_Throw,
+                'Current Allied Damage Roll': Dice_Rolls.Current_Allied_Damage_Roll,
+                'Current Enemy Ability Check': Dice_Rolls.Current_Enemy_Ability_Check,
+                'Current Enemy Attack Roll': Dice_Rolls.Current_Enemy_Attack_Roll,
+                'Current Enemy Saving Throw': Dice_Rolls.Current_Enemy_Saving_Throw,
+                'Current Enemy Damage Roll': Dice_Rolls.Current_Enemy_Damage_Roll,
+                } 
+
+    
+  # attach the new_round dictionary to the combat_log_new dataframe using concat
+  combat_log = pd.concat([combat_log,pd.DataFrame(new_round,index=[0])],ignore_index=True)
 
 
 
