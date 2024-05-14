@@ -114,8 +114,10 @@ def Enact_Attack(Actor,Target,Weapon,Combat_Situation):
 
 
   if Weapon.Damage_Type == 'Bludgeoning' or Weapon.Damage_Type == 'Piercing' or Weapon.Damage_Type == 'Slashing':
-    x = x + Actor.Effects['Self_Dealing_Damage']['Bludgeoning'][0].Bonus
-  
+    try:
+      x = x + Actor.Effects['Self_Dealing_Damage']['Bludgeoning'][0].Bonus
+    except:
+      pass
   #for i in Actor.Effects['Self_Dealing_Damage'][Weapon.Dmg_Type]:
   #  x = x + Actor.Effects['Self_Dealing_Damage'][Weapon.Dmg_Type][i]
   
