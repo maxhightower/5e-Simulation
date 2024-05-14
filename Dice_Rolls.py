@@ -8,10 +8,10 @@ import numpy as np
 # rolling any given number of dice for any type
 def Roll_Dice(Number_of_Dice,Dice_Type):
   roll_results = 0
-  for i in range(1,Number_of_Dice):
+  for i in range(Number_of_Dice):
     roll_results = roll_results + randrange(1,int(Dice_Type))
+  print(roll_results)
   return roll_results
-
 
 ############ Defining the Main d20_Roll Class and Subclasses ##################
 
