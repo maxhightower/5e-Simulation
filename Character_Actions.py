@@ -252,7 +252,7 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
 
   
   # attach the new_round dictionary to the combat_log_new dataframe using concat
-  new_combat_log = pd.concat([combat_log,pd.DataFrame(new_round,index=[0])],ignore_index=True)
+  new_combat_log = pd.concat([combat_log,pd.DataFrame(new_round)],ignore_index=True)
 
   return new_combat_log
 
