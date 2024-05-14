@@ -30,7 +30,7 @@ class Roll:
       'Penalties': []
     }
 
-    
+
 class d20_Roll(Roll):
   def __init__(self,Entity_Making,Dice_Type,Dice_Number):
     super().__init__(Entity_Making,Dice_Type,Dice_Number)
@@ -47,9 +47,9 @@ class Damage_Roll(Roll):
     self.Modifiers = Modifiers
     self.Damage_Types = Damage_Types
 
-    def Convert_Roll_to_Int(Dice_Type,Dice_Number):
-      damage = Roll_Dice(Dice_Type,Dice_Number)
-      return damage
+def Convert_Roll_to_Int(Dice_Type,Dice_Number):
+  damage = Roll_Dice(Dice_Type,Dice_Number)
+  return damage
 
 
 
