@@ -182,8 +182,8 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,combat_log):
   action_name = 'Attack'
   action_type = 'Offense'
   # the target is the last entity in the Actor.Target_List
-  print(combat_situation[Actor])
-  target = combat_situation[Actor].Target_List[-1]
+  print(Actor)
+  target = Actor.Target_List[-1]
 
   # create a dictionary called new_round
   new_round = {'Log Entry ID': log_id,
