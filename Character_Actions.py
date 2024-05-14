@@ -109,7 +109,7 @@ def Attack_Action(Actor,Combat_Situation,combat_log):
   return Enact_Attack(Actor,Target,Weapon,Combat_Situation,combat_log)
 
 
-def Enact_Attack(Actor,Target,Weapon,combat_situation,combat_log):
+def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
   Attack_Modifier = Establishing_Hierarchy.Attack_Score(Actor) + Actor.Prof_Bonus
   Armor_Class = Target.AC
 
@@ -205,7 +205,7 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,combat_log):
 
     
   # attach the new_round dictionary to the combat_log_new dataframe using concat
-  combat_log = pd.concat([combat_log,pd.DataFrame(new_round,index=[0])],ignore_index=True)
+  return new_round
 
 
 
