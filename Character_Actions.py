@@ -227,6 +227,7 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
   new_round[Actor.Name + ' Cha_Score'] = Actor.Cha_Score
   new_round[Actor.Name + ' Active_Conditions'] = Actor.Active_Conditions
   new_round[Actor.Name + ' Concentrating'] = Actor.Concentrating
+  new_round[Actor.Name + ' Location'] = Actor.Location
   # using combat_situation create new columns for Acting False and add them to the dict
   for i in combat_situation:
     if i == Actor:
@@ -246,6 +247,7 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
       new_round[i.Name + ' Cha_Score'] = i.Cha_Score
       new_round[i.Name + ' Active_Conditions'] = i.Active_Conditions
       new_round[i.Name + ' Concentrating'] = i.Concentrating
+      new_round[i.Name + ' Location'] = i.Location
       
 
   
@@ -255,22 +257,24 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
   return new_combat_log
 
 
+import numpy as np
 
 
 # Actions
 # Move
-def Move(Creature,Distance,Direction):
-  First_Location = Creature.Location
-  if Direction == 'x':
-    Current_Location = Creature.Location    # (x, y, z)
-    New_Location = Current_Location + (Distance,0)
-    #elif Direction == 'y':
-    #  Current_Location = Creature.Location   # (x, y, z)
-    #  New_Location = Current_Location + (0,Distance)
-  else:
-    Current_Location = Creature.Location    # (x, y, z)
-    New_Location = Current_Location + (0,Distance)
-  return New_Location
+def Move(Actor,combat_situation,combat_log_new):
+  current_location = Actor.Location
+  other_entity_locations = {}
+  for i in combat_situation:
+    if i == Actor:
+      pass
+    else:
+      other_entity_locations[i] = i.Location
+  
+  # check the distances between the Actor and the other entities
+  distances = {}
+  for i in other_entity_locations:
+    distances[i] = np.linalg.norm(np.array(current_location) - np.array(other_entity_locations[i]))
 
 
 #Hide
@@ -293,9 +297,6 @@ def Check_Cover(Creature,Target,World):
     Distance = Fastest_Speed(Creature) * 2
   else:
     Distance = Fastest_Speed(Creature)
-
-
-
 
   Locations_Available = []
   

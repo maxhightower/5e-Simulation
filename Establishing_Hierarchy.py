@@ -52,8 +52,6 @@ def Predicted_Hit_Points(Player_Character):
 
 
 
-
-
 #def Random_Hit_Points(Player_Character):         Need to update this to match the changes to Predicted Hit Points
 #  i = Player_Character.Class.Hit_Dice
 #  for i in range(1,Player_Character.Level,1):
