@@ -7,11 +7,11 @@ import numpy as np
 
 # rolling any given number of dice for any type
 def Roll_Dice(Number_of_Dice,Dice_Type):
-  roll_results = []
+  roll_results = 0
   for i in range(Number_of_Dice):
-    roll_results.append(randrange(1,Dice_Type))
-  print(roll_results)
-  return roll_results.sum()
+    roll_results = roll_results + randrange(1,Dice_Type)
+  return roll_results
+
 
 
 
