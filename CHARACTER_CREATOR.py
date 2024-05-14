@@ -56,7 +56,7 @@ def calc_health(character):
     else:
         HP = 10 + Establishing_Hierarchy.abilityScoreToModifier(character.Con_Score)
     #print('HP:',HP)
-    character.HP = HP
+    return HP
 
 # Testing Character Creation
 
@@ -227,6 +227,7 @@ def Create_Character(character_name,Score_Generation_Method,Species,Subspecies,C
         True,     # tool profs
         True,     # weapon equipped
         True,     # armor equipped
+        True,
         Strength,                  # For the ability scores, I need to know how they're getting AND allocating the scores 
         Dexterity,
         Constitution,
@@ -236,12 +237,12 @@ def Create_Character(character_name,Score_Generation_Method,Species,Subspecies,C
         True, # Spellcasting Prepared
         True, # Item Attunements
         True, # Inventory
-        True,
         True, 
         #True # Related Stat Blocks
         )
 
-    calc_health(character_name)
+    character_name.HP = calc_health(character_name)
+    character_name.Current_HP = character_name.HP
 
     character_name.Actions['Don Shield'] = Armor_and_Weapons.Don_Armor(Armor_and_Weapons.Shield,character_name)
     character_name.Actions['Doff Shield'] = Armor_and_Weapons.Doff_Armor(Armor_and_Weapons.Shield,character_name)
