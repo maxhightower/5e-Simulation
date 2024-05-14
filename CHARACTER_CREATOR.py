@@ -176,7 +176,7 @@ def Create_Character(character_name,Score_Generation_Method,Species,Subspecies,C
         'Wizard': ['Intelligence','Constitution','Dexterity','Wisdom','Charisma','Strength']}
 
     for x, y in Quick_Builds.items():
-        if x == Class:
+        if x == str(Class):
             for i in range(len(y)):
                 #print(i)
                 if y[i] == 'Strength':
