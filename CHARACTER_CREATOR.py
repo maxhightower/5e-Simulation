@@ -160,6 +160,7 @@ def Create_Character(character_name,Score_Generation_Method,Species,Subspecies,C
     else:
         print('Unrecognizable Score Generation Method')
 
+    '''
     Quick_Builds = {
         'Artificer': ['Intelligence','Constitution','Dexterity','Wisdom','Strength','Charisma'],
         'Barbarian': ['Strength','Constitution','Dexterity','Wisdom','Charisma','Intelligence'],
@@ -174,44 +175,50 @@ def Create_Character(character_name,Score_Generation_Method,Species,Subspecies,C
         'Sorcerer': ['Charisma','Constitution','Dexterity','Intelligence','Wisdom','Strength'],
         'Warlock': ['Charisma','Constitution','Dexterity','Wisdom','Intelligence','Strength'],
         'Wizard': ['Intelligence','Constitution','Dexterity','Wisdom','Charisma','Strength']}
+    try: 
+        for x, y in Quick_Builds.items():
+            if x == str(Class):
+                for i in range(len(y)):
+                    if y[i] == 'Strength':
+                        Strength = int(listl[i])
+                        #print('Strength = ',Strength)
+                    elif y[i] == 'Dexterity':
+                        Dexterity = int(listl[i])
+                        #print('Dexterity = ',Dexterity)
+                    elif y[i] == 'Constitution':
+                        Constitution = int(listl[i])
+                        #print('Constitution = ',Constitution)
+                    elif y[i] == 'Intelligence':
+                        Intelligence = int(listl[i])
+                        #print('Intelligence = ',Intelligence)
+                    elif y[i] == 'Wisdom':
+                        Wisdom = int(listl[i])
+                        #print('Wisdom = ',Wisdom)
+                    elif y[i] == 'Charisma':
+                        Charisma = int(listl[i])
+                        #print('Charisma = ',Charisma)
+                    else:
+                        pass
+    except:
+    '''
+    # randomly assign the scores from listl and remove each score from the list
+    Strength = random.choice(listl)
+    listl.remove(Strength)
 
-    for x, y in Quick_Builds.items():
-        if x == str(Class):
-            for i in range(len(y)):
-                #print(i)
-                if y[i] == 'Strength':
-                    Strength = int(listl[i])
-                    #print('Strength = ',Strength)
-                elif y[i] == 'Dexterity':
-                    Dexterity = int(listl[i])
-                    #print('Dexterity = ',Dexterity)
-                elif y[i] == 'Constitution':
-                    Constitution = int(listl[i])
-                    #print('Constitution = ',Constitution)
-                elif y[i] == 'Intelligence':
-                    Intelligence = int(listl[i])
-                    #print('Intelligence = ',Intelligence)
-                elif y[i] == 'Wisdom':
-                    Wisdom = int(listl[i])
-                    #print('Wisdom = ',Wisdom)
-                elif y[i] == 'Charisma':
-                    Charisma = int(listl[i])
-                    #print('Charisma = ',Charisma)
-                else:
-                    Strength = 10
-                    Dexterity = 10
-                    Constitution = 10
-                    Intelligence = 10
-                    Wisdom = 10
-                    Charisma = 10
+    Dexterity = random.choice(listl)
+    listl.remove(Dexterity)
 
-        else:
-             Strength = 10
-             Dexterity = 10
-             Constitution = 10
-             Intelligence = 10
-             Wisdom = 10
-             Charisma = 10
+    Constitution = random.choice(listl)
+    listl.remove(Constitution)
+
+    Intelligence = random.choice(listl)
+    listl.remove(Intelligence)
+
+    Wisdom = random.choice(listl)
+    listl.remove(Wisdom)
+
+    Charisma = listl[0]
+
 
     #print('Error after Quick Builds')
 
