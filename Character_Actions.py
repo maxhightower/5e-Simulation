@@ -343,7 +343,7 @@ def Dodge_Action(Actor,Combat_Situation,Combat_Log):
                 'Action Time': action_time,
                 'Action Name': action_name,
                 'Action Type': action_type,
-                'Target': Actor,
+                'Target': Actor.Name,
                 'Action Result': 'Dodge',
                 'Current Allied Ability Check': Dice_Rolls.Current_Allied_Ability_Check,
                 'Current Allied Attack Roll': Dice_Rolls.Current_Allied_Attack_Roll,
