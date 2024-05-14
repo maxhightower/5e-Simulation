@@ -146,6 +146,7 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
       elif str(Weapon.Dmg_Type.lower(),'immue') in Target.WRI:
         damage = 0
       else: pass
+      result = 'Critical Hit'
     else:
       damage = damage_roll + y
       if str(Weapon.Damage_Type.lower()+'res') in Target.WRI:
@@ -153,6 +154,7 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
       elif str(Weapon.Damage_Type.lower()+'immue') in Target.WRI:
         damage = 0
       else: pass
+      result = 'Hit'
   elif Establishing_Hierarchy.Current_Attack_Roll == Armor_Class:
     damage = (damage_roll + y)/2
     if str(Weapon.Damage_Type.lower()+'res') in Target.WRI:
@@ -160,8 +162,10 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
     elif str(Weapon.Damage_Type.lower()+'immue') in Target.WRI:
         damage = 0
     else: pass
+    result = 'Glancing Blow'
   else:
       damage = 0
+      result = 'Miss'
   
    # it's going to return the information needed to update the combat log
   #return 'Action','Attack','Offense',Target, damage
@@ -194,6 +198,7 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
                 'Action Name': action_name,
                 'Action Type': action_type,
                 'Target': target,
+                'Action Result': result,
                 'Current Allied Ability Check': Dice_Rolls.Current_Allied_Ability_Check,
                 'Current Allied Attack Roll': Dice_Rolls.Current_Allied_Attack_Roll,
                 'Current Allied Saving Throw': Dice_Rolls.Current_Allied_Saving_Throw,
