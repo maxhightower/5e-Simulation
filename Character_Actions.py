@@ -37,7 +37,7 @@ import pandas as pd
 
 # Druid
 
-combat_log = pd.DataFrame(columns=['Log Entry ID',
+combat_log = pd.DataFrame(columns=[
                                    'Combat Round',
                                    'Action Number',
                                    'Action Time', # action, bonus action, reaction, etc
@@ -186,7 +186,7 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
   target = Actor.Target_List[-1]
 
   # create a dictionary called new_round
-  new_round = {'Log Entry ID': log_id,
+  new_round = {'Index': log_id,
                 'Combat Round': combat_round,
                 'Action Number': action_number,
                 'Action Time': action_time,
@@ -202,7 +202,6 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
                 'Current Enemy Saving Throw': Dice_Rolls.Current_Enemy_Saving_Throw,
                 'Current Enemy Damage Roll': Dice_Rolls.Current_Enemy_Damage_Roll,
                 } 
-
     
   # attach the new_round dictionary to the combat_log_new dataframe using concat
   return new_round
