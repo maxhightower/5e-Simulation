@@ -978,7 +978,7 @@ class Player_Character:
     self.Jump_Height = 3 + abilityScoreToModifier(self.Str_Score)
     self.Jump_Distance = self.Str_Score
     self.Carrying_Capacity = self.Str_Score * 15
-
+    self.Target_List = []
     self.Memory = {   # perhaps I could use the pickle module
       # thinking about how this should be organized...
       # perhaps it could be a dataframe of creatures encountered in order
