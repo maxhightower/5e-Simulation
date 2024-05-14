@@ -9,7 +9,7 @@ import numpy as np
 def Roll_Dice(Number_of_Dice,Dice_Type):
   roll_results = 0
   for i in range(Number_of_Dice):
-    roll_results = roll_results + randrange(1,Dice_Type)
+    roll_results = roll_results + randrange(1,int(Dice_Type))
   return roll_results
 
 
