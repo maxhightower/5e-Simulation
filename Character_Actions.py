@@ -173,12 +173,12 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
    # it's going to return the information needed to update the combat log
   #return 'Action','Attack','Offense',Target, damage
 
-  if len(combat_log) == 0:
+  if len(new_combat_log) == 0:
     log_id = 0
   else:
     log_id = log_id + 1
         
-  if len(combat_log) == 0:
+  if len(new_combat_log) == 0:
     combat_round = 0
   else:
     combat_round = combat_round + 1
@@ -252,7 +252,7 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
 
   
   # attach the new_round dictionary to the combat_log_new dataframe using concat
-  new_combat_log = pd.concat([combat_log,pd.DataFrame(new_round)],ignore_index=True)
+  new_combat_log = pd.concat([new_combat_log,pd.DataFrame(new_round)],ignore_index=True)
 
   return new_combat_log
 
