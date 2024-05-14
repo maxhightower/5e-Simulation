@@ -47,8 +47,10 @@ class Damage_Roll(Roll):
     self.Modifiers = Modifiers
     self.Damage_Types = Damage_Types
 
-    def Apply_Damage_to_Target(Damage_Roll,Combat_Sitaution):
-      pass
+    def Convert_Roll_to_Int(Dice_Type,Dice_Number):
+      damage = Roll_Dice(Dice_Type,Dice_Number)
+      return damage
+
 
 
 class Ability_Check(d20_Roll):
