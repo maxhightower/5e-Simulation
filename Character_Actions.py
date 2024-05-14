@@ -110,7 +110,7 @@ def Enact_Attack(Actor,Target,Weapon,Combat_Situation):
     # check if any effects can be added
   #damage_roll = Dice_Rolls.Damage_Roll(Weapon.Dice_Type,Weapon.Dice_Num,Actor,Target,Weapon,Establishing_Hierarchy.Attack_Score(Actor),Weapon.Damage_Type)
   # use the function Convert_Roll_to_Int to convert the roll x to an integer
-  damage_roll = Dice_Rolls.Roll_Dice(Weapon.Dice_Type,Weapon.Dice_Num)
+  damage_roll = Dice_Rolls.Roll_Dice(int(Weapon.Dice_Type),int(Weapon.Dice_Num))
   y = Attack_Modifier
 
 
