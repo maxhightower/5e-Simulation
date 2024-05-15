@@ -172,11 +172,6 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
   
    # it's going to return the information needed to update the combat log
   #return 'Action','Attack','Offense',Target, damage
-
-  if len(new_combat_log) == 0:
-    log_id = 0
-  else:
-    log_id = log_id + 1
         
   if len(new_combat_log) == 0:
     combat_round = 0
@@ -230,25 +225,25 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
   #new_round[Actor.Name + ' Location'] = Actor.Location
   # using combat_situation create new columns for Acting False and add them to the dict
   print('enact attack')
-  for i in combat_situation:
-    if i == Actor:
+  for combat_situation[i] in range(len(combat_situation)):
+    if combat_situation[i] == Actor:
       pass
     else:
  
-      new_round[i.Name + ' Acting True'] = 0
-      new_round[i.Name + ' Current_HP'] = i.Current_HP
-      new_round[i.Name + ' Temp_HP'] = i.Temp_HP
-      new_round[i.Name + ' Size'] = i.Size
-      new_round[i.Name + ' Walking Speed'] = i.Speed['Walking']
-      new_round[i.Name + ' Flying Speed'] = i.Speed['Flying']
-      new_round[i.Name + ' Str_Score'] = i.Str_Score
-      new_round[i.Name + ' Dex_Score'] = i.Dex_Score
-      new_round[i.Name + ' Con_Score'] = i.Con_Score
-      new_round[i.Name + ' Int_Score'] = i.Int_Score
-      new_round[i.Name + ' Wis_Score'] = i.Wis_Score
-      new_round[i.Name + ' Cha_Score'] = i.Cha_Score
-      new_round[i.Name + ' Active_Conditions'] = i.Active_Conditions
-      new_round[i.Name + ' Concentrating'] = i.Concentrating
+      new_round[combat_situation[i].Name + ' Acting True'] = 0
+      new_round[combat_situation[i].Name + ' Current_HP'] = combat_situation[i].Current_HP
+      new_round[combat_situation[i].Name + ' Temp_HP'] = combat_situation[i].Temp_HP
+      new_round[combat_situation[i].Name + ' Size'] = combat_situation[i].Size
+      new_round[combat_situation[i].Name + ' Walking Speed'] = combat_situation[i].Speed['Walking']
+      new_round[combat_situation[i].Name + ' Flying Speed'] = combat_situation[i].Speed['Flying']
+      new_round[combat_situation[i].Name + ' Str_Score'] = combat_situation[i].Str_Score
+      new_round[combat_situation[i].Name + ' Dex_Score'] = combat_situation[i].Dex_Score
+      new_round[combat_situation[i].Name + ' Con_Score'] = combat_situation[i].Con_Score
+      new_round[combat_situation[i].Name + ' Int_Score'] = combat_situation[i].Int_Score
+      new_round[combat_situation[i].Name + ' Wis_Score'] = combat_situation[i].Wis_Score
+      new_round[combat_situation[i].Name + ' Cha_Score'] = combat_situation[i].Cha_Score
+      new_round[combat_situation[i].Name + ' Active_Conditions'] = combat_situation[i].Active_Conditions
+      new_round[combat_situation[i].Name + ' Concentrating'] = combat_situation[i].Concentrating
       #new_round[i.Name + ' Location'] = i.Location
     
 
