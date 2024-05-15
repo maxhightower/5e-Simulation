@@ -229,11 +229,12 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
   new_round[Actor.Name + ' Concentrating'] = Actor.Concentrating
   #new_round[Actor.Name + ' Location'] = Actor.Location
   # using combat_situation create new columns for Acting False and add them to the dict
+  print('enact attack')
   for i in combat_situation:
     if i == Actor:
       pass
     else:
-      print('enact attack')
+ 
       new_round[i.Name + ' Acting True'] = 0
       new_round[i.Name + ' Current_HP'] = i.Current_HP
       new_round[i.Name + ' Temp_HP'] = i.Temp_HP
@@ -249,8 +250,7 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
       new_round[i.Name + ' Active_Conditions'] = i.Active_Conditions
       new_round[i.Name + ' Concentrating'] = i.Concentrating
       #new_round[i.Name + ' Location'] = i.Location
-      
-
+    
   
   # attach the new_round dictionary to the combat_log_new dataframe using concat
   #new_combat_log = pd.concat([new_combat_log,pd.DataFrame(new_round)],ignore_index=True)
@@ -357,7 +357,7 @@ def Dodge_Action(Actor,Combat_Situation,Combat_Log):
                 'Current Enemy Saving Throw': Dice_Rolls.Current_Enemy_Saving_Throw,
                 'Current Enemy Damage Roll': Dice_Rolls.Current_Enemy_Damage_Roll,
                 }
-  
+  print('dodge action')
   # using Actor.Name create  new columns for Acting True and add them to the dict
   new_round[Actor.Name + ' Acting True'] = 1
   new_round[Actor.Name + ' Current_HP'] = Actor.Current_HP
