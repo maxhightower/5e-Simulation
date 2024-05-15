@@ -249,8 +249,8 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
 
   # attach the new_round dictionary to the combat_log_new dataframe using concat
   new_combat_log = pd.concat([new_combat_log,pd.DataFrame(new_round)],ignore_index=False)
-  # drop the duplicates from the new_combat_log
-  new_combat_log = new_combat_log.drop_duplicates()
+  # drop the duplicates from the new_combat_log based on the columns with only ints and floats
+  new_combat_log = new_combat_log[~new_combat_log.duplicated(subset=[col for col in new_combat_log.columns if new_combat_log[col].dtype in ['int64','float64']])]
 
   return new_combat_log
 
