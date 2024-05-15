@@ -232,6 +232,7 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
     if i == Actor:
       pass
     else:
+      print('enact attack')
       new_round[i.Name + ' Acting True'] = 0
       new_round[i.Name + ' Current_HP'] = i.Current_HP
       new_round[i.Name + ' Temp_HP'] = i.Temp_HP
