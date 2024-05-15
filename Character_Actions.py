@@ -227,7 +227,7 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
   new_round[Actor.Name + ' Cha_Score'] = Actor.Cha_Score
   new_round[Actor.Name + ' Active_Conditions'] = Actor.Active_Conditions
   new_round[Actor.Name + ' Concentrating'] = Actor.Concentrating
-  new_round[Actor.Name + ' Location'] = Actor.Location
+  #new_round[Actor.Name + ' Location'] = Actor.Location
   # using combat_situation create new columns for Acting False and add them to the dict
   for i in combat_situation:
     if i == Actor:
@@ -247,7 +247,7 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
       new_round[i.Name + ' Cha_Score'] = i.Cha_Score
       new_round[i.Name + ' Active_Conditions'] = i.Active_Conditions
       new_round[i.Name + ' Concentrating'] = i.Concentrating
-      new_round[i.Name + ' Location'] = i.Location
+      #new_round[i.Name + ' Location'] = i.Location
       
 
   
