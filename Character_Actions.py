@@ -224,7 +224,7 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
   new_round[Actor.Name + ' Concentrating'] = Actor.Concentrating
   #new_round[Actor.Name + ' Location'] = Actor.Location
   # using combat_situation create new columns for Acting False and add them to the dict
-  print('enact attack')
+
   for i in range(len(combat_situation)):
     if combat_situation[i] == Actor:
       pass
@@ -354,7 +354,7 @@ def Dodge_Action(Actor,Combat_Situation,Combat_Log):
                 'Current Enemy Saving Throw': Dice_Rolls.Current_Enemy_Saving_Throw,
                 'Current Enemy Damage Roll': Dice_Rolls.Current_Enemy_Damage_Roll,
                 }
-  print('dodge action')
+
   # using Actor.Name create  new columns for Acting True and add them to the dict
   new_round[Actor.Name + ' Acting True'] = 1
   new_round[Actor.Name + ' Current_HP'] = Actor.Current_HP
