@@ -102,8 +102,8 @@ def Choose_Best_Weapon(Actor):
   # returns to change the Weapon Equipped if need be
 
 def Attack_Action(Actor,Combat_Situation,combat_log):
-  Equip_Weapon(Actor,Choose_Best_Weapon(Actor))
-  print('attack action')
+  #Equip_Weapon(Actor,Choose_Best_Weapon(Actor))
+  #print('attack action')
   Weapon = Actor.Weapon_Equipped[0]
   Target = Dice_Rolls.Choose_Target_Offense(Actor,Combat_Situation)
   Actor.Target_List.append(Target)
@@ -111,6 +111,7 @@ def Attack_Action(Actor,Combat_Situation,combat_log):
 
 
 def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
+
   Attack_Modifier = Establishing_Hierarchy.Attack_Score(Actor) + Actor.Prof_Bonus
   Armor_Class = Target.AC
   if Actor.Circumstances['Attack Rolls'] == 'Advantage':
