@@ -103,7 +103,6 @@ def Choose_Best_Weapon(Actor):
 
 def Attack_Action(Actor,Combat_Situation,combat_log):
   Equip_Weapon(Actor,Choose_Best_Weapon(Actor))
-  #print('attack action')
   Weapon = Actor.Weapon_Equipped[0]
   Target = Dice_Rolls.Choose_Target_Offense(Actor,Combat_Situation)
   Actor.Target_List.append(Target)
@@ -252,11 +251,11 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
       new_round[i.Name + ' Concentrating'] = i.Concentrating
       #new_round[i.Name + ' Location'] = i.Location
     
-  
-  # attach the new_round dictionary to the combat_log_new dataframe using concat
-  #new_combat_log = pd.concat([new_combat_log,pd.DataFrame(new_round)],ignore_index=True)
 
-  return new_round
+  # attach the new_round dictionary to the combat_log_new dataframe using concat
+  new_combat_log = pd.concat([new_combat_log,pd.DataFrame(new_round)],ignore_index=True)
+
+  return new_combat_log
 
 
 import numpy as np
@@ -395,9 +394,9 @@ def Dodge_Action(Actor,Combat_Situation,Combat_Log):
       new_round[i.Name + ' Concentrating'] = i.Concentrating
   
   # attach the new_round dictionary to the combat_log_new dataframe using concat
-  #new_combat_log = pd.concat([combat_log,pd.DataFrame(new_round,index=[0])],ignore_index=True)
+  new_combat_log = pd.concat([combat_log,pd.DataFrame(new_round,index=[0])],ignore_index=True)
 
-  return new_round
+  return new_combat_log
 
 #Dash
 def Dash_Action(Creature):
