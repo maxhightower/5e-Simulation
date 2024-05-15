@@ -225,7 +225,7 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
   #new_round[Actor.Name + ' Location'] = Actor.Location
   # using combat_situation create new columns for Acting False and add them to the dict
   print('enact attack')
-  for combat_situation[i] in range(len(combat_situation)):
+  for i in range(len(combat_situation)):
     if combat_situation[i] == Actor:
       pass
     else:
