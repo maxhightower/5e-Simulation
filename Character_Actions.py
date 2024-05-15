@@ -103,6 +103,7 @@ def Choose_Best_Weapon(Actor):
 
 def Attack_Action(Actor,Combat_Situation,combat_log):
   Equip_Weapon(Actor,Choose_Best_Weapon(Actor))
+  print('attack action')
   Weapon = Actor.Weapon_Equipped[0]
   Target = Dice_Rolls.Choose_Target_Offense(Actor,Combat_Situation)
   Actor.Target_List.append(Target)
