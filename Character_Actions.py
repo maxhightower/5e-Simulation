@@ -112,7 +112,7 @@ def Attack_Action(Actor,Combat_Situation,combat_log):
 def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
 
   Attack_Modifier = Establishing_Hierarchy.Attack_Score(Actor) + Actor.Prof_Bonus
-
+  print('Target Name: ',Target.Name)
   if Weapon.Category == 'Melee':
     # is the target is within range of the attacker by the Target.Location['X'] and Target.Location['Y'] against the Weapon.Reach
     if abs(Actor.Location['X'] - Target.Location['X']) <= Weapon.Reach and abs(Actor.Location['Y'] - Target.Location['Y']) <= Weapon.Reach/5:
