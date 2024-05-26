@@ -180,6 +180,9 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
     elif str(Weapon.Damage_Type.lower()+'immue') in Target.WRI:
         damage = 0
     else: pass
+  else:
+    result = 'Miss'
+    damage = 0
   
    # it's going to return the information needed to update the combat log
   #return 'Action','Attack','Offense',Target, damage
