@@ -117,9 +117,17 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
     # is the target is within range of the attacker by the Target.Location['X'] and Target.Location['Y'] against the Weapon.Reach
     if abs(Actor.Location['X'] - Target.Location['X']) <= Weapon.Reach and abs(Actor.Location['Y'] - Target.Location['Y']) <= Weapon.Reach/5:
       Armor_Class = Target.AC
-      if Actor.Circumstances['Attack Rolls'] == 'Advantage':
+      if Actor.Circumstances['Next']['Attack Rolls'][Target.Name]['Any'] == 'ADV':
         Roll = Dice_Rolls.d20_Advantage()
-      elif Actor.Circumstances['Attack Rolls'] == 'Disadvantage':
+      elif Actor.Circumstances['Any']['Attack Rolls'][Target.Name]['Any'] == 'ADV':
+        Roll = Dice_Rolls.d20_Advantage()
+      elif Actor.Circumstances['All']['Attack Rolls'][Target.Name]['Any'] == 'ADV':
+        Roll = Dice_Rolls.d20_Advantage()
+      elif Actor.Circumstances['Next']['Attack Rolls'][Target.Name]['Any'] == 'DIS':
+        Roll = Dice_Rolls.d20_Disadvantage()
+      elif Actor.Circumstances['Any']['Attack Rolls'][Target.Name]['Any'] == 'DIS':
+        Roll = Dice_Rolls.d20_Disadvantage()
+      elif Actor.Circumstances['All']['Attack Rolls'][Target.Name]['Any'] == 'DIS':
         Roll = Dice_Rolls.d20_Disadvantage()
       else:
         Roll = Dice_Rolls.d20()
@@ -833,7 +841,7 @@ def Help_Action(Actor,Help_Target,Combat_Situation,Combat_Log):
     
     if len(Potential_Attack_Targets) > 0:
       Attack_Target = random.choice(Potential_Attack_Targets)
-      Combat_Situation[Help_Target].Circumstances['Next']['Attack Rolls'][Attack_Target]['Any'].append('ADV')
+      Combat_Situation[Help_Target].Circumstances['Next']['Attack Rolls'][Attack_Target]['Any'] = 'ADV'
     else:
       pass
 
