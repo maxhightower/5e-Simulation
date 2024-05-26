@@ -458,9 +458,9 @@ def Move(Actor,combat_situation,combat_log_new):
 
   action_number = 'Undetermined'
 
-  action_time = 'Action'
+  action_time = 'Move'
   action_name = 'Move'
-  action_type = 'Movement'
+  action_type = 'Mobility'
 
   # create a dictionary called new_round
   new_round = {'Combat Round': combat_round,
