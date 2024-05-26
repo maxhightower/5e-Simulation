@@ -121,7 +121,7 @@ Magical_Item_Tinkering_Effects = [Magical_Tinkering_Light_Effect,Magical_Tinkeri
 def Artificer_Spellcasting(Player_Character):
   # there might be an issue that pops up later with the Artificer Initiate Feat but we'll get there when we get there
 
-  Player_Character.Actions['Cast'] = {} # this will need to be changed when multiclassing is implemented
+  Player_Character.Actions['Cast'] = Character_Actions.Cast_Action() # this will need to be changed when multiclassing is implemented
 
   Player_Character.Spellcasting_Known['Artificer'] = {}
   Player_Character.Spellcasting_Prepared['Artificer'] = {}

@@ -61,17 +61,6 @@ def Predicted_Hit_Points(Player_Character):
 #  hit_points = i + (abilityScoreToModifier(Player_Character.Con_Score) * Player_Character.Level)
 #  print('Randomly Rolled Hit Points:',i)
 
-def Choose_Target(Self_Creature,World,Effect):
-  pass
-  # I need a function that takes the world that the creatures is in and, 
-  # based on the type of feature, chooses the type of creature appropriate
-  # Effect Target Type Options:
-  # Ally
-  # Creature
-  # Location
-  # Object
-  # Hostile
-  # Target
 
 def Spawn_Creature(Location,Creature):
   Creature.Location = Location
@@ -887,21 +876,51 @@ class Player_Character:
     }         # should be a dictionary for conditions on self and on certain creatures however I'm unsure how to make that work without a relevant environment 
 
     self.Circumstances = {
-        'Attack Rolls': {},
-        'Ability Checks': {},
-
-        'Saving Throws': {
-          'Strength': [],
-          'Dexterity': [],
-          'Constitutions': [],
-          'Intelligence': [],
-          'Wisdom': {
-            'Frightened': [],
-            'Charmed': []
+        'Next': {
+          'Attack Rolls': {
+            
           },
-          'Charisma': [],
-          'Death': []
-        }
+          'Ability Checks': {},
+          'Saving Throws': {
+            'Strength': [],
+            'Dexterity': [],
+            'Constitutions': [],
+            'Intelligence': [],
+            'Wisdom': {
+              'Frightened': [],
+              'Charmed': []},
+            'Charisma': [],
+            'Death': []}
+        },
+        'Any': {
+          'Attack Rolls': {},
+          'Ability Checks': {},
+          'Saving Throws': {
+            'Strength': [],
+            'Dexterity': [],
+            'Constitutions': [],
+            'Intelligence': [],
+            'Wisdom': {
+              'Frightened': [],
+              'Charmed': []},
+            'Charisma': [],
+            'Death': []}
+        },
+        'All': {
+          'Attack Rolls': {},
+          'Ability Checks': {},
+          'Saving Throws': {
+            'Strength': [],
+            'Dexterity': [],
+            'Constitutions': [],
+            'Intelligence': [],
+            'Wisdom': {
+              'Frightened': [],
+              'Charmed': []},
+            'Charisma': [],
+            'Death': []}
+        },
+
     }
 
 

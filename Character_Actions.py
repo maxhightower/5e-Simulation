@@ -6,6 +6,7 @@ import operator
 import random
 import Armor_and_Weapons
 import pandas as pd
+import math
 # let's split the different options for builds for each class
 # Artificer
   # Caster: Studded Leather, Ranged Simple Weapon, Melee Simple Weapon, Thieves Tools, Dungoneers Pack
@@ -322,7 +323,6 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
 
   # create a dictionary called new_round
   new_round = {'Combat Round': combat_round,
-                'Action Number': action_number,
                 'Action Time': action_time,
                 'Action Name': action_name,
                 'Action Type': action_type,
@@ -811,7 +811,31 @@ def Disengage_Action(Creature):
 #def Help_Action(Creature,Target):   # i forget whether the target was supposed to be the task/attack or the creature being helped
   # help action grants advantage on an attack roll or ability check
 #  Effects.Apply_Buff_Circumstance_Effect
+def Help_Action(Actor,Help_Target,Combat_Situation,Combat_Log):
+  help_types = ['Attack','Ability Check']
+  help_type = random.choice(help_types)
+  
+  ## Ability Check
+  # target gains ADV on the next Ability Check they make
+  if help_type == 'Ability Check':
+    Combat_Situation[Help_Target].Circumstances['Next']['Ability Checks']['Any'] = 'ADV'
 
+  ## Attack Check
+  # the attack_target must be within 5 feet of the Helper
+  # the help_target gains ADV on the next attack roll they make
+  
+  elif help_type == 'Attack':
+    # potential Attack_Targets are creatures within 5 feet of the Actor
+    Potential_Attack_Targets = []
+    for i in Combat_Situation:
+      if abs(Actor.Location['X'] - i.Location['X']) <= 5 and abs(Actor.Location['Y'] - i.Location['Y']) <= 5:
+        Potential_Attack_Targets.append(i)
+    
+    if len(Potential_Attack_Targets) > 0:
+      Attack_Target = random.choice(Potential_Attack_Targets)
+      Combat_Situation[Help_Target].Circumstances['Next']['Attack Checks'][Attack_Target]['Any'].append('ADV')
+    else:
+      pass
 
 #Search
 def Search_Action(Creature):
@@ -901,5 +925,17 @@ def None_Action():
 #def Two_Weapon_Fighting_Attack_Bonus_Action(Attacker,Defender,Weapon):
 #  Weapon_Attack(Attacker,Defender,Weapon)
 
-def Cast_Action(Target,Spell):
-  pass
+def Cast_Action(Actor,Target,Spell,Combat_Situation,Combat_Log):
+  # determine if the Target is within Range from Target
+  spell_range = Spell.Range
+  actor_location = [Actor.Location['X'],Actor.Location['Y']]
+  target_location = [Target.Location['X'],Target.Location['Y']]
+  distance = math.sqrt((actor_location[0] - target_location[0])**2 + (actor_location[1] - target_location[1])**2)
+  if distance <= spell_range:
+    # go through the motions of casting the spell
+    pass
+
+
+  else: 
+    # return 'Target Out of Range'
+    pass
