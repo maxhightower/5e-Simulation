@@ -112,6 +112,21 @@ def Attack_Action(Actor,Combat_Situation,combat_log):
 def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
 
   Attack_Modifier = Establishing_Hierarchy.Attack_Score(Actor) + Actor.Prof_Bonus
+
+  if Weapon.Category == 'Melee':
+    # is the target is within range of the attacker by the Target.Location['X'] and Target.Location['Y'] against the Weapon.Reach
+    if abs(Actor.Location['X'] - Target.Location['X']) <= Weapon.Reach and abs(Actor.Location['Y'] - Target.Location['Y']) <= Weapon.Reach:
+      pass
+    else:
+      result = 'Out of Range'
+  elif Weapon.Category == 'Ranged':
+    # is the target is within range of the attacker by the Target.Location['X'] and Target.Location['Y'] against the Weapon.Range
+    if abs(Actor.Location['X'] - Target.Location['X']) <= Weapon.Range and abs(Actor.Location['Y'] - Target.Location['Y']) <= Weapon.Range:
+      pass
+    else:
+      result = 'Out of Range'
+  
+
   Armor_Class = Target.AC
   if Actor.Circumstances['Attack Rolls'] == 'Advantage':
     Roll = Dice_Rolls.d20_Advantage()
@@ -165,10 +180,6 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
     elif str(Weapon.Damage_Type.lower()+'immue') in Target.WRI:
         damage = 0
     else: pass
-    
-  else:
-      damage = 0
-      result = 'Miss'
   
    # it's going to return the information needed to update the combat log
   #return 'Action','Attack','Offense',Target, damage
