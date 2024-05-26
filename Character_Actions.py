@@ -117,17 +117,18 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
     # is the target is within range of the attacker by the Target.Location['X'] and Target.Location['Y'] against the Weapon.Reach
     if abs(Actor.Location['X'] - Target.Location['X']) <= Weapon.Reach and abs(Actor.Location['Y'] - Target.Location['Y']) <= Weapon.Reach/5:
       Armor_Class = Target.AC
-      if Actor.Circumstances['Next']['Attack Rolls'][str(Target.Name)]['Any'] == 'ADV':
+      target_name = str(Target.Name)
+      if Actor.Circumstances['Next']['Attack Rolls'][target_name]['Any'] == 'ADV':
         Roll = Dice_Rolls.d20_Advantage()
-      elif Actor.Circumstances['Any']['Attack Rolls'][str(Target.Name)]['Any'] == 'ADV':
+      elif Actor.Circumstances['Any']['Attack Rolls'][target_name]['Any'] == 'ADV':
         Roll = Dice_Rolls.d20_Advantage()
-      elif Actor.Circumstances['All']['Attack Rolls'][str(Target.Name)]['Any'] == 'ADV':
+      elif Actor.Circumstances['All']['Attack Rolls'][target_name]['Any'] == 'ADV':
         Roll = Dice_Rolls.d20_Advantage()
-      elif Actor.Circumstances['Next']['Attack Rolls'][str(Target.Name)]['Any'] == 'DIS':
+      elif Actor.Circumstances['Next']['Attack Rolls'][target_name]['Any'] == 'DIS':
         Roll = Dice_Rolls.d20_Disadvantage()
-      elif Actor.Circumstances['Any']['Attack Rolls'][str(Target.Name)]['Any'] == 'DIS':
+      elif Actor.Circumstances['Any']['Attack Rolls'][target_name]['Any'] == 'DIS':
         Roll = Dice_Rolls.d20_Disadvantage()
-      elif Actor.Circumstances['All']['Attack Rolls'][str(Target.Name)]['Any'] == 'DIS':
+      elif Actor.Circumstances['All']['Attack Rolls'][target_name]['Any'] == 'DIS':
         Roll = Dice_Rolls.d20_Disadvantage()
       else:
         Roll = Dice_Rolls.d20()
