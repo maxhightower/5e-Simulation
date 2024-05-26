@@ -272,7 +272,7 @@ def No_Action(Actor,combat_situation,combat_log_new):
   
   action_time = 'Action'
   action_name = 'None'
-  action_type = 'None'
+  action_type = 'Passive'
 
   # create a dictionary called new_round
   new_round = {'Combat Round': combat_round,
@@ -346,7 +346,7 @@ def No_Bonus_Action(Actor,combat_situation,combat_log_new):
   
   action_time = 'Bonus Action'
   action_name = 'None'
-  action_type = 'None'
+  action_type = 'Passive'
 
   # create a dictionary called new_round
   new_round = {'Combat Round': combat_round,
