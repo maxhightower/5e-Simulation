@@ -174,6 +174,7 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
         damage = 0
     else:
       result = 'Out of Range'
+      damage = 0
 
   elif Weapon.Category == 'Ranged':
     # is the target is within range of the attacker by the Target.Location['X'] and Target.Location['Y'] against the Weapon.Range
@@ -236,6 +237,7 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
         damage = 0
     else:
       result = 'Out of Range'
+      damage = 0
   
   # it's going to return the information needed to update the combat log
   #return 'Action','Attack','Offense',Target, damage
