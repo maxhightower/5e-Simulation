@@ -437,19 +437,95 @@ def No_Bonus_Action(Actor,combat_situation,combat_log_new):
 # Move
 def Move(Actor,combat_situation,combat_log_new):
   print('2')
-  current_location = Actor.Location
-  other_entity_locations = {}
+  current_x = Actor.Location['X']
+  current_y = Actor.Location['Y']
+
+  # choose a new location within the range of the Actor's speed
+  new_x = random.randint(current_x - Actor.Speed['Walking'],current_x + Actor.Speed['Walking'])
+  new_y = random.randint(current_y - Actor.Speed['Walking'],current_y + Actor.Speed['Walking'])
+  Actor.Location['X'] = new_x
+  Actor.Location['Y'] = new_y
+
+  if len(combat_log) == 0:
+    log_id = 0
+  else:
+    log_id = log_id + 1
+  
+  if len(combat_log) == 0:
+    combat_round = 0
+  else:
+    combat_round = combat_round + 1
+
+  action_number = 'Undetermined'
+
+  action_time = 'Action'
+  action_name = 'Move'
+  action_type = 'Movement'
+
+  # create a dictionary called new_round
+  new_round = {'Combat Round': combat_round,
+                'Action Number': action_number,
+                'Action Time': action_time,
+                'Action Name': action_name,
+                'Action Type': action_type,
+                'Target': Actor.Name,
+                'Action Result': 'Moved',
+                'Current Allied Ability Check': Dice_Rolls.Current_Allied_Ability_Check,
+                'Current Allied Attack Roll': Dice_Rolls.Current_Allied_Attack_Roll,
+                'Current Allied Saving Throw': Dice_Rolls.Current_Allied_Saving_Throw,
+                'Current Allied Damage Roll': Dice_Rolls.Current_Allied_Damage_Roll,
+                'Current Enemy Ability Check': Dice_Rolls.Current_Enemy_Ability_Check,
+                'Current Enemy Attack Roll': Dice_Rolls.Current_Enemy_Attack_Roll,
+                'Current Enemy Saving Throw': Dice_Rolls.Current_Enemy_Saving_Throw,
+                'Current Enemy Damage Roll': Dice_Rolls.Current_Enemy_Damage_Roll,
+                }
+  
+  # using Actor.Name create  new columns for Acting True and add them to the dict
+  new_round[Actor.Name + ' Acting True'] = 1
+  new_round[Actor.Name + ' Current_HP'] = Actor.Current_HP
+  new_round[Actor.Name + ' Temp_HP'] = Actor.Temp_HP
+  new_round[Actor.Name + ' Size'] = Actor.Size
+  new_round[Actor.Name + ' Walking Speed'] = Actor.Speed['Walking']
+  new_round[Actor.Name + ' Flying Speed'] = Actor.Speed['Flying']
+  new_round[Actor.Name + ' Str_Score'] = Actor.Str_Score
+  new_round[Actor.Name + ' Dex_Score'] = Actor.Dex_Score
+  new_round[Actor.Name + ' Con_Score'] = Actor.Con_Score
+  new_round[Actor.Name + ' Int_Score'] = Actor.Int_Score
+  new_round[Actor.Name + ' Wis_Score'] = Actor.Wis_Score
+  new_round[Actor.Name + ' Cha_Score'] = Actor.Cha_Score
+  new_round[Actor.Name + ' Active_Conditions'] = Actor.Active_Conditions
+  new_round[Actor.Name + ' Concentrating'] = Actor.Concentrating
+  new_round[Actor.Name + 'Location X'] = Actor.Location['X']
+  new_round[Actor.Name + 'Location Y'] = Actor.Location['Y']
+  new_round[Actor.Name + 'Location Z'] = Actor.Location['Z']
+
+  # using combat_situation create new columns for Acting False and add them to the dict
   for i in combat_situation:
     if i == Actor:
       pass
     else:
-      other_entity_locations[i] = i.Location
+      new_round[i.Name + ' Acting True'] = 0
+      new_round[i.Name + ' Current_HP'] = i.Current_HP
+      new_round[i.Name + ' Temp_HP'] = i.Temp_HP
+      new_round[i.Name + ' Size'] = i.Size
+      new_round[i.Name + ' Walking Speed'] = i.Speed['Walking']
+      new_round[i.Name + ' Flying Speed'] = i.Speed['Flying']
+      new_round[i.Name + ' Str_Score'] = i.Str_Score
+      new_round[i.Name + ' Dex_Score'] = i.Dex_Score
+      new_round[i.Name + ' Con_Score'] = i.Con_Score
+      new_round[i.Name + ' Int_Score'] = i.Int_Score
+      new_round[i.Name + ' Wis_Score'] = i.Wis_Score
+      new_round[i.Name + ' Cha_Score'] = i.Cha_Score
+      new_round[i.Name + ' Active_Conditions'] = i.Active_Conditions
+      new_round[i.Name + ' Concentrating'] = i.Concentrating
+      new_round[i.Name + 'Location X'] = i.Location['X']
+      new_round[i.Name + 'Location Y'] = i.Location['Y']
+      new_round[i.Name + 'Location Z'] = i.Location['Z']
   
-  # check the distances between the Actor and the other entities
-  distances = {}
-  for i in other_entity_locations:
-    distances[i] = np.linalg.norm(np.array(current_location) - np.array(other_entity_locations[i]))
+  # attach the new_round dictionary to the combat_log_new dataframe using concat
+  new_combat_log = pd.concat([combat_log,pd.DataFrame(new_round,index=[0])],ignore_index=True)
 
+  return new_combat_log
 
 #Hide
 def Fastest_Speed(Creature):
