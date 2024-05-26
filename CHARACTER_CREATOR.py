@@ -464,6 +464,9 @@ def Random_Character():
     #print('Creating Random Character...')
     # generate a random name using 'a' and four random numbers
     name = 'a' + str(random.randint(1000,9999))
+    # remove any spaces from the name
+    name = name.replace(' ','')
+    
     # randomly 
     species = random.choice(available_species)
     sub_species = False
