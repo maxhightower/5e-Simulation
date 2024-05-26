@@ -116,75 +116,128 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
   if Weapon.Category == 'Melee':
     # is the target is within range of the attacker by the Target.Location['X'] and Target.Location['Y'] against the Weapon.Reach
     if abs(Actor.Location['X'] - Target.Location['X']) <= Weapon.Reach and abs(Actor.Location['Y'] - Target.Location['Y']) <= Weapon.Reach:
-      pass
+      Armor_Class = Target.AC
+      if Actor.Circumstances['Attack Rolls'] == 'Advantage':
+        Roll = Dice_Rolls.d20_Advantage()
+      elif Actor.Circumstances['Attack Rolls'] == 'Disadvantage':
+        Roll = Dice_Rolls.d20_Disadvantage()
+      else:
+        Roll = Dice_Rolls.d20()
+
+      Establishing_Hierarchy.Current_Attack_Roll = Roll + Attack_Modifier
+
+      #for i in Actor.Effects['Self_Attacking']['Rolling'][Weapon.Type]:
+        # check if any effects can be added
+      #damage_roll = Dice_Rolls.Damage_Roll(Weapon.Dice_Type,Weapon.Dice_Num,Actor,Target,Weapon,Establishing_Hierarchy.Attack_Score(Actor),Weapon.Damage_Type)
+      # use the function Convert_Roll_to_Int to convert the roll x to an integer
+      damage_roll = Dice_Rolls.Roll_Dice(Weapon.Dice_Type,Weapon.Dice_Num)
+      y = Attack_Modifier
+
+
+      if Weapon.Damage_Type == 'Bludgeoning' or Weapon.Damage_Type == 'Piercing' or Weapon.Damage_Type == 'Slashing':
+        try:
+          x = x + Actor.Effects['Self_Dealing_Damage']['Bludgeoning'][0].Bonus
+        except:
+          pass
+      #for i in Actor.Effects['Self_Dealing_Damage'][Weapon.Dmg_Type]:
+      #  x = x + Actor.Effects['Self_Dealing_Damage'][Weapon.Dmg_Type][i]
+      
+      if Establishing_Hierarchy.Current_Attack_Roll > Armor_Class:
+        if Roll in Actor.Crit:
+          result = 'Critical Hit'
+          damage = (damage_roll * 2) + y
+          if str(Weapon.Dmg_Type.lower(),'res') in Target.WRI:
+            damage = damage/2
+          elif str(Weapon.Dmg_Type.lower(),'immue') in Target.WRI:
+            damage = 0
+          else: pass
+        
+        else:
+          result = 'Hit'
+          damage = damage_roll + y
+          if str(Weapon.Damage_Type.lower()+'res') in Target.WRI:
+            damage = damage/2
+          elif str(Weapon.Damage_Type.lower()+'immue') in Target.WRI:
+            damage = 0
+          else: pass
+          
+      elif Establishing_Hierarchy.Current_Attack_Roll == Armor_Class:
+        result = 'Glancing Blow'
+        damage = (damage_roll + y)/2
+        if str(Weapon.Damage_Type.lower()+'res') in Target.WRI:
+          damage = damage/2
+        elif str(Weapon.Damage_Type.lower()+'immue') in Target.WRI:
+            damage = 0
+        else: pass
+      else:
+        result = 'Miss'
+        damage = 0
     else:
       result = 'Out of Range'
+
   elif Weapon.Category == 'Ranged':
     # is the target is within range of the attacker by the Target.Location['X'] and Target.Location['Y'] against the Weapon.Range
     if abs(Actor.Location['X'] - Target.Location['X']) <= Weapon.Range and abs(Actor.Location['Y'] - Target.Location['Y']) <= Weapon.Range:
-      pass
+      Armor_Class = Target.AC
+      if Actor.Circumstances['Attack Rolls'] == 'Advantage':
+        Roll = Dice_Rolls.d20_Advantage()
+      elif Actor.Circumstances['Attack Rolls'] == 'Disadvantage':
+        Roll = Dice_Rolls.d20_Disadvantage()
+      else:
+        Roll = Dice_Rolls.d20()
+
+      Establishing_Hierarchy.Current_Attack_Roll = Roll + Attack_Modifier
+
+      #for i in Actor.Effects['Self_Attacking']['Rolling'][Weapon.Type]:
+        # check if any effects can be added
+      #damage_roll = Dice_Rolls.Damage_Roll(Weapon.Dice_Type,Weapon.Dice_Num,Actor,Target,Weapon,Establishing_Hierarchy.Attack_Score(Actor),Weapon.Damage_Type)
+      # use the function Convert_Roll_to_Int to convert the roll x to an integer
+      damage_roll = Dice_Rolls.Roll_Dice(Weapon.Dice_Type,Weapon.Dice_Num)
+      y = Attack_Modifier
+
+
+      if Weapon.Damage_Type == 'Bludgeoning' or Weapon.Damage_Type == 'Piercing' or Weapon.Damage_Type == 'Slashing':
+        try:
+          x = x + Actor.Effects['Self_Dealing_Damage']['Bludgeoning'][0].Bonus
+        except:
+          pass
+      #for i in Actor.Effects['Self_Dealing_Damage'][Weapon.Dmg_Type]:
+      #  x = x + Actor.Effects['Self_Dealing_Damage'][Weapon.Dmg_Type][i]
+      
+      if Establishing_Hierarchy.Current_Attack_Roll > Armor_Class:
+        if Roll in Actor.Crit:
+          result = 'Critical Hit'
+          damage = (damage_roll * 2) + y
+          if str(Weapon.Dmg_Type.lower(),'res') in Target.WRI:
+            damage = damage/2
+          elif str(Weapon.Dmg_Type.lower(),'immue') in Target.WRI:
+            damage = 0
+          else: pass
+        
+        else:
+          result = 'Hit'
+          damage = damage_roll + y
+          if str(Weapon.Damage_Type.lower()+'res') in Target.WRI:
+            damage = damage/2
+          elif str(Weapon.Damage_Type.lower()+'immue') in Target.WRI:
+            damage = 0
+          else: pass
+          
+      elif Establishing_Hierarchy.Current_Attack_Roll == Armor_Class:
+        result = 'Glancing Blow'
+        damage = (damage_roll + y)/2
+        if str(Weapon.Damage_Type.lower()+'res') in Target.WRI:
+          damage = damage/2
+        elif str(Weapon.Damage_Type.lower()+'immue') in Target.WRI:
+            damage = 0
+        else: pass
+      else:
+        result = 'Miss'
+        damage = 0
     else:
       result = 'Out of Range'
   
-
-  Armor_Class = Target.AC
-  if Actor.Circumstances['Attack Rolls'] == 'Advantage':
-    Roll = Dice_Rolls.d20_Advantage()
-  elif Actor.Circumstances['Attack Rolls'] == 'Disadvantage':
-    Roll = Dice_Rolls.d20_Disadvantage()
-  else:
-    Roll = Dice_Rolls.d20()
-
-  Establishing_Hierarchy.Current_Attack_Roll = Roll + Attack_Modifier
-
-  #for i in Actor.Effects['Self_Attacking']['Rolling'][Weapon.Type]:
-    # check if any effects can be added
-  #damage_roll = Dice_Rolls.Damage_Roll(Weapon.Dice_Type,Weapon.Dice_Num,Actor,Target,Weapon,Establishing_Hierarchy.Attack_Score(Actor),Weapon.Damage_Type)
-  # use the function Convert_Roll_to_Int to convert the roll x to an integer
-  damage_roll = Dice_Rolls.Roll_Dice(Weapon.Dice_Type,Weapon.Dice_Num)
-  y = Attack_Modifier
-
-
-  if Weapon.Damage_Type == 'Bludgeoning' or Weapon.Damage_Type == 'Piercing' or Weapon.Damage_Type == 'Slashing':
-    try:
-      x = x + Actor.Effects['Self_Dealing_Damage']['Bludgeoning'][0].Bonus
-    except:
-      pass
-  #for i in Actor.Effects['Self_Dealing_Damage'][Weapon.Dmg_Type]:
-  #  x = x + Actor.Effects['Self_Dealing_Damage'][Weapon.Dmg_Type][i]
-  
-  if Establishing_Hierarchy.Current_Attack_Roll > Armor_Class:
-    if Roll in Actor.Crit:
-      result = 'Critical Hit'
-      damage = (damage_roll * 2) + y
-      if str(Weapon.Dmg_Type.lower(),'res') in Target.WRI:
-        damage = damage/2
-      elif str(Weapon.Dmg_Type.lower(),'immue') in Target.WRI:
-        damage = 0
-      else: pass
-     
-    else:
-      result = 'Hit'
-      damage = damage_roll + y
-      if str(Weapon.Damage_Type.lower()+'res') in Target.WRI:
-        damage = damage/2
-      elif str(Weapon.Damage_Type.lower()+'immue') in Target.WRI:
-        damage = 0
-      else: pass
-      
-  elif Establishing_Hierarchy.Current_Attack_Roll == Armor_Class:
-    result = 'Glancing Blow'
-    damage = (damage_roll + y)/2
-    if str(Weapon.Damage_Type.lower()+'res') in Target.WRI:
-      damage = damage/2
-    elif str(Weapon.Damage_Type.lower()+'immue') in Target.WRI:
-        damage = 0
-    else: pass
-  else:
-    result = 'Miss'
-    damage = 0
-  
-   # it's going to return the information needed to update the combat log
+  # it's going to return the information needed to update the combat log
   #return 'Action','Attack','Offense',Target, damage
         
   if len(new_combat_log) == 0:
