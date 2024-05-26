@@ -222,6 +222,10 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
   new_round[Actor.Name + ' Cha_Score'] = Actor.Cha_Score
   new_round[Actor.Name + ' Active_Conditions'] = Actor.Active_Conditions
   new_round[Actor.Name + ' Concentrating'] = Actor.Concentrating
+  new_round[Actor.Name + 'Location X'] = Actor.Location['X']
+  new_round[Actor.Name + 'Location Y'] = Actor.Location['Y']
+  new_round[Actor.Name + 'Location Z'] = Actor.Location['Z']
+
   #new_round[Actor.Name + ' Location'] = Actor.Location
   # using combat_situation create new columns for Acting False and add them to the dict
 
@@ -244,6 +248,10 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
       new_round[combat_situation[i].Name + ' Cha_Score'] = combat_situation[i].Cha_Score
       new_round[combat_situation[i].Name + ' Active_Conditions'] = combat_situation[i].Active_Conditions
       new_round[combat_situation[i].Name + ' Concentrating'] = combat_situation[i].Concentrating
+      new_round[combat_situation[i].Name + 'Location X'] = combat_situation[i].Location['X']
+      new_round[combat_situation[i].Name + 'Location Y'] = combat_situation[i].Location['Y']
+      new_round[combat_situation[i].Name + 'Location Z'] = combat_situation[i].Location['Z']
+
       #new_round[i.Name + ' Location'] = i.Location
     
 
@@ -307,6 +315,10 @@ def No_Action(Actor,combat_situation,combat_log_new):
   new_round[Actor.Name + ' Cha_Score'] = Actor.Cha_Score
   new_round[Actor.Name + ' Active_Conditions'] = Actor.Active_Conditions
   new_round[Actor.Name + ' Concentrating'] = Actor.Concentrating
+  new_round[Actor.Name + 'Location X'] = Actor.Location['X']
+  new_round[Actor.Name + 'Location Y'] = Actor.Location['Y']
+  new_round[Actor.Name + 'Location Z'] = Actor.Location['Z']
+
   # using combat_situation create new columns for Acting False and add them to the dict
   for i in combat_situation:
     if i == Actor:
@@ -326,6 +338,11 @@ def No_Action(Actor,combat_situation,combat_log_new):
       new_round[i.Name + ' Cha_Score'] = i.Cha_Score
       new_round[i.Name + ' Active_Conditions'] = i.Active_Conditions
       new_round[i.Name + ' Concentrating'] = i.Concentrating
+      new_round[i.Name + 'Location X'] = i.Location['X']
+      new_round[i.Name + 'Location Y'] = i.Location['Y']
+      new_round[i.Name + 'Location Z'] = i.Location['Z']
+
+
   # attach the new_round dictionary to the combat_log_new dataframe using concat
   new_combat_log = pd.concat([combat_log,pd.DataFrame(new_round,index=[0])],ignore_index=True)
 
@@ -381,6 +398,10 @@ def No_Bonus_Action(Actor,combat_situation,combat_log_new):
   new_round[Actor.Name + ' Cha_Score'] = Actor.Cha_Score
   new_round[Actor.Name + ' Active_Conditions'] = Actor.Active_Conditions
   new_round[Actor.Name + ' Concentrating'] = Actor.Concentrating
+  new_round[Actor.Name + 'Location X'] = Actor.Location['X']
+  new_round[Actor.Name + 'Location Y'] = Actor.Location['Y']
+  new_round[Actor.Name + 'Location Z'] = Actor.Location['Z']
+
   # using combat_situation create new columns for Acting False and add them to the dict
   for i in combat_situation:
     if i == Actor:
@@ -400,6 +421,10 @@ def No_Bonus_Action(Actor,combat_situation,combat_log_new):
       new_round[i.Name + ' Cha_Score'] = i.Cha_Score
       new_round[i.Name + ' Active_Conditions'] = i.Active_Conditions
       new_round[i.Name + ' Concentrating'] = i.Concentrating
+      new_round[i.Name + 'Location X'] = i.Location['X']
+      new_round[i.Name + 'Location Y'] = i.Location['Y']
+      new_round[i.Name + 'Location Z'] = i.Location['Z']
+
   # attach the new_round dictionary to the combat_log_new dataframe using concat
   new_combat_log = pd.concat([combat_log,pd.DataFrame(new_round,index=[0])],ignore_index=True)
   
@@ -520,6 +545,10 @@ def Dodge_Action(Actor,Combat_Situation,Combat_Log):
   new_round[Actor.Name + ' Cha_Score'] = Actor.Cha_Score
   new_round[Actor.Name + ' Active_Conditions'] = Actor.Active_Conditions
   new_round[Actor.Name + ' Concentrating'] = Actor.Concentrating
+  new_round[Actor.Name + 'Location X'] = Actor.Location['X']
+  new_round[Actor.Name + 'Location Y'] = Actor.Location['Y']
+  new_round[Actor.Name + 'Location Z'] = Actor.Location['Z']
+
   # using combat_situation create new columns for Acting False and add them to the dict
   for i in Combat_Situation:
     if i == Actor:
@@ -539,6 +568,9 @@ def Dodge_Action(Actor,Combat_Situation,Combat_Log):
       new_round[i.Name + ' Cha_Score'] = i.Cha_Score
       new_round[i.Name + ' Active_Conditions'] = i.Active_Conditions
       new_round[i.Name + ' Concentrating'] = i.Concentrating
+      new_round[i.Name + 'Location X'] = i.Location['X']
+      new_round[i.Name + 'Location Y'] = i.Location['Y']
+      new_round[i.Name + 'Location Z'] = i.Location['Z']
   
   # attach the new_round dictionary to the combat_log_new dataframe using concat
   new_combat_log = pd.concat([combat_log,pd.DataFrame(new_round,index=[0])],ignore_index=True)

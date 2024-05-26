@@ -945,7 +945,12 @@ class Player_Character:
     }
     self.Crit = [20]
     
-    self.Location = ()
+    self.Location = {
+      'X': 0,
+      'Y': 0,
+      'Z': 0,
+      'A': 0, # material plane
+    }
 
 
     self.Inventory = {    # calculate the weight
