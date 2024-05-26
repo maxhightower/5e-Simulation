@@ -707,7 +707,12 @@ def Hide_Action(Creature,Location,World):
 
 # Dodge
 def Dodge_Action(Actor,Combat_Situation,Combat_Log):
-  Actor.Circumstances['Attack Rolls'] = 'Disadvantage'
+  for entity in Combat_Situation:
+    if entity == Actor:
+      pass
+    else:
+      entity.Circumstances['Next']['Attack Rolls'][str(Combat_Situation[entity])]['Any'] = 'DIS'
+    
   Actor.Circumstances['Saving Throws'] = 'Advantage'
 
   if len(combat_log) == 0:
