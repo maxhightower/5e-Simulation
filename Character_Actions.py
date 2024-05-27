@@ -711,10 +711,11 @@ def Hide_Action(Creature,Location,World):
 # Dodge
 def Dodge_Action(Actor,Combat_Situation,Combat_Log):
   for entity in Combat_Situation:
+    target_number = Combat_Situation.index(entity)
     if entity == Actor:
       pass
     else:
-      entity.Circumstances['Next']['Attack Rolls'][str(Combat_Situation[entity])]['Any'] = 'DIS'
+      entity.Circumstances['Next']['Attack Rolls'][target_number]['Any'] = 'DIS'
     
   Actor.Circumstances['Saving Throws'] = 'Advantage'
 
