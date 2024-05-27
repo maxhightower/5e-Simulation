@@ -7,6 +7,8 @@ import random
 import Armor_and_Weapons
 import pandas as pd
 import math
+import numpy as np
+
 # let's split the different options for builds for each class
 # Artificer
   # Caster: Studded Leather, Ranged Simple Weapon, Melee Simple Weapon, Thieves Tools, Dungoneers Pack
@@ -119,7 +121,6 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
       Armor_Class = Target.AC
       target_name = str(Target.Name)
       # target_number is the location of the target in the combat_situation list
-      target_number = str(combat_situation.index(Target))
       print(Actor.Circumstances['Attack Rolls'])
       if Actor.Circumstances['Attack Rolls'][target_name] == 'ADV':
         Roll = Dice_Rolls.d20_Advantage()
@@ -398,7 +399,7 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
   return new_combat_log
 
 
-import numpy as np
+
 
 def No_Action(Actor,combat_situation,combat_log_new):
   if len(combat_log) == 0:
