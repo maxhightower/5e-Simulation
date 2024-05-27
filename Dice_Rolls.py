@@ -340,9 +340,9 @@ class Natural_Weapon(Attack):
 
 def Choose_Target_Offense(Actor,Combat_Situation):
   # randomly choose a creature in the list Combat_Situation that isn't Actor
-  # options is Combat_Situation without Actor
+  # options is the list Combat_Situation without Actor
   options = Combat_Situation.remove(Actor)
-  target = random.choice(options)
+  target = np.random.choice(options)
   return target
 
 def Choose_Target_Support(Actor,Combat_Situation):
