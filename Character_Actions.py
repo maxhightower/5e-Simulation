@@ -828,7 +828,7 @@ def Help_Action(Actor,Combat_Situation,Combat_Log):
   # target gains ADV on the next Ability Check they make
   Help_Target = random.choice(Combat_Situation)
   if help_type == 'Ability Check':
-    Combat_Situation[Help_Target].Circumstances['Next']['Ability Checks']['Any'] = 'ADV'
+    Combat_Situation[Help_Target].Circumstances['Ability Checks']['Any'] = 'ADV'
 
   ## Attack Check
   # the attack_target must be within 5 feet of the Helper
