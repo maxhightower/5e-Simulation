@@ -707,7 +707,7 @@ def Dodge_Action(Actor,Combat_Situation,Combat_Log):
     if entity == Actor:
       pass
     else:
-      entity.Circumstances['Next']['Attack Rolls'][target_number]['Any'] = 'DIS'
+      entity.Circumstances['Attack Rolls'][target_number] = 'DIS'
     
   Actor.Circumstances['Saving Throws'] = 'Advantage'
 
