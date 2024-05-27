@@ -421,7 +421,6 @@ def No_Action(Actor,combat_situation,combat_log_new):
 
   # create a dictionary called new_round
   new_round = {'Combat Round': combat_round,
-                'Action Number': action_number,
                 'Action Time': action_time,
                 'Action Name': action_name,
                 'Action Type': action_type,
@@ -504,7 +503,6 @@ def No_Bonus_Action(Actor,combat_situation,combat_log_new):
 
   # create a dictionary called new_round
   new_round = {'Combat Round': combat_round,
-                'Action Number': action_number,
                 'Action Time': action_time,
                 'Action Name': action_name,
                 'Action Type': action_type,
@@ -608,7 +606,6 @@ def Move(Actor,combat_situation,combat_log_new):
 
   # create a dictionary called new_round
   new_round = {'Combat Round': combat_round,
-                'Action Number': action_number,
                 'Action Time': action_time,
                 'Action Name': action_name,
                 'Action Type': action_type,
@@ -741,7 +738,6 @@ def Dodge_Action(Actor,Combat_Situation,Combat_Log):
 
   # create a dictionary called new_round
   new_round = {'Combat Round': combat_round,
-                'Action Number': action_number,
                 'Action Time': action_time,
                 'Action Name': action_name,
                 'Action Type': action_type,
