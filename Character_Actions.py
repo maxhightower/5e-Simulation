@@ -844,7 +844,7 @@ def Help_Action(Actor,Combat_Situation,Combat_Log):
     if len(Potential_Attack_Targets) > 0:
       Attack_Target = random.choice(Potential_Attack_Targets)
       Attack_Target_Name = str(Attack_Target.Name)
-      Combat_Situation[Help_Target].Circumstances['Attack Rolls'][Attack_Target_Name]['Any'] = 'ADV'
+      Help_Target.Circumstances['Attack Rolls'][Attack_Target_Name]['Any'] = 'ADV'
     else:
       pass
 
