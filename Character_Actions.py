@@ -573,13 +573,20 @@ def No_Bonus_Action(Actor,combat_situation,combat_log_new):
 # Actions
 # Move
 def Move(Actor,combat_situation,combat_log_new):
-  print('2')
+  # the current bounds of the arena are 12x12
+
   current_x = Actor.Location['X']
   current_y = Actor.Location['Y']
 
-  # choose a new location within the range of the Actor's speed
+  # choose a new location within the range of the Actor's speed and within the 12x12 grid
   new_x = random.randint(current_x - Actor.Speed['Walking'],current_x + Actor.Speed['Walking'])
   new_y = random.randint(current_y - Actor.Speed['Walking'],current_y + Actor.Speed['Walking'])
+
+  # if the new location is outside of the 12x12 grid, choose a new location
+  while new_x < 0 or new_x > 12 or new_y < 0 or new_y > 12:
+    new_x = random.randint(current_x - Actor.Speed['Walking'],current_x + Actor.Speed['Walking'])
+    new_y = random.randint(current_y - Actor.Speed['Walking'],current_y + Actor.Speed['Walking'])
+
   Actor.Location['X'] = new_x
   Actor.Location['Y'] = new_y
 
