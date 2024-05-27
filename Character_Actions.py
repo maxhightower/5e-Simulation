@@ -118,17 +118,19 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
     if abs(Actor.Location['X'] - Target.Location['X']) <= Weapon.Reach and abs(Actor.Location['Y'] - Target.Location['Y']) <= Weapon.Reach/5:
       Armor_Class = Target.AC
       target_name = str(Target.Name)
-      if Actor.Circumstances['Next']['Attack Rolls'][target_name]['Any'] == 'ADV':
+      # target_number is the location of the target in the combat_situation list
+      target_number = combat_situation.index(Target)
+      if Actor.Circumstances['Next']['Attack Rolls'][target_number]['Any'] == 'ADV':
         Roll = Dice_Rolls.d20_Advantage()
-      elif Actor.Circumstances['Any']['Attack Rolls'][target_name]['Any'] == 'ADV':
+      elif Actor.Circumstances['Any']['Attack Rolls'][target_number]['Any'] == 'ADV':
         Roll = Dice_Rolls.d20_Advantage()
-      elif Actor.Circumstances['All']['Attack Rolls'][target_name]['Any'] == 'ADV':
+      elif Actor.Circumstances['All']['Attack Rolls'][target_number]['Any'] == 'ADV':
         Roll = Dice_Rolls.d20_Advantage()
-      elif Actor.Circumstances['Next']['Attack Rolls'][target_name]['Any'] == 'DIS':
+      elif Actor.Circumstances['Next']['Attack Rolls'][target_number]['Any'] == 'DIS':
         Roll = Dice_Rolls.d20_Disadvantage()
-      elif Actor.Circumstances['Any']['Attack Rolls'][target_name]['Any'] == 'DIS':
+      elif Actor.Circumstances['Any']['Attack Rolls'][target_number]['Any'] == 'DIS':
         Roll = Dice_Rolls.d20_Disadvantage()
-      elif Actor.Circumstances['All']['Attack Rolls'][target_name]['Any'] == 'DIS':
+      elif Actor.Circumstances['All']['Attack Rolls'][target_number]['Any'] == 'DIS':
         Roll = Dice_Rolls.d20_Disadvantage()
       else:
         Roll = Dice_Rolls.d20()
