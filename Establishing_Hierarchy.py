@@ -875,7 +875,8 @@ class Player_Character:
       'Self': [],
     }         # should be a dictionary for conditions on self and on certain creatures however I'm unsure how to make that work without a relevant environment 
 
-    self.Circumstances = {
+    self.Circumstances = {}
+    '''
         'Next': {
           'Attack Rolls': {
             
@@ -922,7 +923,7 @@ class Player_Character:
         },
 
     }
-
+  '''
 
     self.At_Will_Spells = []
     self.Per_Use_Spells = {
