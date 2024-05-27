@@ -120,9 +120,9 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
       target_name = str(Target.Name)
       # target_number is the location of the target in the combat_situation list
       target_number = combat_situation.index(Target)
-      if Actor.Circumstances['Attack Rolls'][target_name]['Any'] == 'ADV':
+      if Actor.Circumstances['Attack Rolls'][target_name] == 'ADV':
         Roll = Dice_Rolls.d20_Advantage()
-      elif Actor.Circumstances['Next']['Attack Rolls'][target_name]['Any'] == 'DIS':
+      elif Actor.Circumstances['Next']['Attack Rolls'][target_name] == 'DIS':
         Roll = Dice_Rolls.d20_Disadvantage()
       else:
         Roll = Dice_Rolls.d20()
