@@ -820,12 +820,13 @@ def Disengage_Action(Creature):
 #def Help_Action(Creature,Target):   # i forget whether the target was supposed to be the task/attack or the creature being helped
   # help action grants advantage on an attack roll or ability check
 #  Effects.Apply_Buff_Circumstance_Effect
-def Help_Action(Actor,Help_Target,Combat_Situation,Combat_Log):
+def Help_Action(Actor,Combat_Situation,Combat_Log):
   help_types = ['Attack','Ability Check']
   help_type = random.choice(help_types)
   
   ## Ability Check
   # target gains ADV on the next Ability Check they make
+  Help_Target = random.choice(Combat_Situation)
   if help_type == 'Ability Check':
     Combat_Situation[Help_Target].Circumstances['Next']['Ability Checks']['Any'] = 'ADV'
 
