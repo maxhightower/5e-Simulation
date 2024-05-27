@@ -112,7 +112,7 @@ def Attack_Action(Actor,Combat_Situation,combat_log):
 
 
 def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
-
+  print('Actor', Actor)
   Attack_Modifier = Establishing_Hierarchy.Attack_Score(Actor) + Actor.Prof_Bonus
   print('Target Name:',Target.Name)
   if Weapon.Category == 'Melee':
