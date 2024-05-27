@@ -848,6 +848,87 @@ def Help_Action(Actor,Combat_Situation,Combat_Log):
     else:
       pass
 
+  if len(combat_log) == 0:
+    log_id = 0
+  else:
+    log_id = log_id + 1
+
+  if len(combat_log) == 0:
+    combat_round = 0
+  else:
+    combat_round = combat_round + 1
+
+  action_number = 'Undetermined'
+
+  action_time = 'Action'
+  action_name = 'Help'
+  action_type = 'Support'
+
+  # create a dictionary called new_round
+  new_round = {'Combat Round': combat_round,
+                'Action Time': action_time,
+                'Action Name': action_name,
+                'Action Type': action_type,
+                'Target': Actor.Name,
+                'Action Result': 'Help',
+                'Current Allied Ability Check': Dice_Rolls.Current_Allied_Ability_Check,
+                'Current Allied Attack Roll': Dice_Rolls.Current_Allied_Attack_Roll,
+                'Current Allied Saving Throw': Dice_Rolls.Current_Allied_Saving_Throw,
+                'Current Allied Damage Roll': Dice_Rolls.Current_Allied_Damage_Roll,
+                'Current Enemy Ability Check': Dice_Rolls.Current_Enemy_Ability_Check,
+                'Current Enemy Attack Roll': Dice_Rolls.Current_Enemy_Attack_Roll,
+                'Current Enemy Saving Throw': Dice_Rolls.Current_Enemy_Saving_Throw,
+                'Current Enemy Damage Roll': Dice_Rolls.Current_Enemy_Damage_Roll,
+                }
+  
+  # using Actor.Name create  new columns for Acting True and add them to the dict
+  new_round[Actor.Name + ' Acting True'] = 1
+  new_round[Actor.Name + ' Current_HP'] = Actor.Current_HP
+  new_round[Actor.Name + ' Temp_HP'] = Actor.Temp_HP
+  new_round[Actor.Name + ' Size'] = Actor.Size
+  new_round[Actor.Name + ' Walking Speed'] = Actor.Speed['Walking']
+  new_round[Actor.Name + ' Flying Speed'] = Actor.Speed['Flying']
+  new_round[Actor.Name + ' Str_Score'] = Actor.Str_Score
+  new_round[Actor.Name + ' Dex_Score'] = Actor.Dex_Score
+  new_round[Actor.Name + ' Con_Score'] = Actor.Con_Score
+  new_round[Actor.Name + ' Int_Score'] = Actor.Int_Score
+  new_round[Actor.Name + ' Wis_Score'] = Actor.Wis_Score
+  new_round[Actor.Name + ' Cha_Score'] = Actor.Cha_Score
+  new_round[Actor.Name + ' Active_Conditions'] = Actor.Active_Conditions
+  new_round[Actor.Name + ' Concentrating'] = Actor.Concentrating
+  new_round[Actor.Name + 'Location X'] = Actor.Location['X']
+  new_round[Actor.Name + 'Location Y'] = Actor.Location['Y']
+  new_round[Actor.Name + 'Location Z'] = Actor.Location['Z']
+
+  # using combat_situation create new columns for Acting False and add them to the dict
+  for i in Combat_Situation:
+    if i == Actor:
+      pass
+    else:
+      new_round[i.Name + ' Acting True'] = 0
+      new_round[i.Name + ' Current_HP'] = i.Current_HP
+      new_round[i.Name + ' Temp_HP'] = i.Temp_HP
+      new_round[i.Name + ' Size'] = i.Size
+      new_round[i.Name + ' Walking Speed'] = i.Speed['Walking']
+      new_round[i.Name + ' Flying Speed'] = i.Speed['Flying']
+      new_round[i.Name + ' Str_Score'] = i.Str_Score
+      new_round[i.Name + ' Dex_Score'] = i.Dex_Score
+      new_round[i.Name + ' Con_Score'] = i.Con_Score
+      new_round[i.Name + ' Int_Score'] = i.Int_Score
+      new_round[i.Name + ' Wis_Score'] = i.Wis_Score
+      new_round[i.Name + ' Cha_Score'] = i.Cha_Score
+      new_round[i.Name + ' Active_Conditions'] = i.Active_Conditions
+      new_round[i.Name + ' Concentrating'] = i.Concentrating
+      new_round[i.Name + 'Location X'] = i.Location['X']
+      new_round[i.Name + 'Location Y'] = i.Location['Y']
+      new_round[i.Name + 'Location Z'] = i.Location['Z']
+    
+  # attach the new_round dictionary to the combat_log_new dataframe using concat
+  new_combat_log = pd.concat([combat_log,pd.DataFrame(new_round,index=[0])],ignore_index=True)
+
+  return new_combat_log
+
+
 #Search
 def Search_Action(Creature):
   if 'Blinded' in Creature.Conditions: # since the search action can be taken (technically) with different senses, I'll need to elaborate a lot further than previously expected
