@@ -186,9 +186,9 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
     Long_Weapon_Range = int(Weapon.Range.split('/')[1]) # if the target isn't within normal range, but is within long range, the attack is at disadvantage
     if abs(Actor.Location['X'] - Target.Location['X']) <= Normal_Weapon_Range and abs(Actor.Location['Y'] - Target.Location['Y']) <= Normal_Weapon_Range/5:
       Armor_Class = Target.AC
-      if Actor.Circumstances['Attack Rolls'] == 'Advantage':
+      if Actor.Circumstances['Attack Rolls'][target_name] == 'ADV':
         Roll = Dice_Rolls.d20_Advantage()
-      elif Actor.Circumstances['Attack Rolls'] == 'Disadvantage':
+      elif Actor.Circumstances['Attack Rolls'][target_name] == 'DIS':
         Roll = Dice_Rolls.d20_Disadvantage()
       else:
         Roll = Dice_Rolls.d20()
