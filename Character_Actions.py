@@ -317,7 +317,7 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
     combat_round += 1
   
   # the last row of the combat_log_new is the current state of the combat situation
-  Target.Current_HP = new_combat_log.iloc[-1][Target.Name + ' Current_HP'] - damage
+  Target.Current_HP = Target.Current_HP - damage
   
   action_number = 'Undetermined'
   
