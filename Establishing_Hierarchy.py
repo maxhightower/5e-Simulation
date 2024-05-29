@@ -710,9 +710,11 @@ class Player_Character:
 
     self.Saving_Throws = []
 
-    self.Actions = {
+    self.Actions = []
+    
+    #{
 
-    }
+    #}
                     #   'Character_Actions.Cast_Action()' the Cast Action needs to be added via the spellcasting feature
                     
                     # Dice_Rolls.Hide_Action(),         # Not important for Simple Probability Assistant
@@ -747,19 +749,20 @@ class Player_Character:
 
     }
   
-    self.Bonus_Actions = {
-      'Independent': {
+    self.Bonus_Actions = []
+    #{
+      #'Independent': {
       
-      },
+      #},
       #'Character_Actions.Cast_Bonus_Action()'],
-      'Dependent': {
-        'Attack_Action': {
+      #'Dependent': {
+      #  'Attack_Action': {
       
-        }
+      #  }
         #'Cast_Action': []
         #'Dash_Action': [],
-      }     # eventually I could use a for loop, for each Action that the player_character has and then use something to find the action's location in a list
-    }
+      #}     # eventually I could use a for loop, for each Action that the player_character has and then use something to find the action's location in a list
+    #}
 
     self.Free_Actions = {
       'Dependent': {},
