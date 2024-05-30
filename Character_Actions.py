@@ -103,12 +103,12 @@ def Choose_Best_Weapon(Actor):
   return best_weapon
   # returns to change the Weapon Equipped if need be
 
-def Attack_Action(Actor,Combat_Situation):
+def Attack_Action(Actor,Combat_Situation,state):
   Equip_Weapon(Actor,Choose_Best_Weapon(Actor))
   Weapon = Actor.Weapon_Equipped[0]
   Target = Dice_Rolls.Choose_Target_Offense(Actor,Combat_Situation)
   Actor.Target_List.append(Target)
-  return Enact_Attack(Actor,Target,Weapon,Combat_Situation)
+  return Enact_Attack(Actor,Target,Weapon,Combat_Situation,state)
 
 
 def Enact_Attack(Actor,Target,Weapon,combat_situation,current_state):
@@ -407,7 +407,7 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,current_state):
 
 
 
-def No_Action(Actor,combat_situation):
+def No_Action(Actor,combat_situation,state):
 
   '''
   if len(combat_log) == 0:
@@ -493,7 +493,7 @@ def No_Action(Actor,combat_situation):
   return 0
 
 
-def No_Bonus_Action(Actor,combat_situation):
+def No_Bonus_Action(Actor,combat_situation,state):
   '''
   if len(combat_log) == 0:
     log_id = 0
