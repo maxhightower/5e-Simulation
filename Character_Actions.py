@@ -103,15 +103,15 @@ def Choose_Best_Weapon(Actor):
   return best_weapon
   # returns to change the Weapon Equipped if need be
 
-def Attack_Action(Actor,Combat_Situation,combat_log):
+def Attack_Action(Actor,Combat_Situation):
   Equip_Weapon(Actor,Choose_Best_Weapon(Actor))
   Weapon = Actor.Weapon_Equipped[0]
   Target = Dice_Rolls.Choose_Target_Offense(Actor,Combat_Situation)
   Actor.Target_List.append(Target)
-  return Enact_Attack(Actor,Target,Weapon,Combat_Situation,combat_log)
+  return Enact_Attack(Actor,Target,Weapon,Combat_Situation)
 
 
-def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
+def Enact_Attack(Actor,Target,Weapon,combat_situation,current_state):
   print('Actor', Actor.Name)
   Attack_Modifier = Establishing_Hierarchy.Attack_Score(Actor) + Actor.Prof_Bonus
   print('Target Name:',Target.Name)
@@ -310,7 +310,7 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
   
   # it's going to return the information needed to update the combat log
   #return 'Action','Attack','Offense',Target, damage
-        
+  '''        
   if len(new_combat_log) == 0:
     combat_round = 0
   else:
@@ -397,13 +397,19 @@ def Enact_Attack(Actor,Target,Weapon,combat_situation,new_combat_log):
   new_combat_log = pd.concat([new_combat_log,pd.DataFrame(new_round)],ignore_index=False)
   # drop the duplicates from the new_combat_log based on the columns with only ints and floats
   new_combat_log = new_combat_log[~new_combat_log.duplicated(subset=[col for col in new_combat_log.columns if new_combat_log[col].dtype in ['int64','float64']])]
+  '''
 
-  return new_combat_log
+  # the goal would be to take current_state, modify it accordingly, and return the proposed_state for creatures to react...
+
+
+  return 0
 
 
 
 
-def No_Action(Actor,combat_situation,combat_log_new):
+def No_Action(Actor,combat_situation):
+
+  '''
   if len(combat_log) == 0:
     log_id = 0
   else:
@@ -482,10 +488,13 @@ def No_Action(Actor,combat_situation,combat_log_new):
 
   # attach the new_round dictionary to the combat_log_new dataframe using concat
   new_combat_log = pd.concat([combat_log,pd.DataFrame(new_round,index=[0])],ignore_index=True)
+  '''
+  
+  return 0
 
-  return new_combat_log
 
-def No_Bonus_Action(Actor,combat_situation,combat_log_new):
+def No_Bonus_Action(Actor,combat_situation):
+  '''
   if len(combat_log) == 0:
     log_id = 0
   else:
@@ -563,15 +572,16 @@ def No_Bonus_Action(Actor,combat_situation,combat_log_new):
 
   # attach the new_round dictionary to the combat_log_new dataframe using concat
   new_combat_log = pd.concat([combat_log,pd.DataFrame(new_round,index=[0])],ignore_index=True)
-  
-  return new_combat_log
+  '''
+
+  return 0
 
 
 
 
 # Actions
 # Move
-def Move(Actor,combat_situation,combat_log_new):
+def Move(Actor,combat_situation):
   # the current bounds of the arena are 12x12
 
   current_x = Actor.Location['X']
@@ -588,7 +598,7 @@ def Move(Actor,combat_situation,combat_log_new):
 
   Actor.Location['X'] = new_x
   Actor.Location['Y'] = new_y
-
+  '''
   if len(combat_log) == 0:
     log_id = 0
   else:
@@ -666,8 +676,9 @@ def Move(Actor,combat_situation,combat_log_new):
   
   # attach the new_round dictionary to the combat_log_new dataframe using concat
   new_combat_log = pd.concat([combat_log,pd.DataFrame(new_round,index=[0])],ignore_index=True)
+  '''
 
-  return new_combat_log
+  return 0
 
 #Hide
 def Fastest_Speed(Creature):
@@ -709,7 +720,7 @@ def Hide_Action(Creature,Location,World):
   Dice_Rolls.Ability_Check(Creature,'Stealth','Dexterity')
 
 # Dodge
-def Dodge_Action(Actor,Combat_Situation,Combat_Log):
+def Dodge_Action(Actor,Combat_Situation):
   for entity in Combat_Situation:
     target_number = Combat_Situation.index(entity)
     target_name = str(entity.Name)
@@ -720,6 +731,7 @@ def Dodge_Action(Actor,Combat_Situation,Combat_Log):
     
   Actor.Circumstances['Saving Throws'] = 'Advantage'
 
+  '''
   if len(combat_log) == 0:
     log_id = 0
   else:
@@ -798,9 +810,9 @@ def Dodge_Action(Actor,Combat_Situation,Combat_Log):
   
   # attach the new_round dictionary to the combat_log_new dataframe using concat
   new_combat_log = pd.concat([combat_log,pd.DataFrame(new_round,index=[0])],ignore_index=True)
+  '''
 
-
-  return new_combat_log
+  return 0
 
 #Dash
 def Dash_Action(Creature):
@@ -828,7 +840,7 @@ def Disengage_Action(Creature):
 #def Help_Action(Creature,Target):   # i forget whether the target was supposed to be the task/attack or the creature being helped
   # help action grants advantage on an attack roll or ability check
 #  Effects.Apply_Buff_Circumstance_Effect
-def Help_Action(Actor,Combat_Situation,Combat_Log):
+def Help_Action(Actor,Combat_Situation):
   help_types = ['Attack','Ability Check']
   help_type = random.choice(help_types)
   
@@ -856,6 +868,7 @@ def Help_Action(Actor,Combat_Situation,Combat_Log):
     else:
       pass
 
+  '''
   if len(combat_log) == 0:
     log_id = 0
   else:
@@ -933,8 +946,9 @@ def Help_Action(Actor,Combat_Situation,Combat_Log):
     
   # attach the new_round dictionary to the combat_log_new dataframe using concat
   new_combat_log = pd.concat([combat_log,pd.DataFrame(new_round,index=[0])],ignore_index=True)
+  '''
 
-  return new_combat_log
+  return 0
 
 
 #Search
