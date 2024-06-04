@@ -581,7 +581,7 @@ def No_Bonus_Action(Actor,combat_situation,state):
 
 # Actions
 # Move
-def Move(Actor,combat_situation):
+def Move(Actor,combat_situation,state):
   # the current bounds of the arena are 12x12
 
   current_x = Actor.Location['X']
@@ -720,7 +720,7 @@ def Hide_Action(Creature,Location,World):
   Dice_Rolls.Ability_Check(Creature,'Stealth','Dexterity')
 
 # Dodge
-def Dodge_Action(Actor,Combat_Situation):
+def Dodge_Action(Actor,Combat_Situation,state):
   for entity in Combat_Situation:
     target_number = Combat_Situation.index(entity)
     target_name = str(entity.Name)
@@ -829,7 +829,7 @@ def Dash_Action(Creature):
 
 
 #Disengage
-def Disengage_Action(Creature):
+def Disengage_Action(Actor,Combat_Situation,state):
   pass
 
 
@@ -840,7 +840,7 @@ def Disengage_Action(Creature):
 #def Help_Action(Creature,Target):   # i forget whether the target was supposed to be the task/attack or the creature being helped
   # help action grants advantage on an attack roll or ability check
 #  Effects.Apply_Buff_Circumstance_Effect
-def Help_Action(Actor,Combat_Situation):
+def Help_Action(Actor,Combat_Situation,State):
   help_types = ['Attack','Ability Check']
   help_type = random.choice(help_types)
   
@@ -952,11 +952,11 @@ def Help_Action(Actor,Combat_Situation):
 
 
 #Search
-def Search_Action(Creature):
-  if 'Blinded' in Creature.Conditions: # since the search action can be taken (technically) with different senses, I'll need to elaborate a lot further than previously expected
+def Search_Action(Actor,Combat_Situation,state):
+  if 'Blinded' in Actor.Conditions: # since the search action can be taken (technically) with different senses, I'll need to elaborate a lot further than previously expected
     pass
   else:
-    Dice_Rolls.Ability_Check(Creature,'Perception','Wisdom')
+    Dice_Rolls.Ability_Check(Actor,'Perception','Wisdom')
 
 
 #Improvise
