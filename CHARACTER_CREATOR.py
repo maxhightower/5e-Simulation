@@ -251,8 +251,8 @@ def Create_Character(character_name,Score_Generation_Method,Species,Subspecies,C
     character_name.HP = calc_health(character_name)
     character_name.Current_HP = character_name.HP
 
-    character_name.Actions = character_name.Actions = [Armor_and_Weapons.Don_Armor(Armor_and_Weapons.Shield,character_name)]
-    character_name.Actions = character_name.Actions.append(Armor_and_Weapons.Doff_Armor(Armor_and_Weapons.Shield,character_name))
+    character_name.Actions['0'] = Armor_and_Weapons.Don_Armor(Armor_and_Weapons.Shield,character_name)
+    character_name.Actions['1'] = Armor_and_Weapons.Doff_Armor(Armor_and_Weapons.Shield,character_name)
     
     #Name.Bonus_Actions[]
     #Name.Reactions[]

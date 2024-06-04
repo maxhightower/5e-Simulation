@@ -710,7 +710,7 @@ class Player_Character:
 
     self.Saving_Throws = []
 
-    self.Actions = []
+    self.Actions = {}
     
     #{
 
