@@ -578,7 +578,7 @@ class Memory_Fragment:
 
 
 class Player_Character:
-  def __init__(self,Name,First_Class,Species,Subspecies,Levels,Background,Skill_Profs,Skill_Expertise,Tool_Profs,Weapon_Equipped,Armor_Equipped,Senses,Str_Score,Dex_Score,Con_Score,Int_Score,Wis_Score,Cha_Score,Spellcasting_Prepared,Item_Attunements,Inventory,Related_Stat_Blocks):
+  def __init__(self,Name,First_Class,Species,Subspecies,Levels,Background,Skill_Profs,Skill_Expertise,Tool_Profs,Weapon_Equipped,Armor_Equipped,Senses,Str_Score,Dex_Score,Con_Score,Int_Score,Wis_Score,Cha_Score,Spellcasting_Prepared,Item_Attunements,Inventory,Related_Stat_Blocks,Alignment):
     self.Name = Name
     self.First_Class = First_Class
     
@@ -1057,6 +1057,10 @@ class Player_Character:
       'Dominated_Creatures': {},
       'Other': 'None',
     }
+    
+    self.Alignment = Alignment
+    self.Passive_Investigation = 10 + abilityScoreToModifier(self.Int_Score)
+    self.Passive_Perception = 10 + abilityScoreToModifier(self.Wis_Score)
 
 
 

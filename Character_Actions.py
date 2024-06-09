@@ -1053,3 +1053,70 @@ def Cast_Action(Actor,Target,Spell,Combat_Situation,Combat_Log):
   else: 
     # return 'Target Out of Range'
     pass
+
+
+
+def Passive_Analyze_Environment(Actor,Combat_Situation):
+  # the first thing that's done is a full picture is made
+  # then the Actor's intelligence/wisdom determines how much they receive
+
+  # observations that can be made:
+  # armor being worn
+  # spellcasting focuses
+  # ranged or melee weapons
+  # bloodied or not
+
+  observation_array = []
+  for entity in Combat_Situation:
+    entity_name = entity.Name
+    str(entity_name + 'wearing_light_armor') = 0
+    str(entity_name + 'wearing_medium_armor') = 0
+    str(entity_name + 'wearing_heavy_armor') = 0
+    str(entity_name + 'wearing_shield') = 0
+    str(entity_name + 'spellcasting_focus') = 0
+    str(entity_name + 'ranged_weapon') = 0
+    str(entity_name + 'melee_weapon') = 0
+    str(entity_name + 'bloodied') = 0
+    str(entity_name + 'unconscious') = 0
+    str(entity_name + 'prone') = 0
+
+    # distance from Actor
+    entity_location = [entity.Location['X'],entity.Location['Y']]
+    actor_location = [Actor.Location['X'],Actor.Location['Y']]
+    distance = math.sqrt((actor_location[0] - entity_location[0])**2 + (actor_location[1] - entity_location[1])**2)
+    str(entity_name + 'distance') = distance
+
+    if 'Light Armor' in entity.Equipment:
+      str(entity_name + 'wearing_light_armor') = 1
+    if 'Medium Armor' in entity.Equipment:
+      str(entity_name + 'wearing_medium_armor') = 1
+    if 'Heavy Armor' in entity.Equipment:
+      str(entity_name + 'wearing_heavy_armor') = 1
+    if 'Shield' in entity.Equipment:
+      str(entity_name + 'wearing_shield') = 1
+    if 'Spellcasting Focus' in entity.Equipment:
+      str(entity_name + 'spellcasting_focus') = 1
+    if 'Ranged Weapon' in entity.Equipment:
+      str(entity_name + 'ranged_weapon') = 1
+    if 'Melee Weapon' in entity.Equipment:
+      str(entity_name + 'melee_weapon') = 1
+    if entity.Current_HP < entity.Max_HP:
+      str(entity_name + 'bloodied') = 1
+    if entity.Current_HP == 0:
+      str(entity_name + 'unconscious') = 1
+    if 'Prone' in entity.Conditions:
+      str(entity_name + 'prone') = 1
+
+    observation_array.append(str(entity_name + 'wearing_light_armor'))
+    observation_array.append(str(entity_name + 'wearing_medium_armor'))
+    observation_array.append(str(entity_name + 'wearing_heavy_armor'))
+    observation_array.append(str(entity_name + 'wearing_shield'))
+    observation_array.append(str(entity_name + 'spellcasting_focus'))
+    observation_array.append(str(entity_name + 'ranged_weapon'))
+    observation_array.append(str(entity_name + 'melee_weapon'))
+    observation_array.append(str(entity_name + 'bloodied'))
+    observation_array.append(str(entity_name + 'unconscious'))
+    observation_array.append(str(entity_name + 'prone'))
+    observation_array.append(str(entity_name + 'distance'))
+
+  Actor.Observation = observation_array
