@@ -769,7 +769,15 @@ class Player_Character:
       'Independent': {}
     }
                                   # Free Actions vs Effects
+    self.Move_Actions = {
+      'Go Prone': 0,
+      'Stand Up': 0,
+      'Crawl': 0,
+      'Jump': 0,
 
+    }
+    self.Movement_Spent = 0
+    self.Initiative = 0
 
     self.Effects = {            
         #'Self_Attacking': {
