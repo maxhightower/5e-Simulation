@@ -16,7 +16,7 @@ class Barbarian(Establishing_Hierarchy.Character_Class):
         self.weapon_proficiencies = ["Simple Weapons", "Martial Weapons"]
         self.spellcasting_ability = None
 
-        self.starting_equipment = {}
+        self.starting_equipment = {} 
 
     def give_starting_equipment(self, character):
         for item in self.starting_equipment:

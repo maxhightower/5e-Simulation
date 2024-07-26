@@ -77,7 +77,7 @@ class ClassFeature(Observer):
     def update(self, event: GameEvent):
         if event.type == "turn_start" and event.data['character'] == self.character:
             print(f"Class feature {self.name} is checking if it should activate for {self.character.name}")
-
+ 
 class Character:
     def __init__(self, name: str):
         self.name = name

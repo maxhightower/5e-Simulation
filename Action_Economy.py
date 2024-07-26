@@ -7,7 +7,7 @@ import Monsters
 import random
 from random import randrange
 import pandas as pd
-
+ 
 
 def Check_Object(Object):
   if hasattr(Object, '__class__') == True:

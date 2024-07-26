@@ -14,7 +14,7 @@ Actions = pd.read_excel(r'C:\Users\maxhi\OneDrive\Desktop\Python Project\Python 
 
 # will need to go through for armor source and add to inventory
 
-
+ 
 
 
 

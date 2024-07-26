@@ -807,7 +807,7 @@ class Add_Natural_Action_Effect:
       pass
     Effect.Target.Actions[Effect.Action_Name] = Use_Action_Function_Name()
 
-
+ 
 
 
 # Share Information
