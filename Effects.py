@@ -471,6 +471,8 @@ class Cannot_Heal_Effect:
   def __init__(self):
     self
 
+
+
 #Reduced Maximum Hitpoints
 class Reduced_Maximum_Hitpoint_Effect:
   def __init__(self,Amount,Reset_Type,Heal_Type):
@@ -658,6 +660,8 @@ class Dimensional_Effect:
     # Can the image change? Malleable = True,False
     # Which Creatures can Detect the Illusion? [Target_Only,Creatures,Any]
 
+
+
 class Illusory_Effect:
   def __init__(self,Location,Senses_Produced,Malleable,Percievable_Type,Purpose):
     self.Location = Location
@@ -666,11 +670,11 @@ class Illusory_Effect:
     self.Percievable_Type = Percievable_Type #[Target_Only,Creatures,Any]
     self.Purpose = Purpose # [Scare_Away,Lure,Gather_Info,Restrain,Bluff,Concealment,Charm]
 
-def Apply_Illusory_Effect(Effect,World):
-  for Creature in World:
-    if 'Truesight' in Creature.Senses.index():
-      pass
-    else: pass
+  def Apply_Illusory_Effect(Effect,World):
+    for Creature in World:
+      if 'Truesight' in Creature.Senses.index():
+        pass
+      else: pass
 
 
 

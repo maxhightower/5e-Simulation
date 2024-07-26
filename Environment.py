@@ -10,8 +10,97 @@ import math
 from matplotlib import pyplot as plt
 from mpl_toolkits import mplot3d
 
-# Joey said to look into pygame
-#import pygame
+# I'm going to need to be able to store different environment information
+# currently the environment is being represented by an array with an integer value per space
+# I can instead use lists of ints to represent different environment conditions
+
+# Cellular Automata???
+
+class world:
+    def __init__(self,Size):
+        self.Size = Size
+        self.Fig = None
+        self.Grid = None
+        self.Coin_Locations = []
+
+    def Generate_Map(world):
+        # generate a grid with the dimensions of world.Size
+        grid = np.zeros([world.Size,world.Size])
+        
+        fig = plt.figure(figsize = [5,5])
+        plt.xlim(0,world.Size)
+        plt.ylim(0,world.Size)
+
+        world.Grid = grid
+        world.Fig = fig
+
+
+    def Generate_Coins(world,number_of_coins):
+
+        for coin in range(0,number_of_coins):
+            coin_location_x = randrange(0,world.Size)
+            coin_location_y = randrange(0,world.Size)
+
+            coin_location = [coin_location_x,coin_location_y]
+            world.Coin_Locations.append(coin_location)
+
+        fig = world.Fig
+
+        for coins in range(len(world.Coin_Locations)):
+            world.Grid[world.Coin_Locations[coins][0],world.Coin_Locations[coins][1]] = 1
+        
+        plt.imshow(world.Grid, cmap='viridis', interpolation='nearest')
+        plt.show()
+
+
+environment_list_index_key = {
+    0: "matter occupation", # 0 = empty, 1 = filled
+    1: "matter type",       # 0 = air, 1 = water, 2 = fire, 3 = earth, 4 = plants, 5 = ice
+    2: "on ground",         # 0 = no, 1 = yes
+    3: "entity occupation", # 0 = unoccupied, 1 = occupied
+    4: "terrain",           # 0 = normal, 1 = difficult, 2 = unpassable
+    5: "light level",       # 0 = bright, 1 = dim, 2 = dark, 3 = magical darkness
+    7: "obscurement",       # 0 = none, 1 = light, 2 = heavy
+    8: "sound level",       # 0 = quiet, 1 = normal, 2 = loud
+    9: "odor",              # 0 = none, 1 = light, 2 = heavy
+    10: "piousness",         # 0 = normal, 1 = consecrated, 2 = desecrated
+    11: "illusion",          # 0 = no, 1 = yes
+    12: "wind",              # 0 = none, 1 = light, 2 = strong
+    13: "temperature",       # 0 = extreme cold, 1 = normal, 2 = extreme heat
+    14: "biome",             # 0 = none, 1 = arctic, 2 = coastal, 3 = desert, 4 = forest, 5 = grassland, 6 = hill, 7 = mountain, 8 = swamp, 9 = underdark, 10 = underwater, 11 = urban
+    
+
+    # on_fire boolean???
+    # slippery
+    # damaging terrain (spikes, lava)
+    # pressure (air pressure, water pressure)
+    # weather
+
+    ####### redesign requirements:
+    # need a way to have multiple entities within the same space
+    # need a way to have multiple objects in the same space
+
+}
+
+# I'm going to need to make a fucking light tracing simulator for when fire is present it illuminates the areas
+def Light_Rendering(world):
+    locations = world.Grid
+    rows, cols = locations.shape
+
+    for location in locations:
+
+        if location[1][2] == 2: # if there's fire in the space, change light level to bright
+            location[6] = 0
+
+def Sound_Rendering(world):
+    pass
+
+def Smell_Rendering(world):
+    pass
+
+
+
+
 
 
  
