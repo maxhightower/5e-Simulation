@@ -14,6 +14,29 @@ world_grid_states = {
     6: 'objects',
 }
 
+class enemy:
+    def __init__(self,world):
+        self.world = world
+        self.is_spawned = False
+
+        self.caster = False
+        self.concentrating = False
+
+        self.attack_limit = 1
+
+        self.hp = 2
+        self.ac = 10
+
+        if self.is_spawned == False:
+            self.location = [0,0]
+            
+        elif self.is_spawned == True:
+            x_loc = world.grid[np.where(world.grid[:,0] == max(world.grid))]
+            print('x: ',x_loc)
+            y_loc = world.grid[np.where(world.grid[0,:] == max(world.grid))]
+            print('y: ',y_loc)
+            self.location = [x_loc,y_loc]
+
 
 class world:
     def __init__(self,size):
@@ -44,6 +67,12 @@ class world:
 
     def add_enemy(world,location):
         # add an enemy to the grid at the specified location
+        enemy_count = len(world.enemy_locations)
+        enemy_id = f'enemy_{enemy_count+1}'
+        enemy_id = enemy(world)
+        enemy_id.location = location
+
+
         world.grid[location[0],location[1]] = 2
         world.enemy_locations.append(location)
 
