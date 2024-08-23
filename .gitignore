@@ -7,3 +7,4 @@ action_series_dict.json
 location_series_dict.json
 reward_series_dict.json
 subaction_dict.json
+previous_dict_gen.json

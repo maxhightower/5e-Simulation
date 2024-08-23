@@ -26,6 +26,9 @@ class enemy:
 
         self.hp = 2
         self.ac = 10
+        self.conditions = []
+
+        self.reaction_used = False
 
         if self.is_spawned == False:
             self.location = [0,0]
@@ -45,6 +48,8 @@ class world:
         self.grid = None
         self.coin_locations = []
         self.enemy_locations = []
+        self.enemies = []
+        self.non_enemies = []
         
     def generate_map(world):
         grid = np.zeros([world.size,world.size])
@@ -75,6 +80,7 @@ class world:
 
         world.grid[location[0],location[1]] = 2
         world.enemy_locations.append(location)
+        world.enemies.append(enemy_id)
 
     def add_coin(world,location):
         world.grid[location[0],location[1]] = 1
