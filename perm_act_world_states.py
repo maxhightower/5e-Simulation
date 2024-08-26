@@ -97,6 +97,7 @@ class world:
         self.coin_locations = []
         self.enemy_locations = []
         self.enemies = []
+        self.enemy_adjacent_locations = []
         self.non_enemies = []
         
     def generate_map(world):
