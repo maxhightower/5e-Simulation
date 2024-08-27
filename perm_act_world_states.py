@@ -4,6 +4,8 @@ from matplotlib import style
 import numpy as np
 from collections import defaultdict
 import networkx as nx
+from perm_act_functions import adjacent_locations, chebyshev_distance, bresenham_line, calculate_full_path, check_opportunity_attacks, is_line_of_sight_clear, check_visibility
+
 
 
 world_grid_states = {
@@ -142,6 +144,7 @@ class world:
         world.grid[location[0],location[1]] = 2
         world.enemy_locations.append(location)
         world.enemies.append(enemy_id)
+        world.enemy_adjacent_locations.append(adjacent_locations(enemy_id.location))
 
     def add_coin(world,location):
         world.grid[location[0],location[1]] = 1
