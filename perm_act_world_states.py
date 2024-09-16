@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib import style
 import numpy as np
 from collections import defaultdict
-import networkx as nx
+#import networkx as nx
 from perm_act_functions import adjacent_locations, chebyshev_distance, bresenham_line, calculate_full_path, check_opportunity_attacks, is_line_of_sight_clear, check_visibility
 
 
@@ -55,11 +55,11 @@ class graph:
 
         # Default dictionary to store graph
         self.graph = defaultdict(list)
-        self.grid_vis = nx.Graph()
+#        self.grid_vis = nx.Graph()
      
     def add_edge(self, u, v):
         self.graph[u].append(v)
-        self.grid_vis.add_edge(u, v)  # Add edge to the NetworkX graph as well
+#        self.grid_vis.add_edge(u, v)  # Add edge to the NetworkX graph as well
 
 
 
@@ -151,29 +151,29 @@ class world:
         world.coin_locations.append(location)
 
 
-    def visualize(self, dfs_path=None):
-        pos = {i: (i % self.size, self.size - 1 - i // self.size) for i in range(self.size * self.size)}
-        plt.figure(figsize=(10, 10))
-        
+#    def visualize(self, dfs_path=None):
+#        pos = {i: (i % self.size, self.size - 1 - i // self.size) for i in range(self.size * self.size)}
+#        plt.figure(figsize=(10, 10))
+#        
         # Calculate the offset to center the coordinates
-        offset = (self.size - 1) // 2
+#        offset = (self.size - 1) // 2
         
         # Create a mapping of node indices to centered (x,y) coordinates
-        pos = {i: ((i % self.size) - offset, offset - (i // self.size)) for i in range(self.size * self.size)}
+#        pos = {i: ((i % self.size) - offset, offset - (i // self.size)) for i in range(self.size * self.size)}
 
 
-        nx.draw(self.grid_graph.grid_vis, pos, with_labels=False, node_shape='s',node_color='lightgrey', node_size=4500, font_size=8, font_weight='bold')
+#        nx.draw(self.grid_graph.grid_vis, pos, with_labels=False, node_shape='s',node_color='lightgrey', node_size=4500, font_size=8, font_weight='bold')
         
 
         
         # Draw node labels (centered coordinates)
-        labels = {node: f"({x},{y})" for node, (x, y) in pos.items()}
-        nx.draw_networkx_labels(self.grid_graph.grid_vis, pos, labels, font_size=8)
+#        labels = {node: f"({x},{y})" for node, (x, y) in pos.items()}
+#        nx.draw_networkx_labels(self.grid_graph.grid_vis, pos, labels, font_size=8)
         
-        if dfs_path:
-            path_edges = list(zip(dfs_path, dfs_path[1:]))
-            nx.draw_networkx_edges(self.grid_graph.grid_vis, pos, edgelist=path_edges, edge_color='r', width=2)
+#        if dfs_path:
+#            path_edges = list(zip(dfs_path, dfs_path[1:]))
+#            nx.draw_networkx_edges(self.grid_graph.grid_vis, pos, edgelist=path_edges, edge_color='r', width=2)
         
-        plt.axis('off')
-        plt.tight_layout()
-        plt.show()
+#        plt.axis('off')
+#        plt.tight_layout()
+#        plt.show()

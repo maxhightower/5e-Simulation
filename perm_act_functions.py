@@ -59,8 +59,17 @@ def calculate_full_path(entity_location, move_series_zip):
     :return: List of all coordinates in the path
     """
     # Create a list of all positions, starting with the entity's initial location
-    all_positions = [entity_location] + [loc for _, loc in move_series_zip]
+
+    #print(f'move series zip: {move_series_zip}')
+    #print(f'entity location: {entity_location}')
+
+    all_positions = [entity_location]
+    for loc in move_series_zip[1]:
+        all_positions.append(loc)
     
+    #all_positions = [entity_location] + [loc for _, loc in move_series_zip]
+    #print(f'all_positions: {all_positions}')
+
     # Use list comprehension to get Bresenham lines for each segment
     path_segments = [bresenham_line(start, end) 
                      for start, end in zip(all_positions, all_positions[1:])]
