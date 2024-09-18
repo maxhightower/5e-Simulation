@@ -4,7 +4,7 @@ from matplotlib import style
 import numpy as np
 from collections import defaultdict
 #import networkx as nx
-from perm_act_functions import adjacent_locations, chebyshev_distance, bresenham_line, calculate_full_path, check_opportunity_attacks, is_line_of_sight_clear, check_visibility
+from DFS_Functions import adjacent_locations, chebyshev_distance, bresenham_line, calculate_full_path, check_opportunity_attacks, is_line_of_sight_clear, check_visibility
 
 
 
