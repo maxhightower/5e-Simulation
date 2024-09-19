@@ -221,6 +221,13 @@ def rule_equip_weapon(sequence, next_num, acting_entity):
         return False
     return True
 
+def rule_object_number_limitation(sequence, next_num, acting_entity):
+    obj_act = [x for x in sequence if x in object_action_subactions]
+    if next_num in object_action_subactions:
+        if len(obj_act) > len(acting_entity.world.objects + acting_entity.inventory + acting_entity.weapon_equipped):
+            return False
+    return True
+
 
 action_rules = [rule_only_one_action, 
          rule_only_one_bonus_action, 
@@ -236,7 +243,7 @@ action_rules = [rule_only_one_action,
          rule_remove_redundant_prones,
          rule_remove_redundant_objects,
          rule_unequip_weapon,
-         rule_equip_weapon
-
+         rule_equip_weapon,
+         rule_object_number_limitation,
          ]
 

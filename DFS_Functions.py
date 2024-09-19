@@ -257,7 +257,7 @@ def analyze_reward_distribution(reward_series_full_list, action_series_full_list
         print(f'% of {reward}s: {percentage:.2f}%')
     print()
 
-    print(f"Total Qualifiers: {len([x for x in reward_series_full_list if x >= 2])}")
+    print(f"Total Qualifiers: {len([x for x in reward_series_full_list if x >= 3])}")
     print()
 
     # Print individual rewards and actions
@@ -286,7 +286,7 @@ def post_loc_series_reward_calc(all_action_series, all_location_series, all_rewa
             #print(act_loc_rew_zip[i][0])
             
             for loc_series in locs_for_act:
-                post_reward = pre_reward
+                post_loc_reward = pre_reward
 
                 act_loc_rew_series = (action_series, loc_series, pre_reward)
                 #print(f'act loc rew series: {act_loc_rew_series}')
@@ -299,29 +299,29 @@ def post_loc_series_reward_calc(all_action_series, all_location_series, all_rewa
                 #print(f'move path: {move_path}')
 
                 if check_opportunity_attacks(move_path, acting_entity.world.enemy_locations):
-                    post_reward -= 1
+                    post_loc_reward -= 1
                 
                 #print(move_path)
                 if move_path != []:   
                     vis_count = len(check_visibility(move_path[-1], acting_entity.world.enemy_locations, acting_entity.world))
-                    post_reward -= vis_count
+                    post_loc_reward -= vis_count
 
 
                 if move_path == []:
-                    post_reward -= 0.5
+                    post_loc_reward -= 0.5
 
 
                 # if the object action targets entity's location, but inventory is empty...
                 
                 # if they end their turn prone while adjacent to an enemy
                 if 19 in action_series and 20 not in action_series[:-action_series.index(19)] and move_path[-1] in acting_entity.world.enemy_adjacent_locations:
-                    post_reward -= 1
+                    post_loc_reward -= 1
                 
                 # if the path is in a circle...
                 # if the 
                 
 
-                new_act_loc_rew_series = (action_series, loc_series, post_reward)
+                new_act_loc_rew_series = (action_series, loc_series, post_loc_reward)
                 post_reward_list.append(new_act_loc_rew_series)            
 
     post_reward_list = sorted(post_reward_list, key=lambda x: x[2],reverse=True)
@@ -362,12 +362,33 @@ def post_loc_series_reward_calc(all_action_series, all_location_series, all_rewa
     # if the Pickup subaction was made, a potion was picked up, and then the Consume Potion subaction was made, +1
 
 def post_obj_reward_series_calc(action_series_full_list, location_series_full_list, reward_series_full_list, object_series_full_list, acting_entity):
-    action_series = 1
-    location_series = 1
-    object_series_list = 1
-    reward = 1
+    
+    for i in action_series_full_list:
+        action_series = action_series_full_list[i]
+        location_series = location_series_full_list[i]
+        reward = reward_series_full_list[i]
+        object_series_list = object_series_full_list[i]
+    
+        if object_series_list != []:
+            for obj_series in object_series_list:
+                post_obj_reward = reward
 
-    return_set = (action_series, location_series, object_series_list, reward)
+                # if the object action targets entity's location, but inventory is empty...
+                
+                # if they end their turn prone while adjacent to an enemy
+                if 19 in action_series and 20 not in action_series[:-action_series.index(19)] and move_path[-1] in acting_entity.world.enemy_adjacent_locations:
+                    post_reward -= 1
+                
+                # if the path is in a circle...
+                # if the 
+                
+
+                new_act_loc_rew_series = (action_series, location_series, obj_series, post_obj_reward)
+                post_reward_list.append(new_act_loc_rew_series)
+
+
+
+    return_set = (action_series, location_series, object_series_list, post_obj_reward)
     post_object_list = sorted(return_set, key=lambda x: x[2],reverse=True)
     return post_object_list
 

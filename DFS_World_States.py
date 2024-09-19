@@ -124,6 +124,7 @@ class world:
         self.enemies = []
         self.enemy_adjacent_locations = []
         self.non_enemies = []
+        self.objects = []
         
     def generate_map(world):
         grid = np.zeros([world.size,world.size])
@@ -177,24 +178,28 @@ class world:
         world.grid[location[0],location[1]] = 1
         world.grid2[location[0]][location[1]][6].append(coin)
         world.coin_locations.append(location)
+        world.objects.append(coin)
 
     def add_weapon_dagger(world,location):
         dagger = Weapon(name='dagger', type='weapon', damage=1, weight=1)
 
         world.grid[location[0],location[1]] = 1
         world.grid2[location[0]][location[1]][6].append(dagger)
+        world.objects.append(dagger)
 
     def add_weapon_greataxe(world,location):
         greataxe = Weapon(name='greataxe', type='weapon', damage=2, weight=2)
 
         world.grid[location[0],location[1]] = 1
         world.grid2[location[0]][location[1]][6].append(greataxe)
+        world.objects.append(greataxe)
 
     def add_shield(world,location):
         shield = Shield(name='shield', type='shield')
         
         world.grid[location[0],location[1]] = 1
         world.grid2[location[0]][location[1]][6].append(shield)
+        world.objects.append(shield)
 
 #    def visualize(self, dfs_path=None):
 #        pos = {i: (i % self.size, self.size - 1 - i // self.size) for i in range(self.size * self.size)}

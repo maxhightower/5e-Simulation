@@ -32,6 +32,33 @@ target_distance_scores = { # the distance from which a location can be per subac
 # we need to create a series that represents each object available to interact with
 
 
+# Discussion: Does Object Series need a similar output to Location Series?
+# location series required an output comprising of a list of many potential locations for one action series
+# this was because with multiple types of move subactions, there could be multiple potential locations
+# and then iteratively more possible locations based on previous decisions.
+# The question to answer is, are there new object series that can come from previous object choices?
+# Yes, there are possible sequences where an entity picks up an object then equips it, 
+# so new possibilities are possible based on previous decisions within the same object_series 
+
+# What gets stored in the object_series_list?
+# Is it class instances of objects?
+
+# How should the DFS and Potential_Objects functions work?
+# the DFS function works by appending object class instances to a list based on the rules
+# within the DFS function, the Potential_Objects function is called to get a list of objects that can be interacted with
+# the Potential_Objects function should return a list of class instances
+# the Potential_Objects function should be given 
+#       - the current object sequence, 
+#       - the post_reward_location_list,
+#       - the acting_entity,
+#       - the 
+
+# BUT if the DFS is to iterate through a list of objects, 
+
+# there needs to be a Worldly list of objects (aka a list of objects that exist in the world)
+# which is different from the list of objects that can be interacted with in a given action series (aka potential_objects)
+
+
 class RuleBasedObjectSequenceDFS:
     def __init__(self, post_location_reward_list, target_distance_scores, object_rules, acting_entity):
         self.post_location_reward_list = post_location_reward_list
@@ -43,22 +70,58 @@ class RuleBasedObjectSequenceDFS:
         self.sequences = []
 
     def get_potential_objects(self, sequence, acting_entity, post_location_reward_list, object_subaction_index):
+        # the goal of this function is to return a list of objects, 
+        # out of the objects in the world, 
+        # that can be interacted with based on the current sequence
+    
+        ###  ------  Setting Up Constants  ------  ###
+
         potential_objects = []
+        worldly_objects = acting_entity.world.objects
+
         action_series = post_location_reward_list[0]
         location_series = post_location_reward_list[1]
 
-        tar_act_req = [x for x in action_series if x in subactions_req_targets]
         obj_act = [x for x in action_series if x in object_subactions]
-        # action_index = len(sequence) # this presumes the last in the line is what we're looking at
-        #action = obj_act[action_index]
+
         action = action_series[object_subaction_index]
         location = location_series[object_subaction_index]
 
-        #move_series = [location_series[i] for i in range(len(location_series)) if action_series[i] in move_subactions]
-        #if len(move_series) < 1:
-        #    entity_location = acting_entity.location
-        #else:
-        #    entity_location = move_series[-1]
+        next_action = post_location_reward_list[0][object_subaction_index]
+
+        # action_index = len(sequence) # this presumes the last in the line is what we're looking at
+        #   instead we'll create object_subaction_index
+
+
+
+
+
+        ###  ------  Adjusting for Sequence History  ------  ###
+
+        # because the object series is generated iteratively/recursively,
+        # an object may be newly usable/unusable based on the previous subaction and object choices
+
+        # every act_loc_obj sequence will begin the same, with the constants
+        # 
+
+
+        ###  Situationally Adjusting Potential Objects  ###
+        # information that is known at any point in the object_series generation
+        # the full action_series is always known
+        # the full location_series is always known
+
+        # for each object subaction, in order, 
+        for action_index in range(len(obj_act)):
+
+            # if an object has been picked up, it can be used by later subactions
+            if obj_act[action_index] in [4,7]:
+                potential_objects.append(sequence[action_index])
+
+            # if an object has been dropped, it can be picked up, unless 4 or 7 is 
+            if obj_act[action_index] in [29,30]:
+                if sequence[action_index] in acting_entity.inventory:
+                    potential_objects.remove(sequence[action_index])
+
 
         # Ground Pickup
         if action in [4,7]:
@@ -90,6 +153,7 @@ class RuleBasedObjectSequenceDFS:
     def dfs(self, sequence, acting_entity, post_location_reward_list, available_objects):
         print(f'sequence: {sequence}')
         print(f'post location reward list: {post_location_reward_list}')
+    
 
         if len(sequence) == len([x for x in post_location_reward_list[0] if x in object_subactions]):
             self.sequences.append(sequence)
@@ -132,6 +196,7 @@ class RuleBasedObjectSequenceDFS:
         # return object_series_list
         # lets do that
         
+        worldly_objects = self.acting_entity.world.objects
         
         for act_loc_rew in post_location_reward_list:
         
@@ -143,19 +208,18 @@ class RuleBasedObjectSequenceDFS:
                     if subaction in object_subactions:
 
                         potential_objects = self.get_potential_objects([], self.acting_entity, act_loc_rew, subaction_index)
+                        
                         self.dfs([], self.acting_entity, act_loc_rew, potential_objects)
+                        
                         self.object_series_list.append(self.sequences)
 
         
                 print(f'{act_loc_rew}')
-                self.dfs([], self.acting_entity, i)
+                self.dfs([], self.acting_entity, act_loc_rew, potential_objects)
                 self.object_series_list.append(self.sequences)
             else:
                 self.object_series_list.append([])
         
-
-
-
 
         #return_set = (action_series, location_series, self.object_series_list, reward)
 
