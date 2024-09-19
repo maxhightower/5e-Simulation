@@ -9,7 +9,7 @@ from DFS_World_States import world, world_grid_states
 
 import DFS_Action_Series
 
-from DFS_Universal_Rules import action_subactions, move_subactions, action_subactions, attack_subactions, free_subactions, subactions_req_targets
+from DFS_Universal_Rules import action_subactions, move_subactions, action_subactions, attack_subactions, free_subactions, subactions_req_targets, object_subactions, entity
 
 target_distance_scores = { # the distance from which a location can be per subaction
             0: 1,
@@ -201,12 +201,12 @@ def rule_attacks_target_enemies(sequence, next_loc, acting_entity, action_series
         entity_location = entity_loc_series[-1]
     action_index = len(sequence)
 
-    print(acting_entity.world.enemy_locations)
-    print(next_loc)
+    #print(acting_entity.world.enemy_locations)
+    #print(next_loc)
     if tar_act_req[action_index] in attack_subactions:
         if next_loc not in acting_entity.world.enemy_locations:
             #print('attack does not target enemies')
-            print('false')
+            #print('false')
             return False
     
     #print('passed the enemy test')
@@ -224,11 +224,17 @@ def rule_objects_target_objects(sequence, next_loc, acting_entity, action_series
     action_index = len(sequence)
 
     #print(f'item locations: {acting_entity.world.coin_locations}')
+    print(action_series)
+    print(action_index)
+    print(tar_act_req)
+    print(tar_act_req[action_index])
 
     if tar_act_req[action_index] in attack_subactions:
         if next_loc not in acting_entity.world.coin_locations or next_loc == entity_location:
             #print('object does not target object')
             return False
+        
+    
     return True
 
 def rule_hide_in_low_light(sequence, next_loc, acting_entity, action_series):
@@ -299,15 +305,50 @@ def rule_move_speed_efficiency(sequence, next_loc, acting_entity, action_series)
     return True
 
 
+def rule_enemy_attempt_2(sequence, next_loc, acting_entity, action_series):
+    tar_act_req = [x for x in action_series if x in subactions_req_targets]
+    action_index = len(sequence)
+    entity_loc_series = [sequence[loc_index] for loc_index in range(len(sequence)) if tar_act_req[loc_index] in move_subactions]
+    if len(entity_loc_series) < 1:
+        entity_location = acting_entity.location
+    else:
+        entity_location = entity_loc_series[-1]
+    
+    if len(acting_entity.world.grid2[next_loc[0]][next_loc[1]][5]) == 0:
+        return False
+    
+    return True
+
+def rule_object_attempt_2(sequence, next_loc, acting_entity, action_series):
+    tar_act_req = [x for x in action_series if x in subactions_req_targets]
+    action_index = len(sequence)
+    entity_loc_series = [sequence[loc_index] for loc_index in range(len(sequence)) if tar_act_req[loc_index] in move_subactions]
+    if len(entity_loc_series) < 1:
+        entity_location = acting_entity.location
+    else:
+        entity_location = entity_loc_series[-1]
+    
+    subaction = tar_act_req[action_index]
+    if subaction in [4,7]:
+        if acting_entity.world.grid2[next_loc[0]][next_loc[1]][6] == []:
+            return False
+    elif subaction in [25,26]:
+        if acting_entity.inventory == [] and acting_entity.weapon_equipped == []:
+            return False
+
+    return True
+
 
 location_rules = [
     #rule_location_spacing_rule,
     #rule_no_excess_locations,
     rule_no_repeating_locations,
     #rule_no_unaddressed_location_series,
-    rule_attacks_target_enemies,
-    rule_objects_target_objects,
+    #rule_attacks_target_enemies,
+    #rule_objects_target_objects,
     rule_hide_in_low_light,
     #rule_move_space_efficiency,
     #rule_move_speed_efficiency,
+    rule_enemy_attempt_2,
+    rule_object_attempt_2,
 ]

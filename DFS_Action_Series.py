@@ -129,9 +129,15 @@ def rule_limited_move_speed(sequence, next_num, acting_entity):
     return True
 
 def rule_one_of_each_free_action(sequence, next_num, acting_entity):
-    if next_num in free_subactions and sum(1 for seq in sequence if seq == next_num) == 1:
+    # free_subactions = [[4,25,27,29,31],[14]] # can do one of each list
+    if next_num in free_subactions[0] and sum(1 for seq in sequence if seq in free_subactions[0]) == 1:
         return False
+
+    if next_num in free_subactions[1] and sum(1 for seq in sequence if seq in free_subactions[1]) == 1:
+        return False
+
     return True
+
 
 def rule_shield(sequence, next_num, acting_entity):
     if next_num == 13 and 'shield' not in acting_entity.inventory or next_num == 13 and 'shield' not in acting_entity.equipped_armor:
@@ -205,6 +211,17 @@ def rule_remove_redundant_objects(sequence, next_num, acting_entity):
 
     return True
 
+def rule_unequip_weapon(sequence, next_num, acting_entity):
+    if next_num == 31 and acting_entity.weapon_equipped == []:
+        return False
+    return True
+
+def rule_equip_weapon(sequence, next_num, acting_entity):
+    if next_num in [25,26] and acting_entity.weapon_equipped != []:
+        return False
+    return True
+
+
 action_rules = [rule_only_one_action, 
          rule_only_one_bonus_action, 
          rule_no_redundant_moves,
@@ -217,5 +234,9 @@ action_rules = [rule_only_one_action,
          rule_condition_rules,
          rule_standing_up_rules,
          rule_remove_redundant_prones,
+         rule_remove_redundant_objects,
+         rule_unequip_weapon,
+         rule_equip_weapon
+
          ]
 

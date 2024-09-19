@@ -86,6 +86,29 @@ class graph:
         # Call the recursive helper function to print DFS traversal
         self.dfs_util(v, visited)
 
+class Object:
+    def __init__(self, name, type):
+        self.name = name
+        self.type = type
+
+# create subclass Coin that inherits from Object
+class Coin(Object):
+    def __init__(self, name, type):
+        super().__init__(name, type)
+        self.type = 'treasure'
+
+class Weapon(Object):
+    def __init__(self, name, type, damage, weight):
+        super().__init__(name, type)
+        self.type = 'weapon'
+        self.damage = damage
+        self.weight = weight
+
+class Shield(Object):
+    def __init__(self, name, type):
+        super().__init__(name, type)
+        self.type = 'shield'
+
 
 
 class world:
@@ -142,14 +165,36 @@ class world:
 
 
         world.grid[location[0],location[1]] = 2
+        world.grid2[location[0]][location[1]][5].append(enemy_id)
         world.enemy_locations.append(location)
         world.enemies.append(enemy_id)
         world.enemy_adjacent_locations.append(adjacent_locations(enemy_id.location))
 
     def add_coin(world,location):
+        # create instance of Coin class
+        coin = Coin(name='coin', type='treasure')
+
         world.grid[location[0],location[1]] = 1
+        world.grid2[location[0]][location[1]][6].append(coin)
         world.coin_locations.append(location)
 
+    def add_weapon_dagger(world,location):
+        dagger = Weapon(name='dagger', type='weapon', damage=1, weight=1)
+
+        world.grid[location[0],location[1]] = 1
+        world.grid2[location[0]][location[1]][6].append(dagger)
+
+    def add_weapon_greataxe(world,location):
+        greataxe = Weapon(name='greataxe', type='weapon', damage=2, weight=2)
+
+        world.grid[location[0],location[1]] = 1
+        world.grid2[location[0]][location[1]][6].append(greataxe)
+
+    def add_shield(world,location):
+        shield = Shield(name='shield', type='shield')
+        
+        world.grid[location[0],location[1]] = 1
+        world.grid2[location[0]][location[1]][6].append(shield)
 
 #    def visualize(self, dfs_path=None):
 #        pos = {i: (i % self.size, self.size - 1 - i // self.size) for i in range(self.size * self.size)}
@@ -177,3 +222,4 @@ class world:
 #        plt.axis('off')
 #        plt.tight_layout()
 #        plt.show()
+

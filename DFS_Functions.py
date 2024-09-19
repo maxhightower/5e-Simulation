@@ -197,6 +197,32 @@ def precalc_reward(action_series, entity):
         pass
 
     
+    # if 25 or 26 is in action_series, and 5 comes after it, reward
+    if 25 in action_series:
+        if 5 in action_series[action_series.index(25):]:
+            reward_value += 1
+    if 26 in action_series:
+        if 5 in action_series[action_series.index(26):]:
+            reward_value += 1
+    
+    
+    # if 4 or 7 is in action_series, and 13, 25, or 26 comes after it, reward
+    if 4 in action_series:
+        if 13 in action_series[action_series.index(4):]:
+            reward_value += 1
+        if 25 in action_series[action_series.index(4):]:
+            reward_value += 1
+        if 26 in action_series[action_series.index(4):]:
+            reward_value += 1
+    if 7 in action_series:
+        if 13 in action_series[action_series.index(7):]:
+            reward_value += 1
+        if 25 in action_series[action_series.index(7):]:
+            reward_value += 1
+        if 26 in action_series[action_series.index(7):]:
+            reward_value += 1
+
+    # for the number of attacks made, times the number of damage dealt, reward
     
 
 
@@ -231,7 +257,7 @@ def analyze_reward_distribution(reward_series_full_list, action_series_full_list
         print(f'% of {reward}s: {percentage:.2f}%')
     print()
 
-    print(f"Total Qualifiers: {len([x for x in reward_series_full_list if x >= 4])}")
+    print(f"Total Qualifiers: {len([x for x in reward_series_full_list if x >= 2])}")
     print()
 
     # Print individual rewards and actions
@@ -323,4 +349,31 @@ def post_loc_series_reward_calc(all_action_series, all_location_series, all_rewa
 
     # if they end their turn prone adjacent to an enemy creature, punish
     # if their movement leaves a space adjacent to an enemy creature and the disengage action isn't taken, punish
-    # 
+
+    # if the Attack action was made unarmed, +1
+    # if the Attack action was made with a light weapon, +2
+    # if the Attack action was made with a heavy weapon, +3
+
+    # if the Pickup action was made, a weapon was picked up, and then the Equip action was made, +1
+    # if the Equip action was made, and then the Attack action was made, +1
+
+    # if the Pickup action was made, a shield was picked up, and the Don action was made, +1
+
+    # if the Pickup subaction was made, a potion was picked up, and then the Consume Potion subaction was made, +1
+
+def post_obj_reward_series_calc(action_series_full_list, location_series_full_list, reward_series_full_list, object_series_full_list, acting_entity):
+    action_series = 1
+    location_series = 1
+    object_series_list = 1
+    reward = 1
+
+    return_set = (action_series, location_series, object_series_list, reward)
+    post_object_list = sorted(return_set, key=lambda x: x[2],reverse=True)
+    return post_object_list
+
+
+def process_combat_zip(combat_zip):
+    action_series = combat_zip[0]
+    location_series = combat_zip[1]
+
+    #tar_act_series = [x for x in action_series if x in ]
