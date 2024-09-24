@@ -22,7 +22,15 @@ target_distance_scores = { # the distance from which a location can be per subac
             10: 1,
             15: 1,
             23: 5,
-            24: 6
+            24: 6,
+            27: 1,
+            28: 1,
+            29: 1,
+            30: 1,
+            31: 1,
+            32: 1,
+            35: 1
+            
         }
 
 
