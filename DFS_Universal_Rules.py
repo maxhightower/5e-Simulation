@@ -1,6 +1,11 @@
 # DFS Universal Rules
 import numpy as np
 
+# should each entity have a custom version of the data below
+# and then what's below is the default for player characters???
+# according to the rules, monsters aren't limited by the same system that player characters are
+
+
 
 subaction_dict = {
     '0': 'Move_One',                # needs a target
@@ -8,7 +13,7 @@ subaction_dict = {
     '2': 'Move_Three',
     '3': 'Move_Four',
     '4': 'Object (Free) Ground Pickup',      # needs a target
-    '5': 'Attack',              # needs a target
+    '5': 'Attack (Weapon)',              # needs a target
     '6': 'Dodge',
     '7': 'Object (Action) Ground Pickup',              # needs a target
     '8': 'Disengage',
@@ -38,7 +43,8 @@ subaction_dict = {
     '32': 'Object (Action) Self Unequip',
     '33': 'Drink Potion',
     '34': 'Activate Magic Item',
-    #'35': 'Help (Skill Check)',
+    '35': 'Help (Skill Check)',
+    #'36': 'Attack (Unnarmed Strike)',
 
 }
 
@@ -48,15 +54,17 @@ move_subactions = [0,1,2,3,23,24]
     # crawl
     # squeeze
 
-action_subactions = [5,6,7,8,9,10,11,12,13,16,17,18,21,22,26,28,30,32,33,34,35]
-attack_subactions = [5,16,18]
+action_subactions = [5,6,7,8,9,10,11,12,13,16,17,18,21,22,26,28,30,32,33,34,35,36]
+attack_subactions = [5,16,18,36]
 free_subactions = [[4,25,27,29,31],[14]] # can do one of each list
 bonus_subactions = [15]
-object_subactions = [4,7,25,26,27,28,29,30,31,32]
+object_subactions = [4,7,25,26,27,28,29,30,31,32,]
 object_action_subactions = [7,26,28,30,32]
 object_free_subactions = [4,25,27,29,31]
 
-subactions_req_targets = [0,1,2,3,4,5,7,10,15,23,24,27,28,29,30,35]
+subactions_req_targets = [0,1,2,3,4,5,7,10,15,23,24,27,28,29,30,35,36]
+# subactions_req_targets = move_subactions + object_subactions + attack_subactions
+
 subactions_req_allies = [10,21,22,35]
 subactions_req_objects = [4,5,7,13,15,25,26,29,30,31,32,33,34]
 
@@ -111,5 +119,13 @@ target_distance_scores = { # the distance from which a location can be per subac
             10: 1,
             15: 1,
             23: 5,
-            24: 6
+            24: 6,
+            27: 1,
+            28: 1,
+            29: 1,
+            30: 1,
+            31: 1,
+            32: 1,
+            35: 1,
+            36: 1,
         }

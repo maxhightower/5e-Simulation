@@ -9,29 +9,7 @@ from DFS_World_States import world, world_grid_states
 
 import DFS_Action_Series
 
-from DFS_Universal_Rules import action_subactions, move_subactions, action_subactions, attack_subactions, free_subactions, subactions_req_targets, object_subactions, entity
-
-target_distance_scores = { # the distance from which a location can be per subaction
-            0: 1,
-            1: 2, 
-            2: 3,
-            3: 4,
-            5: 1,
-            4: 1,
-            7: 1,
-            10: 1,
-            15: 1,
-            23: 5,
-            24: 6,
-            27: 1,
-            28: 1,
-            29: 1,
-            30: 1,
-            31: 1,
-            32: 1,
-            35: 1
-            
-        }
+from DFS_Universal_Rules import action_subactions, move_subactions, action_subactions, attack_subactions, free_subactions, subactions_req_targets, object_subactions, entity, target_distance_scores
 
 
 # this one handles location series

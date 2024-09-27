@@ -125,6 +125,7 @@ class world:
         self.enemy_adjacent_locations = []
         self.non_enemies = []
         self.objects = []
+        # I'll be using the index of world.objects to represent objects within object_series 
         
     def generate_map(world):
         grid = np.zeros([world.size,world.size])

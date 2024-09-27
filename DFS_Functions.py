@@ -1,6 +1,6 @@
 import numpy as np
 import collections
-from DFS_Universal_Rules import action_subactions, move_subactions, action_subactions, attack_subactions, free_subactions
+from DFS_Universal_Rules import action_subactions, move_subactions, action_subactions, attack_subactions, free_subactions, object_subactions
 
 
 
@@ -188,16 +188,18 @@ def precalc_reward(action_series, entity):
     if act_series_len > 8:
         reward_value -= 1
 
-    if 5 not in action_series:
-        reward_value -= 1
-    elif 6 not in action_series:
-        reward_value -= 1
-    elif 8 not in action_series:
-        reward_value -= 1
-    elif 9 not in action_series:
-        reward_value -= 1
-    else:
-        pass
+    #if 5 not in action_series:
+    #    reward_value -= 1
+    #elif 6 not in action_series:
+    #    reward_value -= 1
+    #elif 8 not in action_series:
+    #    reward_value -= 1
+    #elif 9 not in action_series:
+    #    reward_value -= 1
+    #elif 36 not in action_series:
+    #    reward_value -= 1
+    #else:
+    #    pass
 
     
     # if 25 or 26 is in action_series, and 5 comes after it, reward
@@ -208,6 +210,7 @@ def precalc_reward(action_series, entity):
         if 5 in action_series[action_series.index(26):]:
             reward_value += 1
     
+
     
     # if 4 or 7 is in action_series, and 13, 25, or 26 comes after it, reward
     if 4 in action_series:
@@ -227,6 +230,8 @@ def precalc_reward(action_series, entity):
 
     # for the number of attacks made, times the number of damage dealt, reward
     
+
+
     # new rewards to add
     # perhaps dropping items should be discouraged
     if 29 in action_series or 30 in action_series:
@@ -373,15 +378,20 @@ def post_loc_series_reward_calc(all_action_series, all_location_series, all_rewa
     # if the Pickup subaction was made, a potion was picked up, and then the Consume Potion subaction was made, +1
 
 def post_obj_reward_series_calc(action_series_full_list, location_series_full_list, reward_series_full_list, object_series_full_list, acting_entity):
-    print(action_series_full_list)
+    #print(action_series_full_list)
 
 
-    for i in action_series_full_list:
+    for i in range(len(action_series_full_list)):
         action_series = action_series_full_list[i]
         location_series = location_series_full_list[i]
         reward = reward_series_full_list[i]
         object_series_list = object_series_full_list[i]
     
+        print(f'action series: {action_series}')
+        print(f'location series: {location_series}')
+        print(f'object series list: {object_series_list}')
+
+
         if object_series_list != []:
             for obj_series in object_series_list:
                 post_obj_reward = reward
@@ -422,23 +432,34 @@ def process_combat_zip(combat_zip):
 
 def create_act_loc_obj_rew(post_location_reward_list, object_series_full_list, acting_entity):
     post_object_list = []
-
-    print(f'len of object_series_full_list {len(object_series_full_list)}')
-
     filtered_post_location_reward_list = [x for x in post_location_reward_list if x[2] >= 4]
-    print(filtered_post_location_reward_list)
 
+
+    print(f'len of post_location_reward_list {len(post_location_reward_list)}')
+    print(f'len of object_series_full_list {len(object_series_full_list)}')
+    print(f'len of filtered_post_location_reward_list {len(filtered_post_location_reward_list)}')
+
+    # how is it making sure that the object_series from object_series_full_list line up with the act_loc series that remain post-filtering?
+    
 
     for i in range(len(filtered_post_location_reward_list)):
+
+
+        #print(f'i for filtered_post_location_reward_list: {i}')
+
         action_series = filtered_post_location_reward_list[i][0]
         location_series = filtered_post_location_reward_list[i][1]
         reward = filtered_post_location_reward_list[i][2]
 
-        #print(action_series)
         object_series_list = object_series_full_list[i]
+    #    print(f'object_series_list for {i}: {object_series_list}')
 
         for j in range(len(object_series_list)):
+    #        print(f'j for object_series_list: {j}')
+
             obj_series = object_series_list[j]
+    #        print(f'obj_series: {obj_series}')
+
             act_loc_obj_rew_item = (action_series, location_series, obj_series, reward)
             post_object_list.append(act_loc_obj_rew_item)
             
@@ -448,5 +469,59 @@ def create_act_loc_obj_rew(post_location_reward_list, object_series_full_list, a
             post_object_list.append(act_loc_obj_rew_item)
 
     # sort the list by reward value
+    post_object_list = sorted(post_object_list, key=lambda x: x[3],reverse=True)
+    return post_object_list
+
+
+def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
+    #print(action_series_full_list)
+
+    post_object_list = []
+
+    for i in range(len(act_loc_obj_rew_series)):
+        action_series = act_loc_obj_rew_series[i][0]
+        location_series = act_loc_obj_rew_series[i][1]
+        reward = act_loc_obj_rew_series[i][3]
+        object_series_list = act_loc_obj_rew_series[i][2]
+    
+        #print(f'action series: {action_series}')
+        #print(f'location series: {location_series}')
+        #print(f'object series list: {object_series_list}')
+        #print(f'reward: {reward}')
+
+
+        if object_series_list != []:
+            for obj_series in object_series_list:
+                post_obj_reward = reward
+
+                # if the object action targets entity's location, but inventory is empty...
+                
+                # if they end their turn prone while adjacent to an enemy
+                if 19 in action_series and 20 not in action_series[:-action_series.index(19)] and move_path[-1] in acting_entity.world.enemy_adjacent_locations:
+                    post_obj_reward -= 1
+                
+                # if the path is in a circle...
+                # if the 
+                
+                # if the pickup action was taken, and the object was a coin, reward
+                if 4 in action_series or 7 in action_series:
+                    # the object associated with the subaction
+                    obj = obj_series[action_series.index(4) or action_series.index(7)]
+                    if obj.Type == 'coin':
+                        post_obj_reward += 1
+
+
+                new_act_loc_rew_series = (action_series, location_series, obj_series, post_obj_reward)
+                post_object_list.append(new_act_loc_rew_series)
+        else:
+            # if statement if any item in action_series in object_subactiions
+            post_obj_reward = reward
+            if any(item in action_series for item in object_subactions):
+                post_obj_reward -= 10
+
+            act_loc_obj_rew_item = (action_series, location_series, [], post_obj_reward)
+            post_object_list.append(act_loc_obj_rew_item)
+
+    #return_set = (action_series, location_series, object_series_list, post_obj_reward)
     post_object_list = sorted(post_object_list, key=lambda x: x[3],reverse=True)
     return post_object_list
