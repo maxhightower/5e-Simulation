@@ -171,16 +171,13 @@ class RuleBasedObjectSequenceDFS:
             if self.check_rules(current_sequence, next_object, self.acting_entity, act_loc_rew):
                 
                 current_sequence.append(next_object)
-                all_sequences.extend(self.dfs(current_sequence, next_object, acting_entity, act_loc_rew, potential_objects))
+                self.object_series_list.extend(self.dfs(current_sequence, next_object, acting_entity, act_loc_rew, potential_objects))
                 current_sequence.pop()
         
         return all_sequences
     
     def generate_object_sequences(self):
         post_location_reward_list = self.post_location_reward_list
-        action_series = post_location_reward_list[0]
-        location_series = post_location_reward_list[1]
-        reward = post_location_reward_list[2]
 
         # in order to generate the object series, what is the order of operations that must be followed?
         # for post_location_reward_list 
@@ -200,10 +197,16 @@ class RuleBasedObjectSequenceDFS:
         worldly_objects = self.acting_entity.world.objects
         
         act_loc_rew_pass_count = 0
+
+        #print(f'Post Location Reward List: {post_location_reward_list}')
+
         for act_loc_rew in post_location_reward_list:
+            action_series = act_loc_rew[0]
+            location_series = act_loc_rew[1]
+            reward = act_loc_rew[2]
             #print(f'act_loc_rew: {act_loc_rew}') # ([25, 5, 0], [[1, 1], [1, 1]], 5.5)
 
-            if act_loc_rew[2] >= 3:
+            if int(act_loc_rew[2]) >= 4:
                 act_loc_rew_pass_count += 1
 
                 for subaction_index in range(len(act_loc_rew[0])):
@@ -216,7 +219,8 @@ class RuleBasedObjectSequenceDFS:
                         for next_object in potential_objects:
                             
                             sequences = self.dfs([], next_object, self.acting_entity, act_loc_rew, potential_objects)
-                            print(f'sequences: {sequences}')
+
+                            #print(f'sequences: {sequences}')
                             self.object_series_list.append(sequences)
 
             else:

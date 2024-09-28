@@ -525,3 +525,10 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
     #return_set = (action_series, location_series, object_series_list, post_obj_reward)
     post_object_list = sorted(post_object_list, key=lambda x: x[3],reverse=True)
     return post_object_list
+
+
+def damage_calc():
+    pass
+
+    # need to identify the entity, the weapon, and the target
+    # so the input needs to be the act_loc_obj_rew
