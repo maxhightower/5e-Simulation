@@ -19,7 +19,7 @@ subaction_dict = {
     '8': 'Disengage',
     '9': 'Hide',
     '10': 'Help (Attack)',
-    '11': 'Cast',
+    '11': 'Cast',                                       # sometimes Cast needs a target, object, or is a bonus action...
     '12': 'Dash',
     '13': 'Don or Doff Shield',
     '14': 'End Concentration',
@@ -47,6 +47,10 @@ subaction_dict = {
     #'36': 'Attack (Unnarmed Strike)',
 
 }
+
+
+# does picking up an item automatically equip it?
+# 
 
 
 move_subactions = [0,1,2,3,23,24]
@@ -105,6 +109,30 @@ class entity:
         self.speed = 6
         self.coins = 0
 
+        self.shield_proficient = False # because shield is considered medium armor, the default should be false
+
+        self.hands = 2
+        self.main_hand = []
+        self.off_hand = []
+
+        # want to implement entity size
+        # self.size = 'medium'
+        # self.space_orientation = '1x1'
+            # medium options: '1x1'
+            # large options: '2x2', '1x4'
+            # huge options: '3x3', '2x4', '1x9'
+            # gargantuan options: '4x4', '3x6', '2x8', '1x16'
+        # what will be required to implement size?
+        # 1. how to represent the same entity is occupying multiple spaces in the world_grid
+        # 2. world.enemy_locations
+        # 3. world.enemy_locations_adjacent
+        # 4. rules for spawning enemies and entities
+        # 5. entities two sizes smaller than an entity can move through that entity's space unimpeded
+        # 6. entities two sizes larger than an entity can move through that entity's space unimpeded
+        # 7. otherwise it's considered difficult terrain
+        # 8. entities can't end their turn in the same space as another entity
+
+
         # will need to have a add_entity() in order to add a key: value pair to circumstances per enemy in world
 
 
@@ -129,3 +157,13 @@ target_distance_scores = { # the distance from which a location can be per subac
             35: 1,
             36: 1,
         }
+
+def add_optional_rule_action_options():
+    pass
+    # add the following subactions to subaction_dict
+    # - climb onto bigger creature
+    # - disarm
+    # - healing surge
+    # - overrun
+    # - shove aside
+    # - tumble

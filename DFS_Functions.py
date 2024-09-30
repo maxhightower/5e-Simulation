@@ -271,7 +271,7 @@ def analyze_reward_distribution(reward_series_full_list, action_series_full_list
         print(f'% of {reward}s: {percentage:.2f}%')
     print()
 
-    print(f"Total Qualifiers: {len([x for x in reward_series_full_list if x >= 4])}")
+    print(f"Total Qualifiers: {len([x for x in reward_series_full_list if x >= 5])}")
     print()
 
     # Print individual rewards and actions
@@ -315,23 +315,26 @@ def post_loc_series_reward_calc(all_action_series, all_location_series, all_rewa
                 if check_opportunity_attacks(move_path, acting_entity.world.enemy_locations):
                     post_loc_reward -= 1
                 
-                #print(move_path)
+                
+                # punishing for each enemy that can see the entity
                 if move_path != []:   
                     vis_count = len(check_visibility(move_path[-1], acting_entity.world.enemy_locations, acting_entity.world))
-                    post_loc_reward -= vis_count
+                    post_loc_reward -= vis_count/2
 
 
+                # punishing slightly if the entity doesn't move
                 if move_path == []:
                     post_loc_reward -= 0.5
 
 
                 # if the object action targets entity's location, but inventory is empty...
                 
-                # if they end their turn prone while adjacent to an enemy
+                # if they end their turn prone while adjacent to an enemy 
                 if 19 in action_series:
                     if len(move_path) > 1:
                         if 20 not in action_series[:-action_series.index(19)] and move_path[-1] in acting_entity.world.enemy_adjacent_locations:
                            post_loc_reward -= 1
+                        # need to add a check for if the enemy in enemy_adjacent_locations is currently visible, otherwise it shouldn't be taken into account by the acting entity
                 
                 # if the path is in a circle...
                 # if the 
@@ -479,15 +482,38 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
     post_object_list = []
 
     for i in range(len(act_loc_obj_rew_series)):
+        print('')
+        #print(act_loc_obj_rew_series[i])
+
         action_series = act_loc_obj_rew_series[i][0]
         location_series = act_loc_obj_rew_series[i][1]
         reward = act_loc_obj_rew_series[i][3]
         object_series_list = act_loc_obj_rew_series[i][2]
     
-        #print(f'action series: {action_series}')
-        #print(f'location series: {location_series}')
-        #print(f'object series list: {object_series_list}')
-        #print(f'reward: {reward}')
+        print(f'action series: {action_series}')
+        print(f'location series: {location_series}')
+        print(f'object series list: {object_series_list}')
+        print(f'reward: {reward}')
+
+        # actions that are only move_actions
+        move_act_series = [x for x in action_series if x in move_subactions]
+        print(f'move act series: {move_act_series}')
+
+        # locations that are only move_actions
+        move_loc_series = [location_series[y] for y in range(len(location_series)) if action_series[y] in move_subactions]
+        print(f'move loc series: {move_loc_series}')
+
+
+
+        if move_loc_series != []:
+
+            # move_act_loc needs to be a representation of each move_subaction being used (pulled from the action_series) and each location that it's moving to (pulled from the location_series)
+            move_act_loc = ([x for x in action_series if x in move_subactions],[location_series[y] for y in range(len(location_series)) if move_act_series[y] in move_subactions])
+            print(f'move action location series: {move_act_loc}')
+
+
+            move_path = calculate_full_path(acting_entity.location, move_act_loc)
+            print(f'move path: {move_path}')
 
 
         if object_series_list != []:
@@ -497,19 +523,28 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
                 # if the object action targets entity's location, but inventory is empty...
                 
                 # if they end their turn prone while adjacent to an enemy
-                if 19 in action_series and 20 not in action_series[:-action_series.index(19)] and move_path[-1] in acting_entity.world.enemy_adjacent_locations:
-                    post_obj_reward -= 1
+                if 19 in action_series and 20 not in action_series[:-action_series.index(19)]:
+                    if move_path != [] and move_path[-1] in acting_entity.world.enemy_adjacent_locations:
+                        post_obj_reward -= 1
                 
                 # if the path is in a circle...
                 # if the 
                 
                 # if the pickup action was taken, and the object was a coin, reward
-                if 4 in action_series or 7 in action_series:
-                    # the object associated with the subaction
-                    obj = obj_series[action_series.index(4) or action_series.index(7)]
-                    if obj.Type == 'coin':
-                        post_obj_reward += 1
+                if obj_series != []:
+                    if 4 in action_series or 7 in action_series:
+                        # the object associated with the subaction
+                        obj = obj_series[action_series.index(4) or action_series.index(7)]
+                        if obj.Type == 'coin':
+                            post_obj_reward += 1
 
+                # the potential damage, without taking the target into account
+
+                # the risk based on the number of enemies that can be seen
+
+                # the AC of an entity throughout the turn, such as donning armor or using a shield
+
+                # 
 
                 new_act_loc_rew_series = (action_series, location_series, obj_series, post_obj_reward)
                 post_object_list.append(new_act_loc_rew_series)
@@ -532,3 +567,41 @@ def damage_calc():
 
     # need to identify the entity, the weapon, and the target
     # so the input needs to be the act_loc_obj_rew
+
+
+def process_turn(act_loc_obj_rew, acting_entity):
+    # move actions 
+    # object actions
+    # dealing damage
+    action_series = act_loc_obj_rew[0]
+    location_series = act_loc_obj_rew[1]
+    object_series = act_loc_obj_rew[2]
+    reward = act_loc_obj_rew[3]
+
+    # should this go subaction by subaction to check for reactions?
+
+    for subaction in action_series:
+        # this goes subaction by subaction
+        check_reactions(subaction, acting_entity)
+        # this is where the observer pattern will come in
+
+        # global list/dictionary of observers??? that gets checked each time a subaction is made as a shortcut
+        # the following elements are relevant and need to be represented: 
+        # - the entity that can react
+        # - the reacting subaction
+        # - the subaction which triggers the reacting subaction
+        # - the situation which is required for the reacting subaction (proximity, line of sight, etc.)
+        # - the reward value required for the reacting subaction to be triggered (risk the reacting entity takes in reacting)
+        # - the reward value that the reacting entity gets for reacting
+
+
+def check_reactions(subaction, acting_entity):
+    pass
+
+    # process turn will go subaction by subaction to check for reactions, 
+    # so this function will be given the entity acting and the subaction
+    # it will need to check each entity in the world to see if they have a subaction that follows the rules in order to react
+    # then it will need to calculate if the reward value is high enough to react or not
+
+
+    # this will need a 

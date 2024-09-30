@@ -98,11 +98,12 @@ class Coin(Object):
         self.type = 'treasure'
 
 class Weapon(Object):
-    def __init__(self, name, type, damage, weight):
+    def __init__(self, name, type, damage, weight, hands):
         super().__init__(name, type)
         self.type = 'weapon'
         self.damage = damage
         self.weight = weight
+        self.hands = 0 # 0 is one-handed, 1 is two-handed, and 2 is versatile
 
 class Shield(Object):
     def __init__(self, name, type):
@@ -182,14 +183,14 @@ class world:
         world.objects.append(coin)
 
     def add_weapon_dagger(world,location):
-        dagger = Weapon(name='dagger', type='weapon', damage=1, weight=1)
+        dagger = Weapon(name='dagger', type='weapon', damage=1, weight=1, hands=0)
 
         world.grid[location[0],location[1]] = 1
         world.grid2[location[0]][location[1]][6].append(dagger)
         world.objects.append(dagger)
 
     def add_weapon_greataxe(world,location):
-        greataxe = Weapon(name='greataxe', type='weapon', damage=2, weight=2)
+        greataxe = Weapon(name='greataxe', type='weapon', damage=2, weight=2, hands=1)
 
         world.grid[location[0],location[1]] = 1
         world.grid2[location[0]][location[1]][6].append(greataxe)

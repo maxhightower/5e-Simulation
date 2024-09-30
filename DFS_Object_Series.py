@@ -9,7 +9,7 @@ from DFS_World_States import world, world_grid_states
 
 import DFS_Action_Series
 
-from DFS_Universal_Rules import action_subactions, move_subactions, action_subactions, attack_subactions, free_subactions, subactions_req_targets, object_subactions, target_distance_scores
+from DFS_Universal_Rules import action_subactions, move_subactions, action_subactions, attack_subactions, free_subactions, subactions_req_targets, object_subactions, target_distance_scores, subactions_req_objects
 
 
 # what needs to happen in this DFS
@@ -68,7 +68,7 @@ class RuleBasedObjectSequenceDFS:
         action_series = post_location_reward_list[0]
         location_series = post_location_reward_list[1]
 
-        obj_act = [x for x in action_series if x in object_subactions]
+        #obj_act = [x for x in action_series if x in object_subactions]
 
         action = action_series[object_subaction_index]
         if location_series != []:
@@ -80,7 +80,7 @@ class RuleBasedObjectSequenceDFS:
                 potential_objects.append(object)
         
 
-        next_action = post_location_reward_list[0][object_subaction_index]
+        #next_action = post_location_reward_list[0][object_subaction_index]
 
         # action_index = len(sequence) # this presumes the last in the line is what we're looking at
         #   instead we'll create object_subaction_index
@@ -144,19 +144,19 @@ class RuleBasedObjectSequenceDFS:
 
         action_series = act_loc_rew[0]
         tar_act_series = [i for i in action_series if i in subactions_req_targets]
-        obj_act_series = [i for i in action_series if i in object_subactions]
+        obj_act_series = [i for i in action_series if i in subactions_req_objects]
         required_sequence_length = len(obj_act_series)
         
         all_sequences = []
         subaction_index = len(current_sequence)
 
         # the desired outcome
-        if len(current_sequence) == len([x for x in act_loc_rew[0] if x in object_subactions]):
+        if len(current_sequence) == len([x for x in act_loc_rew[0] if x in subactions_req_objects]):
             if self.check_rules(current_sequence, next_object, acting_entity, act_loc_rew):
                 return [current_sequence.copy()]
         
         # the contingency for if less objects are available
-        if len(current_sequence) == len(available_objects) and len(available_objects) < len([x for x in act_loc_rew[0] if x in object_subactions]):
+        if len(current_sequence) == len(available_objects) and len(available_objects) < len([x for x in act_loc_rew[0] if x in subactions_req_objects]):
             if self.check_rules(current_sequence, next_object, acting_entity, act_loc_rew):
                 return [current_sequence.copy()]
         
@@ -206,13 +206,13 @@ class RuleBasedObjectSequenceDFS:
             reward = act_loc_rew[2]
             #print(f'act_loc_rew: {act_loc_rew}') # ([25, 5, 0], [[1, 1], [1, 1]], 5.5)
 
-            if int(act_loc_rew[2]) >= 4:
+            if int(act_loc_rew[2]) >= 5:
                 act_loc_rew_pass_count += 1
 
                 for subaction_index in range(len(act_loc_rew[0])):
                     
                     subaction = act_loc_rew[0][subaction_index]
-                    if subaction in object_subactions:
+                    if subaction in subactions_req_objects:
 
                         potential_objects = self.get_potential_objects([], self.acting_entity, act_loc_rew, subaction_index)
                         
@@ -223,8 +223,8 @@ class RuleBasedObjectSequenceDFS:
                             #print(f'sequences: {sequences}')
                             self.object_series_list.append(sequences)
 
-            else:
-                 self.object_series_list.append([])
+            #else:
+                 #self.object_series_list.append([])
 
             result = [action_series, location_series, self.object_series_list, reward]
             #act_loc_obj_rew.append(result)
@@ -364,7 +364,7 @@ def rule_equip_status(sequence, next_object, acting_entity, i):
     action_series = i[0]
     location_series = i[1]
     
-    obj_act = [x for x in action_series if x in object_subactions]
+    obj_act = [x for x in action_series if x in subactions_req_objects]
     # obj_loc needs to be the relevant locations of the actions in obj_act
     obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
 
@@ -379,7 +379,7 @@ def rule_only_equip_weapons(sequence, next_object, acting_entity, i):
     action_series = i[0]
     location_series = i[1]
 
-    obj_act = [x for x in action_series if x in object_subactions]
+    obj_act = [x for x in action_series if x in subactions_req_objects]
     obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
 
     #print(f'sequence: {sequence}')
@@ -396,7 +396,7 @@ def rule_attack_with_weapons(sequence, next_object, acting_entity, i):
     action_series = i[0]
     location_series = i[1]
 
-    obj_act = [x for x in action_series if x in object_subactions]
+    obj_act = [x for x in action_series if x in subactions_req_objects]
     obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
 
     action = action_series[len(sequence)]
@@ -408,10 +408,100 @@ def rule_attack_with_weapons(sequence, next_object, acting_entity, i):
     return True
 
 
+# if by the time you take the cast action, you are wearing armor that you aren't proficient in, you cannot cast
+    # A shield counts as armor, and is an object
+    # however, because of the wording of page 201, it seems implied that the caster simply couldn't start to cast, 
+    # i.e. they can't choose the cast action, rather than the spell failing
+    # so should this rule be in the object series or the action series?
+        # it has to be in the object series, because the state of wearing can change, however this may need to be revisited later
+
+    # the way to do this currently: if the entity is taking the cast action, armor that the entity is not proficient in cannot be equipped beforehand
+
+def rule_spellcasting_with_shield(sequence, next_object, acting_entity, i):
+    action_series = i[0]
+    location_series = i[1]
+
+    obj_act = [x for x in action_series if x in subactions_req_objects]
+    obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
+
+    action = action_series[len(sequence)]
+
+    if acting_entity.shield_proficient == False:
+        # don or doff shield is action 13
+        # if the cast action (action 11) is taken
+        if 11 in action_series:
+            # a shield cannot be equipped before the cast action
+            # you can be holding a shield and not donning it
+
+            # if shield is in acting_entity.equipped_armor and 13 is not before 11, return False
+            if 'shield' in acting_entity.equipped_armor:
+                if 13 not in [action_series[i] for i in range(len(action_series)) if i < action_series.index(11)]:
+                    return False
+            
+            # shield is not in acting_entity.equipped_armor and 13 is before 11, return False
+            if 'shield' not in acting_entity.equipped_armor:
+                if 13 in [action_series[i] for i in range(len(action_series)) if i < action_series.index(11)]:
+                    return False
+            
+    return True
+
+
+# how should what the entity is holding be represented?
+# - equipped_weapon?
+# - hands?
+
+# what is impacted by what the entity is holding?
+# - armor class, via if the entity is holding a shield
+# - damage, via the difference between a one-handed, two-handed, or versatile weapon
+# - damage, via main-hand vs off-hand and the two-weapon fighting style
+# - spellcasting, via somatic and material components
+        # "if a spell requires a somatic component, the caster must have free use of at least one hand to perform these gestures"
+        # "A spellcaster must have a hand free to access a spell's material components—or to hold a spellcasting focus—
+        #   but it can be the same hand that he or she uses to perform somatic components."
+
+# the logical solution for this is to represent this by having each hand be a separate property that can store an object
+# this way, the entity can have a shield in one hand and a weapon in the other, or one weapon in both
+
+
+# can only have one item in each hand at a time
+def rule_limit_hand_capacity(sequence, next_object, acting_entity, i):
+    # if equipping an item would...
+        # should there be unique subactions for adding or removing items per hand???
+        # should there be a hand series??? because some creatures have more than two hands...
+
+    if len(acting_entity.main_hand) > 1:
+        return False
+    
+    if len(acting_entity.off_hand) > 1:
+        return False
+
+    return True
+
+
+# will eventually need a rule about attacking with a two-handed weapon when it only exists in one of your hands
+def rule_one_handed_attack_with_two_handed_weapon(sequence, next_object, acting_entity, i):
+    action_series = i[0]
+    location_series = i[1]
+
+    obj_act = [x for x in action_series if x in subactions_req_objects]
+    obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
+
+    action = action_series[len(sequence)]
+
+    if action in attack_subactions:
+        if next_object.type == 'weapon':
+            if all([next_object.hands == 1, acting_entity.main_hand == [next_object], acting_entity.off_hand == [next_object]]):
+                return False
+
+    return True
+
+
 object_rules = [
     rule_equip_status,
     #rule_only_equip_weapons,
     rule_attack_with_weapons,
+    rule_spellcasting_with_shield,
+    rule_one_handed_attack_with_two_handed_weapon,
 
 
 ]
