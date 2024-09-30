@@ -153,12 +153,12 @@ class RuleBasedObjectSequenceDFS:
         # the desired outcome
         if len(current_sequence) == len([x for x in act_loc_rew[0] if x in subactions_req_objects]):
             if self.check_rules(current_sequence, next_object, acting_entity, act_loc_rew):
-                return [current_sequence.copy()]
+                return current_sequence.copy()
         
         # the contingency for if less objects are available
         if len(current_sequence) == len(available_objects) and len(available_objects) < len([x for x in act_loc_rew[0] if x in subactions_req_objects]):
             if self.check_rules(current_sequence, next_object, acting_entity, act_loc_rew):
-                return [current_sequence.copy()]
+                return current_sequence.copy()
         
 
         potential_objects = self.get_potential_objects(current_sequence, 
@@ -166,12 +166,12 @@ class RuleBasedObjectSequenceDFS:
                                                        act_loc_rew, 
                                                        subaction_index)
         
+        #print(f'number of potential objects: {len(potential_objects)}')
 
         for next_object in potential_objects:
             if self.check_rules(current_sequence, next_object, self.acting_entity, act_loc_rew):
-                
                 current_sequence.append(next_object)
-                self.object_series_list.extend(self.dfs(current_sequence, next_object, acting_entity, act_loc_rew, potential_objects))
+                self.object_series_list.append(self.dfs(current_sequence, next_object, acting_entity, act_loc_rew, potential_objects))
                 current_sequence.pop()
         
         return self.object_series_list
@@ -317,7 +317,7 @@ class RuleBasedLocationSequenceDFS3:
         for next_loc in locations_accessible:
             if self.check_rules(current_sequence, next_loc, self.acting_entity, tar_act_series):
                 current_sequence.append(next_loc)
-                all_sequences.extend(self.dfs(action_series, current_sequence, grid_locations))
+                all_sequences.append(self.dfs(action_series, current_sequence, grid_locations))
                 current_sequence.pop()
         
         #print(f'sequences being returned from dfs to results 1 {all_sequences[:20]}')
@@ -350,6 +350,75 @@ class RuleBasedLocationSequenceDFS3:
         #print(f'Finished generate sequences: {self.location_series_list}')
         return self.location_series_list
 
+
+class RuleBasedObjectSequenceDFS2:
+    def __init__(self, post_location_reward_list, target_distance_scores, object_rules, acting_entity):
+        self.post_location_reward_list = post_location_reward_list
+        self.target_distance_scores = target_distance_scores
+        self.object_rules = object_rules
+        self.acting_entity = acting_entity
+
+    def get_potential_objects(self, sequence, acting_entity, post_location_reward_list, object_subaction_index):
+        potential_objects = []
+        action_series = post_location_reward_list[0]
+        location_series = post_location_reward_list[1]
+        action = action_series[object_subaction_index]
+        
+        if location_series:
+            location = location_series[-1]
+            
+            if action in [4, 7]:  # Ground Pickup
+                for object in acting_entity.world.grid2[location[0]][location[1]][6]:
+                    potential_objects.append(object)
+        
+        if action in [25, 26]:  # Equip
+            potential_objects.extend(acting_entity.inventory)
+        
+        if action in [29, 30]:  # Drop Item
+            potential_objects.extend(acting_entity.inventory + acting_entity.weapon_equipped)
+        
+        if action in [31, 32]:  # Unequip
+            potential_objects.extend(acting_entity.weapon_equipped)
+        
+        return potential_objects
+    
+    def check_rules(self, sequence, next_object, acting_entity, post_location_reward_list):
+        return all([rule(sequence, next_object, acting_entity, post_location_reward_list) for rule in self.object_rules])
+    
+    def dfs(self, current_sequence, acting_entity, act_loc_rew):
+        action_series = act_loc_rew[0]
+        obj_act_series = [i for i in action_series if i in subactions_req_objects]
+        required_sequence_length = len(obj_act_series)
+        
+        if len(current_sequence) == required_sequence_length:
+            return [current_sequence]
+        
+        subaction_index = len(current_sequence)
+        potential_objects = self.get_potential_objects(current_sequence, acting_entity, act_loc_rew, subaction_index)
+        
+        all_sequences = []
+        for next_object in potential_objects:
+            if self.check_rules(current_sequence, next_object, self.acting_entity, act_loc_rew):
+                new_sequence = current_sequence + [next_object]
+                all_sequences.extend(self.dfs(new_sequence, acting_entity, act_loc_rew))
+        
+        return all_sequences
+    
+    def generate_object_sequences(self):
+        act_loc_obj_rew = []
+        
+        for act_loc_rew in self.post_location_reward_list:
+            action_series, location_series, reward = act_loc_rew
+            
+            if reward >= 4:
+                object_sequences = self.dfs([], self.acting_entity, act_loc_rew)
+                
+                for obj_sequence in object_sequences:
+                    result = [action_series, location_series, obj_sequence, reward]
+                    if result not in act_loc_obj_rew:
+                        act_loc_obj_rew.append(result)
+        
+        return act_loc_obj_rew
 
 
 # rules: you can't interact equip an object if you're already equipped with an object
