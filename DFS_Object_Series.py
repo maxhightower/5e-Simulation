@@ -147,7 +147,7 @@ class RuleBasedObjectSequenceDFS:
         obj_act_series = [i for i in action_series if i in subactions_req_objects]
         required_sequence_length = len(obj_act_series)
         
-        all_sequences = []
+        #all_sequences = []
         subaction_index = len(current_sequence)
 
         # the desired outcome
@@ -174,7 +174,7 @@ class RuleBasedObjectSequenceDFS:
                 self.object_series_list.extend(self.dfs(current_sequence, next_object, acting_entity, act_loc_rew, potential_objects))
                 current_sequence.pop()
         
-        return all_sequences
+        return self.object_series_list
     
     def generate_object_sequences(self):
         post_location_reward_list = self.post_location_reward_list
@@ -206,7 +206,7 @@ class RuleBasedObjectSequenceDFS:
             reward = act_loc_rew[2]
             #print(f'act_loc_rew: {act_loc_rew}') # ([25, 5, 0], [[1, 1], [1, 1]], 5.5)
 
-            if int(act_loc_rew[2]) >= 5:
+            if int(act_loc_rew[2]) >= 4:
                 act_loc_rew_pass_count += 1
 
                 for subaction_index in range(len(act_loc_rew[0])):
