@@ -69,47 +69,57 @@ def generate_pseudo_history(acting_entity,sequence, post_location_reward_list, o
         subaction = object_series[i]
         
         if subaction in [4,7]: # pickup
-            pseudo_world.remove(temp_object)
-            pseudo_inventory.append(temp_object)
+            if temp_object in pseudo_world:
+                pseudo_world.remove(temp_object)
+                pseudo_inventory.append(temp_object)
         
 
         if subaction in [31,32]: # unequip - main_hand
-            pseudo_main_hand.remove(temp_object)
-            pseudo_inventory.append(temp_object)
+            if temp_object in pseudo_main_hand:
+                pseudo_main_hand.remove(temp_object)
+                pseudo_inventory.append(temp_object)
 
         if subaction in [40,41]: # unequip - off_hand
-            pseudo_off_hand.remove(temp_object)
-            pseudo_inventory.append(temp_object)
+            if temp_object in pseudo_off_hand:
+                pseudo_off_hand.remove(temp_object)
+                pseudo_inventory.append(temp_object)
 
         if subaction in [25,26]: # equip - main_hand
-            pseudo_inventory.remove(temp_object)
-            pseudo_main_hand.append(temp_object)
+            if temp_object in pseudo_inventory:
+                pseudo_inventory.remove(temp_object)
+                pseudo_main_hand.append(temp_object)
         
         if subaction in [37,38]: # equip - off_hand
-            pseudo_inventory.remove(temp_object)
-            pseudo_off_hand.append(temp_object)
+            if temp_object in pseudo_inventory:
+                pseudo_inventory.remove(temp_object)
+                pseudo_off_hand.append(temp_object)
 
 
         if subaction in [13]: # don shield
-            pseudo_inventory.remove(temp_object)
-            pseudo_armor_equipped.append(temp_object)
+            if temp_object in pseudo_inventory:
+                pseudo_inventory.remove(temp_object)
+                pseudo_armor_equipped.append(temp_object)
         
         if subaction in [39]: # doff shield
-            pseudo_armor_equipped.remove(temp_object)
-            pseudo_inventory.append(temp_object)
+            if temp_object in pseudo_armor_equipped:
+                pseudo_armor_equipped.remove(temp_object)
+                pseudo_inventory.append(temp_object)
 
         
         if subaction in [29,30]: # drop object
-            pseudo_inventory.remove(temp_object)
-            pseudo_world.append(temp_object)
+            if temp_object in pseudo_inventory:
+                pseudo_inventory.remove(temp_object)
+                pseudo_world.append(temp_object)
 
         if subaction in [42,45]: # drop object - main_hand
-            pseudo_main_hand.remove(temp_object)
-            pseudo_world.append(temp_object)
+            if temp_object in pseudo_main_hand:
+                pseudo_main_hand.remove(temp_object)
+                pseudo_world.append(temp_object)
 
         if subaction in [43,46]: # drop object - off_hand
-            pseudo_off_hand.remove(temp_object)
-            pseudo_world.append(temp_object)
+            if temp_object in pseudo_off_hand:
+                pseudo_off_hand.remove(temp_object)
+                pseudo_world.append(temp_object)
         
         if subaction in [44,47]: # drop object - both hands
             if temp_object in pseudo_main_hand:
@@ -149,7 +159,7 @@ class RuleBasedObjectSequenceDFS:
         # that can be interacted with based on the current sequence
     
         ###  ------  Setting Up Constants  ------  ###
-        object_subaction_index = len(sequence)
+        object_subaction_index = max(len(sequence)-1,0)
         potential_objects = []
         worldly_objects = acting_entity.world.objects
 
@@ -495,13 +505,18 @@ def rule_only_equip_weapons(sequence, next_object, acting_entity, i):
     return True
 
 def rule_attack_with_weapons(sequence, next_object, acting_entity, i):
+    print(f'i: {i}')
     action_series = i[0]
     location_series = i[1]
 
     obj_act = [x for x in action_series if x in subactions_req_objects]
     obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
 
-    action = action_series[len(sequence)]
+    print(f'sequence: {sequence}')
+    print(f'action_series: {action_series}')
+    
+    number = max(len(sequence)-1,0)
+    action = action_series[number]
 
     if action == 5:
         if next_object.type != 'weapon':
@@ -526,7 +541,8 @@ def rule_spellcasting_with_shield(sequence, next_object, acting_entity, i):
     obj_act = [x for x in action_series if x in subactions_req_objects]
     obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
 
-    action = action_series[len(sequence)]
+    number = max(len(sequence)-1,0)
+    action = action_series[number]
 
     if acting_entity.shield_proficient == False:
         # don or doff shield is action 13
@@ -597,7 +613,7 @@ def rule_one_handed_attack_with_two_handed_weapon(sequence, next_object, acting_
     obj_act = [x for x in action_series if x in subactions_req_objects]
     obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
 
-    action = action_series[len(sequence)]
+    action = action_series[len(sequence)-1]
 
     if action in attack_subactions:
         if next_object.type == 'weapon':
@@ -613,7 +629,7 @@ def rule_only_drink_potions(sequence, next_object, acting_entity, i):
     obj_act = [x for x in action_series if x in subactions_req_objects]
     obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
 
-    action = action_series[len(sequence)]
+    action = action_series[len(sequence)-1]
 
     if action == 33:
         if next_object.type != 'potion':
@@ -627,7 +643,7 @@ def rule_only_don_doff_shields(sequence, next_object, acting_entity, i):
     obj_act = [x for x in action_series if x in subactions_req_objects]
     obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
 
-    action = action_series[len(sequence)]
+    action = action_series[len(sequence)-1]
 
     if action in [13,39]:
         if next_object.type != 'shield':
@@ -642,7 +658,7 @@ def rule_cannot_drop_offhand_while_donning_shield(sequence, next_object, acting_
     obj_act = [x for x in action_series if x in subactions_req_objects]
     obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
 
-    action = action_series[len(sequence)]
+    action = action_series[len(sequence)-1]
 
     pseudo_inventory, pseudo_main_hand, pseudo_off_hand, pseudo_armor_equipped, pseudo_world = generate_pseudo_history(acting_entity, sequence, i, len(sequence))
 
