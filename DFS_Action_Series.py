@@ -1,6 +1,8 @@
 # Action Series Depth by First Search
 
 import numpy as np
+import multiprocessing
+
 
 import DFS_Functions
 import DFS_World_States
@@ -132,15 +134,15 @@ def rule_one_of_each_free_action(sequence, next_num, acting_entity):
     # free_subactions = [[4,25,27,29,31],[14]] # can do one of each list
     if next_num in free_subactions[0] and sum(1 for seq in sequence if seq in free_subactions[0]) == 1:
         return False
-
     if next_num in free_subactions[1] and sum(1 for seq in sequence if seq in free_subactions[1]) == 1:
         return False
-
     return True
 
 
 def rule_shield(sequence, next_num, acting_entity):
-    if next_num == 13 and 'shield' not in acting_entity.inventory or next_num == 13 and 'shield' not in acting_entity.equipped_armor:
+    if next_num == 13 and 'shield' not in acting_entity.inventory:
+        return False
+    if next_num == 39 and 'shield' not in acting_entity.equipped_armor:
         return False
     return True
 
@@ -153,7 +155,6 @@ def rule_actions_requiring_allies(sequence, next_num, acting_entity):
     if acting_entity.world.non_enemies == []:
         if next_num in subactions_req_allies:
             return False
-
     return True
 
 def rule_off_hand_two_weapons_requirement(sequence, next_num, acting_entity):
@@ -165,39 +166,31 @@ def rule_condition_rules(sequence, next_num, acting_entity):
     # escape grappled
     if next_num == 17 and 'grappled' not in acting_entity.conditions:
         return False
-    
     # go prone
     if next_num == 19 and 'prone' in acting_entity.conditions:
         return False
-    
     # stand up
     if next_num == 20 and 'grappled' in acting_entity.conditions:
         return False
-
     return True
 
 def rule_standing_up_rules(sequence, next_num, acting_entity):
     # can't stand up twice
     if 20 in sequence and next_num == 20:
         return False
-    
     if next_num == 20 and 19 not in sequence:
         return False
-
     return True
 
 def rule_remove_redundant_prones(sequence, next_num, acting_entity):
     if len(sequence)>0:
         if next_num == 19 and sequence[-1] == 19:
             return False
-        
         if 19 in sequence:
             # if between the last time 19 was called, there isn't a 20, false
             last_prone_index = len(sequence) - 1 - sequence[::-1].index(19)
-
             if 20 not in sequence[last_prone_index:] and next_num == 19:
                 return False
-
     return True
 
 def rule_remove_redundant_objects(sequence, next_num, acting_entity):
@@ -208,7 +201,6 @@ def rule_remove_redundant_objects(sequence, next_num, acting_entity):
     if next_num in object_free_subactions:
         if any(item in object_free_subactions for item in sequence):
             return False
-
     return True
 
 def rule_unequip_weapon(sequence, next_num, acting_entity):
@@ -229,12 +221,15 @@ def rule_object_number_limitation(sequence, next_num, acting_entity):
     return True
 
 
-action_rules = [rule_only_one_action, 
+
+
+action_rules = [
+         rule_only_one_action, 
          rule_only_one_bonus_action, 
          rule_no_redundant_moves,
          rule_limited_move_speed,
          rule_one_of_each_free_action,
-         rule_shield,
+         #rule_shield,
          rule_concentration,
          rule_actions_requiring_allies,
          rule_off_hand_two_weapons_requirement,
@@ -245,5 +240,45 @@ action_rules = [rule_only_one_action,
          rule_unequip_weapon,
          rule_equip_weapon,
          rule_object_number_limitation,
-         ]
+         
+]
 
+
+
+class ParallelizedRuleBasedSequenceDFS:
+    def __init__(self, min_length, max_length, start, end, rules, acting_entity):
+        self.min_length = min_length
+        self.max_length = max_length
+        self.start = start
+        self.end = end
+        self.rules = rules
+        self.acting_entity = acting_entity
+
+    def check_rules(self, sequence, next_num):
+        return all(rule(sequence, next_num, self.acting_entity) for rule in self.rules)
+
+    def dfs(self, current_sequence, results):
+        if self.min_length <= len(current_sequence) <= self.max_length:
+            results.append(current_sequence.copy())
+        
+        if len(current_sequence) < self.max_length:
+            for next_num in range(self.start, self.end + 1):
+                if self.check_rules(current_sequence, next_num):
+                    current_sequence.append(next_num)
+                    self.dfs(current_sequence, results)
+                    current_sequence.pop()
+
+    def parallel_dfs(self, initial_sequence):
+        manager = multiprocessing.Manager()
+        results = manager.list()
+        self.dfs(initial_sequence, results)
+        return list(results)
+
+    def generate_sequences(self):
+        num_cores = multiprocessing.cpu_count()
+        initial_sequences = [[i] for i in range(self.start, min(self.end + 1, self.start + num_cores))]
+        
+        with multiprocessing.Pool(processes=num_cores) as pool:
+            partial_results = pool.map(self.parallel_dfs, initial_sequences)
+        
+        return [seq for sublist in partial_results for seq in sublist]

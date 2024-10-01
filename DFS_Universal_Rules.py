@@ -13,7 +13,7 @@ subaction_dict = {
     '2': 'Move_Three',
     '3': 'Move_Four',
     '4': 'Object (Free) Ground Pickup',      # needs a target
-    '5': 'Attack (Weapon)',              # needs a target
+    '5': 'Attack (Weapon) (Main_Hand)',              # needs a target
     '6': 'Dodge',
     '7': 'Object (Action) Ground Pickup',              # needs a target
     '8': 'Disengage',
@@ -21,9 +21,9 @@ subaction_dict = {
     '10': 'Help (Attack)',
     '11': 'Cast',                                       # sometimes Cast needs a target, object, or is a bonus action...
     '12': 'Dash',
-    '13': 'Don or Doff Shield',
+    '13': 'Don Shield',
     '14': 'End Concentration',
-    '15': 'Off Hand Weapon Attack',
+    '15': 'Attack (Weapon) (Off_Hand)',
     '16': 'Grapple',
     '17': 'Escape Grapple',
     '18': 'Shove',
@@ -33,24 +33,35 @@ subaction_dict = {
     '22': 'Wake Creature',
     '23': 'Move_Five',
     '24': 'Move_Six',
-    '25': 'Object (Free) Self Equip',
-    '26': 'Object (Action) Self Equip',
+    '25': 'Object (Free) Self Equip Main_Hand',
+    '26': 'Object (Action) Self Equip Main_Hand',
     '27': 'Object (Free) Environment',
     '28': 'Object (Action) Environment',
-    '29': 'Object (Free) Ground Drop',
-    '30': 'Object (Action) Ground Drop',
-    '31': 'Object (Free) Self Unequip',
-    '32': 'Object (Action) Self Unequip',
+    '29': 'Object (Free) Ground Drop Inventory',
+    '30': 'Object (Action) Ground Drop Inventory',
+    '31': 'Object (Free) Self Unequip (Main_Hand)',
+    '32': 'Object (Action) Self Unequip (Main_Hand)',
     '33': 'Drink Potion',
     '34': 'Activate Magic Item',
     '35': 'Help (Skill Check)',
-    #'36': 'Attack (Unnarmed Strike)',
+    '36': 'Attack (Unnarmed Strike)',
+    '37': 'Object (Free) Self Equip Off_Hand',
+    '38': 'Object (Action) Self Equip Off_Hand',
+    '39': 'Doff Shield',
+    '40': 'Object (Free) Self Unequip (Off_Hand)',
+    '41': 'Object (Action) Self Unequip (Off_Hand)',
+    '42': 'Object (Free) Ground Drop Main_Hand',
+    '43': 'Object (Free) Ground Drop Off_Hand',
+    '44': 'Object (Free) Ground Drop Both_Hands',
+    '45': 'Object (Action) Ground Drop Main_Hand',
+    '46': 'Object (Action) Ground Drop Off_Hand',
+    #'47': 'Object (Action) Ground Drop Both_Hands',
 
 }
 
 
 # does picking up an item automatically equip it?
-# 
+# no it goes straight to inventory
 
 
 move_subactions = [0,1,2,3,23,24]
@@ -58,19 +69,19 @@ move_subactions = [0,1,2,3,23,24]
     # crawl
     # squeeze
 
-action_subactions = [5,6,7,8,9,10,11,12,13,16,17,18,21,22,26,28,30,32,33,34,35,36]
+action_subactions = [5,6,7,8,9,10,11,12,13,16,17,18,21,22,26,28,30,32,33,34,35,36,38,39,41,45,46,47]
 attack_subactions = [5,16,18,36]
-free_subactions = [[4,25,27,29,31],[14]] # can do one of each list
+free_subactions = [[4,25,27,29,31,37,40,42,43,44],[14]] # can do one of each list
 bonus_subactions = [15]
-object_subactions = [4,7,25,26,27,28,29,30,31,32,]
-object_action_subactions = [7,26,28,30,32]
-object_free_subactions = [4,25,27,29,31]
+object_subactions = [4,7,25,26,27,28,29,30,31,32,37,38,40,41,42,43,44,45,46,47]
+object_action_subactions = [7,26,28,30,32,38,41,45,46,47]
+object_free_subactions = [4,25,27,29,31,37,40,42,43,44]
 
 subactions_req_targets = [0,1,2,3,4,5,7,10,15,23,24,27,28,29,30,35,36]
 # subactions_req_targets = move_subactions + object_subactions + attack_subactions
 
 subactions_req_allies = [10,21,22,35]
-subactions_req_objects = [4,5,7,13,15,25,26,29,30,31,32,33,34]
+subactions_req_objects = [4,5,7,13,15,25,26,29,30,31,32,33,34,37,38,39,40,41,42,43,44,45,46,47]
 subactions_req_entity = [5,10,15,16,18,21,22,35,36]
 
 

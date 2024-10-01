@@ -212,7 +212,7 @@ def precalc_reward(action_series, entity):
     
 
     
-    # if 4 or 7 is in action_series, and 13, 25, or 26 comes after it, reward
+    # if the entity picks up an item, and then equips it, reward
     if 4 in action_series:
         if 13 in action_series[action_series.index(4):]:
             reward_value += 1
@@ -220,6 +220,11 @@ def precalc_reward(action_series, entity):
             reward_value += 1
         if 26 in action_series[action_series.index(4):]:
             reward_value += 1
+        if 37 in action_series[action_series.index(4):]:
+            reward_value += 1
+        if 38 in action_series[action_series.index(4):]:
+            reward_value += 1
+
     if 7 in action_series:
         if 13 in action_series[action_series.index(7):]:
             reward_value += 1
@@ -227,9 +232,38 @@ def precalc_reward(action_series, entity):
             reward_value += 1
         if 26 in action_series[action_series.index(7):]:
             reward_value += 1
+        if 37 in action_series[action_series.index(7):]:
+            reward_value += 1
+        if 38 in action_series[action_series.index(7):]:
+            reward_value += 1
 
     # for the number of attacks made, times the number of damage dealt, reward
     
+    # if the entity loses an item, slightly punish
+    # 29, 30, 42, 43, 44, 45, 46, 47
+    if 29 in action_series:
+        reward_value -= 0.5
+    if 30 in action_series:
+        reward_value -= 0.5
+    if 42 in action_series:
+        reward_value -= 0.5
+    if 43 in action_series:
+        reward_value -= 0.5
+    if 44 in action_series:
+        reward_value -= 0.5
+    if 45 in action_series:
+        reward_value -= 0.5
+    if 46 in action_series:
+        reward_value -= 0.5
+    if 47 in action_series:
+        reward_value -= 0.5
+
+    # if the entity unequips an item, and doesn't equip something later, punish
+    # equip: 25, 26, 37, 38, 13
+    # unequip: 31, 32, 40, 41, 39
+
+    #if 25 in action_series:
+    #    if 31 not in action_series[action_series.index(25):]:
 
 
     # new rewards to add
@@ -338,7 +372,7 @@ def post_loc_series_reward_calc(all_action_series, all_location_series, all_rewa
                 
                 # if the path is in a circle...
                 # if the 
-                
+
 
                 new_act_loc_rew_series = (action_series, loc_series, post_loc_reward)
                 post_reward_list.append(new_act_loc_rew_series)            
