@@ -110,6 +110,11 @@ class Shield(Object):
         super().__init__(name, type)
         self.type = 'shield'
 
+class Potion(Object):
+    def __init__(self, name, type):
+        super().__init(name, type)
+        self.type = 'potion'
+
 
 
 class world:

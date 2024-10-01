@@ -46,6 +46,83 @@ from DFS_Universal_Rules import action_subactions, move_subactions, action_subac
 
 
 
+def generate_pseudo_history(acting_entity,sequence, post_location_reward_list, object_subaction_index):
+    potential_objects = []
+    worldly_objects = acting_entity.world.objects
+
+    action_series = post_location_reward_list[0]
+    location_series = post_location_reward_list[1]
+    object_series = [x for x in action_series if x in subactions_req_objects]
+    print(f'object series: {object_series}')
+    print(f'object subaction index: {object_subaction_index}')
+    object_subaction = object_series[object_subaction_index]
+    pseudo_inventory = acting_entity.inventory.copy()
+    #pseudo_weapon_equipped = acting_entity.weapon_equipped.copy()
+    pseudo_armor_equipped = acting_entity.equipped_armor.copy()
+    pseudo_main_hand = acting_entity.main_hand.copy()
+    pseudo_off_hand = acting_entity.off_hand.copy()
+    pseudo_world = worldly_objects.copy()
+
+    # now to go through the process that would happen if the sequence was followed
+    for i in range(len(sequence)):
+        temp_object = sequence[i]
+        subaction = object_series[i]
+        
+        if subaction in [4,7]: # pickup
+            pseudo_world.remove(temp_object)
+            pseudo_inventory.append(temp_object)
+        
+
+        if subaction in [31,32]: # unequip - main_hand
+            pseudo_main_hand.remove(temp_object)
+            pseudo_inventory.append(temp_object)
+
+        if subaction in [40,41]: # unequip - off_hand
+            pseudo_off_hand.remove(temp_object)
+            pseudo_inventory.append(temp_object)
+
+        if subaction in [25,26]: # equip - main_hand
+            pseudo_inventory.remove(temp_object)
+            pseudo_main_hand.append(temp_object)
+        
+        if subaction in [37,38]: # equip - off_hand
+            pseudo_inventory.remove(temp_object)
+            pseudo_off_hand.append(temp_object)
+
+
+        if subaction in [13]: # don shield
+            pseudo_inventory.remove(temp_object)
+            pseudo_armor_equipped.append(temp_object)
+        
+        if subaction in [39]: # doff shield
+            pseudo_armor_equipped.remove(temp_object)
+            pseudo_inventory.append(temp_object)
+
+        
+        if subaction in [29,30]: # drop object
+            pseudo_inventory.remove(temp_object)
+            pseudo_world.append(temp_object)
+
+        if subaction in [42,45]: # drop object - main_hand
+            pseudo_main_hand.remove(temp_object)
+            pseudo_world.append(temp_object)
+
+        if subaction in [43,46]: # drop object - off_hand
+            pseudo_off_hand.remove(temp_object)
+            pseudo_world.append(temp_object)
+        
+        if subaction in [44,47]: # drop object - both hands
+            if temp_object in pseudo_main_hand:
+                pseudo_main_hand.remove(temp_object)
+            
+            if temp_object in pseudo_off_hand:
+                pseudo_off_hand.remove(temp_object)
+        
+            pseudo_world.append(temp_object)
+
+    return pseudo_inventory, pseudo_main_hand, pseudo_off_hand, pseudo_armor_equipped, pseudo_world
+
+
 class RuleBasedObjectSequenceDFS:
     def __init__(self, post_location_reward_list, target_distance_scores, object_rules, acting_entity):
         self.post_location_reward_list = post_location_reward_list
@@ -56,27 +133,46 @@ class RuleBasedObjectSequenceDFS:
         self.object_series_list = []
         self.sequences = []
 
-    def get_potential_objects(self, sequence, acting_entity, post_location_reward_list, object_subaction_index):
+
+
+
+
+    def get_potential_objects(self, 
+                              sequence, 
+                              acting_entity, 
+                              post_location_reward_list, 
+                                      # filled via subaction_index aka the length of the sequence
+                                                            # meaning 
+                              ):
         # the goal of this function is to return a list of objects, 
         # out of the objects in the world, 
         # that can be interacted with based on the current sequence
     
         ###  ------  Setting Up Constants  ------  ###
-
+        object_subaction_index = len(sequence)
         potential_objects = []
         worldly_objects = acting_entity.world.objects
 
+
         action_series = post_location_reward_list[0]
         location_series = post_location_reward_list[1]
+        object_series = [x for x in action_series if x in subactions_req_objects]
 
-        #obj_act = [x for x in action_series if x in object_subactions]
+        print(f'object series: {object_series}')
+        print(f'object subaction index: {object_subaction_index}') 
+        
+        object_subaction = object_series[object_subaction_index]
 
-        action = action_series[object_subaction_index]
+
+        pseudo_inventory, pseudo_main_hand, pseudo_off_hand, pseudo_armor_equipped, pseudo_world = generate_pseudo_history(acting_entity,sequence, post_location_reward_list, object_subaction_index)
+
+
+        #action = action_series[object_subaction_index]
         if location_series != []:
             location = location_series[-1]
             
-            # Ground Pickup
-        if action in [4,7]:
+        # Ground Pickup
+        if object_subaction in [4,7]:
             for object in acting_entity.world.grid2[location[0]][location[1]][6]:
                 potential_objects.append(object)
         
@@ -118,21 +214,25 @@ class RuleBasedObjectSequenceDFS:
 
 
 
-        # Equip
-        if action in [25,26]:
-            for object in acting_entity.inventory:
+        # Pulling from Inventory
+        if object_subaction in [13,25,26,29,30,33,37,38]:
+            for object in pseudo_inventory:
                 potential_objects.append(object)
 
-        # Drop Item
-        if action in [29,30]:
-            for object in acting_entity.inventory + acting_entity.weapon_equipped:
+        # Pulling from Main Hand
+        if object_subaction in [5,31,32,42,45]:
+            for object in pseudo_main_hand:
                 potential_objects.append(object)
 
-        # Unequip
-        if action in [31,32]:
-            for object in acting_entity.weapon_equipped:
+        # Pulling from Off Hand
+        if object_subaction in [15,39,40,41,43,46]:
+            for object in pseudo_off_hand:
                 potential_objects.append(object)
 
+        # Pulling from Either
+        if object_subaction in [44,47]:
+            for object in pseudo_main_hand + pseudo_off_hand:
+                potential_objects.append(object)
 
         return potential_objects
     
@@ -140,7 +240,7 @@ class RuleBasedObjectSequenceDFS:
         return all([rule(sequence, next_object, acting_entity, post_location_reward_list) for rule in self.object_rules])
 
     
-    def dfs(self, current_sequence, next_object, acting_entity, act_loc_rew, available_objects):
+    def dfs(self, current_sequence, next_object, acting_entity, act_loc_rew, available_objects, post_location_reward_list):
 
 
         action_series = act_loc_rew[0]
@@ -165,15 +265,14 @@ class RuleBasedObjectSequenceDFS:
 
         potential_objects = self.get_potential_objects(current_sequence, 
                                                        acting_entity, 
-                                                       act_loc_rew, 
-                                                       subaction_index)
+                                                       act_loc_rew)
         
         #print(f'number of potential objects: {len(potential_objects)}')
 
         for next_object in potential_objects:
             if self.check_rules(current_sequence, next_object, self.acting_entity, act_loc_rew):
                 current_sequence.append(next_object)
-                self.object_series_list.append(self.dfs(current_sequence, next_object, acting_entity, act_loc_rew, potential_objects))
+                self.object_series_list.append(self.dfs(current_sequence, next_object, acting_entity, act_loc_rew, potential_objects, post_location_reward_list))
                 current_sequence.pop()
         
         return self.object_series_list
@@ -216,11 +315,11 @@ class RuleBasedObjectSequenceDFS:
                     subaction = act_loc_rew[0][subaction_index]
                     if subaction in subactions_req_objects:
 
-                        potential_objects = self.get_potential_objects([], self.acting_entity, act_loc_rew, subaction_index)
+                        potential_objects = self.get_potential_objects([], self.acting_entity, act_loc_rew)
                         
                         for next_object in potential_objects:
                             
-                            sequences = self.dfs([], next_object, self.acting_entity, act_loc_rew, potential_objects)
+                            sequences = self.dfs([], next_object, self.acting_entity, act_loc_rew, potential_objects, post_location_reward_list)
 
                             #print(f'sequences: {sequences}')
                             self.object_series_list.append(sequences)
@@ -507,6 +606,46 @@ def rule_one_handed_attack_with_two_handed_weapon(sequence, next_object, acting_
 
     return True
 
+def rule_only_drink_potions(sequence, next_object, acting_entity, i):
+    action_series = i[0]
+    location_series = i[1]
+
+    obj_act = [x for x in action_series if x in subactions_req_objects]
+    obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
+
+    action = action_series[len(sequence)]
+
+    if action == 33:
+        if next_object.type != 'potion':
+            return False
+    return True
+
+def rule_only_don_doff_shields(sequence, next_object, acting_entity, i):
+    action_series = i[0]
+    location_series = i[1]
+
+    obj_act = [x for x in action_series if x in subactions_req_objects]
+    obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
+
+    action = action_series[len(sequence)]
+
+    if action in [13,39]:
+        if next_object.type != 'shield':
+            return False
+    return True
+
+# can't drop off hand when shield is equipped
+def rule_cannot_drop_offhand_while_donning_shield(sequence, next_object, acting_entity, i):
+    action_series = i[0]
+    location_series = i[1]
+
+    obj_act = [x for x in action_series if x in subactions_req_objects]
+    obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
+
+    action = action_series[len(sequence)]
+
+    pseudo_inventory, pseudo_main_hand, pseudo_off_hand, pseudo_armor_equipped, pseudo_world = generate_pseudo_history(acting_entity, sequence, i, len(sequence))
+
 
 object_rules = [
     rule_equip_status,
@@ -515,6 +654,9 @@ object_rules = [
     rule_spellcasting_with_shield,
     rule_limit_hand_capacity,
     rule_one_handed_attack_with_two_handed_weapon,
+    rule_only_drink_potions,
+    rule_only_don_doff_shields,
+
 
 
 ]
