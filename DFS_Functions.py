@@ -532,11 +532,20 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
                 
                 # if the pickup action was taken, and the object was a coin, reward
                 if obj_series != []:
-                    if any([4 in action_series, 7 in action_series]):
+                    #if any([4 in action_series, 7 in action_series]):
                         # the object associated with the subaction
-                        obj = obj_series[action_series.index(4) or action_series.index(7)]
-                        if obj.Type == 'coin':
+                    #    obj = obj_series[action_series.index(4) or action_series.index(7)]
+                    #    if obj.Type == 'coin':
+                    #        post_obj_reward += 1
+                    if 4 in action_series:
+                        print(f'here 4: {obj_series[action_series.index(4)]}')
+                        if obj_series[action_series.index(4)].name == 'coin':
                             post_obj_reward += 1
+                    if 7 in action_series:
+                        print(f'here 7: {obj_series[action_series.index(7)]}')
+                        if obj_series[action_series.index(7)].name == 'coin':
+                            post_obj_reward += 1
+
 
                 # the potential damage, without taking the target into account
 

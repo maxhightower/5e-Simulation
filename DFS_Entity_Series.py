@@ -11,3 +11,7 @@ import DFS_Action_Series
 
 from DFS_Universal_Rules import action_subactions, move_subactions, action_subactions, attack_subactions, free_subactions, subactions_req_targets, object_subactions, target_distance_scores, subactions_req_objects
 
+
+# basically go through the action_location_object series, and if the action requries an entity, 
+# and there are multiple entities in the location associated,
+# then create a branch for each entity that can be targeted by the action

@@ -71,6 +71,8 @@ subactions_req_targets = [0,1,2,3,4,5,7,10,15,23,24,27,28,29,30,35,36]
 
 subactions_req_allies = [10,21,22,35]
 subactions_req_objects = [4,5,7,13,15,25,26,29,30,31,32,33,34]
+subactions_req_entity = [5,10,15,16,18,21,22,35,36]
+
 
 theoretical_turn_length = len(free_subactions) + 6 + 1 + 1
 
@@ -167,3 +169,11 @@ def add_optional_rule_action_options():
     # - overrun
     # - shove aside
     # - tumble
+
+    # additionally will need to add the target_distance_scores for each of these subactions
+    # - climb onto bigger creature = 1
+    # - disarm = 1 (melee range)
+    # - healing surge = self
+    # - overrun = 1
+    # - shove aside = 1
+    # - tumble = 1

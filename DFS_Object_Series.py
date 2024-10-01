@@ -45,6 +45,7 @@ from DFS_Universal_Rules import action_subactions, move_subactions, action_subac
 # which is different from the list of objects that can be interacted with in a given action series (aka potential_objects)
 
 
+
 class RuleBasedObjectSequenceDFS:
     def __init__(self, post_location_reward_list, target_distance_scores, object_rules, acting_entity):
         self.post_location_reward_list = post_location_reward_list
@@ -156,10 +157,11 @@ class RuleBasedObjectSequenceDFS:
                 return current_sequence.copy()
         
         # the contingency for if less objects are available
-        if len(current_sequence) == len(available_objects) and len(available_objects) < len([x for x in act_loc_rew[0] if x in subactions_req_objects]):
-            if self.check_rules(current_sequence, next_object, acting_entity, act_loc_rew):
-                return current_sequence.copy()
+        #if len(current_sequence) == len(available_objects) and len(available_objects) < len([x for x in act_loc_rew[0] if x in subactions_req_objects]):
+        #    if self.check_rules(current_sequence, next_object, acting_entity, act_loc_rew):
+        #        return current_sequence.copy()
         
+        # there needs to be a minimum number of objects then for scenario generation, however through class features that may not be a problem
 
         potential_objects = self.get_potential_objects(current_sequence, 
                                                        acting_entity, 
@@ -201,13 +203,13 @@ class RuleBasedObjectSequenceDFS:
         #print(f'Post Location Reward List: {post_location_reward_list}')
 
         for act_loc_rew in post_location_reward_list:
-            action_series = act_loc_rew[0]
-            location_series = act_loc_rew[1]
-            reward = act_loc_rew[2]
+            action_series, location_series, reward = act_loc_rew
             #print(f'act_loc_rew: {act_loc_rew}') # ([25, 5, 0], [[1, 1], [1, 1]], 5.5)
 
             if int(act_loc_rew[2]) >= 4:
                 act_loc_rew_pass_count += 1
+
+
 
                 for subaction_index in range(len(act_loc_rew[0])):
                     
@@ -351,74 +353,6 @@ class RuleBasedLocationSequenceDFS3:
         return self.location_series_list
 
 
-class RuleBasedObjectSequenceDFS2:
-    def __init__(self, post_location_reward_list, target_distance_scores, object_rules, acting_entity):
-        self.post_location_reward_list = post_location_reward_list
-        self.target_distance_scores = target_distance_scores
-        self.object_rules = object_rules
-        self.acting_entity = acting_entity
-
-    def get_potential_objects(self, sequence, acting_entity, post_location_reward_list, object_subaction_index):
-        potential_objects = []
-        action_series = post_location_reward_list[0]
-        location_series = post_location_reward_list[1]
-        action = action_series[object_subaction_index]
-        
-        if location_series:
-            location = location_series[-1]
-            
-            if action in [4, 7]:  # Ground Pickup
-                for object in acting_entity.world.grid2[location[0]][location[1]][6]:
-                    potential_objects.append(object)
-        
-        if action in [25, 26]:  # Equip
-            potential_objects.extend(acting_entity.inventory)
-        
-        if action in [29, 30]:  # Drop Item
-            potential_objects.extend(acting_entity.inventory + acting_entity.weapon_equipped)
-        
-        if action in [31, 32]:  # Unequip
-            potential_objects.extend(acting_entity.weapon_equipped)
-        
-        return potential_objects
-    
-    def check_rules(self, sequence, next_object, acting_entity, post_location_reward_list):
-        return all([rule(sequence, next_object, acting_entity, post_location_reward_list) for rule in self.object_rules])
-    
-    def dfs(self, current_sequence, acting_entity, act_loc_rew):
-        action_series = act_loc_rew[0]
-        obj_act_series = [i for i in action_series if i in subactions_req_objects]
-        required_sequence_length = len(obj_act_series)
-        
-        if len(current_sequence) == required_sequence_length:
-            return [current_sequence]
-        
-        subaction_index = len(current_sequence)
-        potential_objects = self.get_potential_objects(current_sequence, acting_entity, act_loc_rew, subaction_index)
-        
-        all_sequences = []
-        for next_object in potential_objects:
-            if self.check_rules(current_sequence, next_object, self.acting_entity, act_loc_rew):
-                new_sequence = current_sequence + [next_object]
-                all_sequences.extend(self.dfs(new_sequence, acting_entity, act_loc_rew))
-        
-        return all_sequences
-    
-    def generate_object_sequences(self):
-        act_loc_obj_rew = []
-        
-        for act_loc_rew in self.post_location_reward_list:
-            action_series, location_series, reward = act_loc_rew
-            
-            if reward >= 4:
-                object_sequences = self.dfs([], self.acting_entity, act_loc_rew)
-                
-                for obj_sequence in object_sequences:
-                    result = [action_series, location_series, obj_sequence, reward]
-                    if result not in act_loc_obj_rew:
-                        act_loc_obj_rew.append(result)
-        
-        return act_loc_obj_rew
 
 
 # rules: you can't interact equip an object if you're already equipped with an object
@@ -530,13 +464,22 @@ def rule_spellcasting_with_shield(sequence, next_object, acting_entity, i):
 
 # the logical solution for this is to represent this by having each hand be a separate property that can store an object
 # this way, the entity can have a shield in one hand and a weapon in the other, or one weapon in both
-
-
-# can only have one item in each hand at a time
-def rule_limit_hand_capacity(sequence, next_object, acting_entity, i):
     # if equipping an item would...
         # should there be unique subactions for adding or removing items per hand???
         # should there be a hand series??? because some creatures have more than two hands...
+
+# what if picking something up defaults to main hand, uses off hand if main hand is full, and then...
+# should it be restricted if hands are full???
+
+# can only have one item in each hand at a time
+def rule_limit_hand_capacity(sequence, next_object, acting_entity, i):
+
+    main_hand_status = acting_entity.main_hand
+    off_hand_status = acting_entity.off_hand
+
+    # determine using sequence what the current main_hand_status and off_hand_status would be
+
+
 
     if len(acting_entity.main_hand) > 1:
         return False
@@ -570,6 +513,7 @@ object_rules = [
     #rule_only_equip_weapons,
     rule_attack_with_weapons,
     rule_spellcasting_with_shield,
+    rule_limit_hand_capacity,
     rule_one_handed_attack_with_two_handed_weapon,
 
 

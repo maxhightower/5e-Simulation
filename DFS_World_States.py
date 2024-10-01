@@ -234,3 +234,10 @@ class world:
 #        plt.tight_layout()
 #        plt.show()
 
+
+
+# how to handle random combat scenario generation...
+# perhaps I can limit it to pre-established 5e encounters?
+# phandelver, dragon of icespire peak, etc.
+
+# or I could completely randomize it...
