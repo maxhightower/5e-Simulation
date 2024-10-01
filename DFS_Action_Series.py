@@ -57,7 +57,18 @@ def rule_only_one_bonus_action(sequence, next_num, acting_entity):
         return False
     return True
 
+def rule_one_of_each_free_action(sequence, next_num, acting_entity):
+    # free_subactions = [[4,25,27,29,31],[14]] # can do one of each list
+    if next_num in free_subactions[0] and sum(1 for seq in sequence if seq in free_subactions[0]) == 1:
+        return False
+    if next_num in free_subactions[1] and sum(1 for seq in sequence if seq in free_subactions[1]) == 1:
+        return False
+    return True
+
+
+
 def rule_no_redundant_moves(sequence, next_num, acting_entity):
+    
     if len(sequence) > 0:
         if next_num == 0 and sequence[-1] == 0:
             return False
@@ -97,6 +108,21 @@ def rule_no_redundant_moves(sequence, next_num, acting_entity):
             return False
         if next_num == 3 and sequence[-1] == 2:
             return False
+    
+    #if len(sequence) == 0:
+    #    return False
+
+    #invalid_pairs = [
+    #    (0, 0), (1, 1), (2, 2), (3, 3),
+    #    (0, 1), (1, 0),
+    #    (1, 2), (2, 1),
+    #    (0, 2), (2, 0),
+    #    (0, 3), (3, 0),
+    #    (0, 23), (23, 0),
+    #    (2, 3), (3, 2)
+    #]
+
+    #return any((next_num, sequence[-1]) == pair for pair in invalid_pairs)
 
     return True
 
@@ -107,48 +133,57 @@ def rule_limited_move_speed(sequence, next_num, acting_entity):
                 1: 2, 
                 2: 3, 
                 3: 4, 
+                19: 0,
                 20: move_speed/2,
                 23: 5,
                 24: 6,
                 }
 
-    speed_spent = sum(move_points[move_type] for move_type in sequence if move_type in move_subactions)
+    speed_spent = 0
     
-    # if prone is taken, stand up hasn't been, multiply the costs of move_points by 2
-    if 19 in sequence:
-        # if between the last time 19 was called, there isn't a 20, false
-        last_prone_index = len(sequence) - 1 - sequence[::-1].index(19)
+    if 'prone' not in acting_entity.conditions:
+        prone = 1
+    else:
+        prone = 2
 
-        if 20 not in sequence[last_prone_index:]:
-            if next_num in move_subactions:
-                if speed_spent + (move_points[next_num]*2) > move_speed:
-                    return False
+    move_series = [x for x in sequence if x in move_subactions or x == 19 or x == 20]
 
-    if next_num in move_subactions:
-        if speed_spent + move_points[next_num] > move_speed:
+    for i in move_series:
+        if i == 19 and prone == False:
+            prone = 2
+        
+        if i == 20 and prone == True:
+            prone = 1
+
+        speed_spent += move_points[i] * prone
+    
+
+    if next_num in move_subactions or next_num == 20:
+        if move_points[next_num] + (speed_spent * prone) > move_speed:
             return False
-
+        
     return True
 
 def rule_one_of_each_free_action(sequence, next_num, acting_entity):
     # free_subactions = [[4,25,27,29,31],[14]] # can do one of each list
     if next_num in free_subactions[0] and sum(1 for seq in sequence if seq in free_subactions[0]) == 1:
         return False
+
     if next_num in free_subactions[1] and sum(1 for seq in sequence if seq in free_subactions[1]) == 1:
         return False
+
     return True
 
 
 def rule_shield(sequence, next_num, acting_entity):
-    if next_num == 13 and 'shield' not in acting_entity.inventory:
-        return False
-    if next_num == 39 and 'shield' not in acting_entity.equipped_armor:
+    if next_num == 13 and 'shield' not in acting_entity.inventory or next_num == 13 and 'shield' not in acting_entity.equipped_armor:
         return False
     return True
 
 def rule_concentration(sequence, next_num, acting_entity):
-    if next_num == 14 and acting_entity.concentration == False:
-        return False
+    if acting_entity.concentration == True:
+        if next_num == 14:
+            return False
     return True
 
 def rule_actions_requiring_allies(sequence, next_num, acting_entity):
@@ -176,8 +211,21 @@ def rule_condition_rules(sequence, next_num, acting_entity):
 
 def rule_standing_up_rules(sequence, next_num, acting_entity):
     # can't stand up twice
-    if 20 in sequence and next_num == 20:
+    if 'prone' not in acting_entity.conditions:
+        prone = False
+    else:
+        prone = True
+    
+    for i in [x for x in sequence if x in [19,20]]:
+        if i == 19:
+            prone = True
+        
+        if i == 20:
+            prone = False
+
+    if prone == True and next_num == 19:
         return False
+    
     if next_num == 20 and 19 not in sequence:
         return False
     return True
@@ -204,8 +252,15 @@ def rule_remove_redundant_objects(sequence, next_num, acting_entity):
     return True
 
 def rule_unequip_weapon(sequence, next_num, acting_entity):
-    if next_num == 31 and acting_entity.weapon_equipped == []:
-        return False
+    # eliminating extra series early
+    # cannot unequip anything from hands if there's nothing in hands to start
+    # AND there's not equip actions in the sequence
+    if acting_entity.main_hand == [] and acting_entity.off_hand == []:
+        # if any of the following numbers are in sequence: [25,26,37,38]
+        if not any(num in sequence for num in {25,26,37,38}):
+            if next_num in [31,32,40,41,42,43,44,45,46,47]: # if the next number would unequip from anywhere       
+                return False
+            
     return True
 
 def rule_equip_weapon(sequence, next_num, acting_entity):
@@ -214,17 +269,22 @@ def rule_equip_weapon(sequence, next_num, acting_entity):
     return True
 
 def rule_object_number_limitation(sequence, next_num, acting_entity):
+    # only object actions
     obj_act = [x for x in sequence if x in object_action_subactions]
+
     if next_num in object_action_subactions:
+        # there can't be more object actions than there are objects in the world...
         if len(obj_act) > len(acting_entity.world.objects + acting_entity.inventory + acting_entity.weapon_equipped):
             return False
     return True
 
+    # how should I actually limit object actions?
 
 
 
-action_rules = [
-         rule_only_one_action, 
+
+
+action_rules = [rule_only_one_action, 
          rule_only_one_bonus_action, 
          rule_no_redundant_moves,
          rule_limited_move_speed,
