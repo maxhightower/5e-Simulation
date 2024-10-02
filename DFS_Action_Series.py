@@ -304,7 +304,7 @@ action_rules = [rule_only_one_action,
 ]
 
 
-
+'''
 class ParallelizedRuleBasedSequenceDFS:
     def __init__(self, min_length, max_length, start, end, rules, acting_entity):
         self.min_length = min_length
@@ -342,3 +342,4 @@ class ParallelizedRuleBasedSequenceDFS:
             partial_results = pool.map(self.parallel_dfs, initial_sequences)
         
         return [seq for sublist in partial_results for seq in sublist]
+'''
