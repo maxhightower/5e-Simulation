@@ -4,7 +4,7 @@ import numpy as np
 
 import DFS_Functions
 import DFS_World_States
-from DFS_Functions import adjacent_locations, chebyshev_distance, bresenham_line, calculate_full_path, check_opportunity_attacks, is_line_of_sight_clear, check_visibility
+from DFS_Functions import adjacent_locations, chebyshev_distance, bresenham_line, calculate_full_path, check_opportunity_attacks, is_line_of_sight_clear, check_visibility, generate_pseudo_history
 from DFS_World_States import world, world_grid_states
 
 import DFS_Action_Series
@@ -46,132 +46,6 @@ from DFS_Universal_Rules import action_subactions, move_subactions, action_subac
 
 
 
-def generate_pseudo_history(acting_entity,sequence, post_location_reward_list, object_subaction_index):
-    potential_objects = []
-    worldly_objects = acting_entity.world.objects
-
-    action_series = post_location_reward_list[0]
-    location_series = post_location_reward_list[1]
-    object_series = [x for x in action_series if x in subactions_req_objects]
-    print(f'object series: {object_series}')
-    print(f'object subaction index: {object_subaction_index}')
-    object_subaction = object_series[object_subaction_index]
-    pseudo_inventory = acting_entity.inventory.copy()
-    #pseudo_weapon_equipped = acting_entity.weapon_equipped.copy()
-    pseudo_armor_equipped = acting_entity.equipped_armor.copy()
-    pseudo_main_hand = acting_entity.main_hand.copy()
-    pseudo_off_hand = acting_entity.off_hand.copy()
-    pseudo_world = worldly_objects.copy()
-
-    # now to go through the process that would happen if the sequence was followed
-    for i in range(len(sequence)):
-        temp_object = sequence[i]
-        subaction = object_series[i]
-        
-        if subaction in [4,7]: # pickup
-            pseudo_world.remove(temp_object)
-            pseudo_inventory.append(temp_object)
-        
-
-        if subaction in [31,32]: # unequip - main_hand
-            pseudo_main_hand.remove(temp_object)
-            pseudo_inventory.append(temp_object)
-
-        if subaction in [40,41]: # unequip - off_hand
-            pseudo_off_hand.remove(temp_object)
-            pseudo_inventory.append(temp_object)
-
-        if subaction in [25,26]: # equip - main_hand
-            pseudo_inventory.remove(temp_object)
-            pseudo_main_hand.append(temp_object)
-        
-        if subaction in [37,38]: # equip - off_hand
-            pseudo_inventory.remove(temp_object)
-            pseudo_off_hand.append(temp_object)
-
-
-        if subaction in [13]: # don shield
-            pseudo_inventory.remove(temp_object)
-            pseudo_armor_equipped.append(temp_object)
-        
-        if subaction in [39]: # doff shield
-            pseudo_armor_equipped.remove(temp_object)
-            pseudo_inventory.append(temp_object)
-
-        
-        if subaction in [29,30]: # drop object
-            pseudo_inventory.remove(temp_object)
-            pseudo_world.append(temp_object)
-
-        if subaction in [42,45]: # drop object - main_hand
-            pseudo_main_hand.remove(temp_object)
-            pseudo_world.append(temp_object)
-
-        if subaction in [43,46]: # drop object - off_hand
-            pseudo_off_hand.remove(temp_object)
-            pseudo_world.append(temp_object)
-            if temp_object in pseudo_world:
-                pseudo_world.remove(temp_object)
-                pseudo_inventory.append(temp_object)
-        
-
-        if subaction in [31,32]: # unequip - main_hand
-            if temp_object in pseudo_main_hand:
-                pseudo_main_hand.remove(temp_object)
-                pseudo_inventory.append(temp_object)
-
-        if subaction in [40,41]: # unequip - off_hand
-            if temp_object in pseudo_off_hand:
-                pseudo_off_hand.remove(temp_object)
-                pseudo_inventory.append(temp_object)
-
-        if subaction in [25,26]: # equip - main_hand
-            if temp_object in pseudo_inventory:
-                pseudo_inventory.remove(temp_object)
-                pseudo_main_hand.append(temp_object)
-        
-        if subaction in [37,38]: # equip - off_hand
-            if temp_object in pseudo_inventory:
-                pseudo_inventory.remove(temp_object)
-                pseudo_off_hand.append(temp_object)
-
-
-        if subaction in [13]: # don shield
-            if temp_object in pseudo_inventory:
-                pseudo_inventory.remove(temp_object)
-                pseudo_armor_equipped.append(temp_object)
-        
-        if subaction in [39]: # doff shield
-            if temp_object in pseudo_armor_equipped:
-                pseudo_armor_equipped.remove(temp_object)
-                pseudo_inventory.append(temp_object)
-
-        
-        if subaction in [29,30]: # drop object
-            if temp_object in pseudo_inventory:
-                pseudo_inventory.remove(temp_object)
-                pseudo_world.append(temp_object)
-
-        if subaction in [42,45]: # drop object - main_hand
-            if temp_object in pseudo_main_hand:
-                pseudo_main_hand.remove(temp_object)
-                pseudo_world.append(temp_object)
-
-        if subaction in [43,46]: # drop object - off_hand
-            if temp_object in pseudo_off_hand:
-                pseudo_off_hand.remove(temp_object)
-                pseudo_world.append(temp_object)
-        
-        if subaction in [44,47]: # drop object - both hands
-            if temp_object in pseudo_main_hand:
-                pseudo_main_hand.remove(temp_object)
-            
-            if temp_object in pseudo_off_hand:
-                pseudo_off_hand.remove(temp_object)
-        
-            pseudo_world.append(temp_object)
-
-    return pseudo_inventory, pseudo_main_hand, pseudo_off_hand, pseudo_armor_equipped, pseudo_world
 
 
 class RuleBasedObjectSequenceDFS:
@@ -356,7 +230,7 @@ class RuleBasedObjectSequenceDFS:
             action_series, location_series, reward = act_loc_rew
             #print(f'act_loc_rew: {act_loc_rew}') # ([25, 5, 0], [[1, 1], [1, 1]], 5.5)
 
-            if int(act_loc_rew[2]) >= 4:
+            if int(act_loc_rew[2]) >= 6:
                 act_loc_rew_pass_count += 1
 
 
@@ -378,12 +252,12 @@ class RuleBasedObjectSequenceDFS:
             #else:
                  #self.object_series_list.append([])
 
-            result = [action_series, location_series, self.object_series_list, reward]
+                result = [action_series, location_series, self.object_series_list, reward]
             #act_loc_obj_rew.append(result)
             
-            if result not in act_loc_obj_rew:
-                act_loc_obj_rew.append(result)
-            self.object_series_list = []
+                if result not in act_loc_obj_rew:
+                    act_loc_obj_rew.append(result)
+                self.object_series_list = []
 
         print(f'act_loc_obj_rew pass count: {act_loc_rew_pass_count}')
         return act_loc_obj_rew
@@ -483,7 +357,7 @@ class RuleBasedLocationSequenceDFS3:
         ]
 
         for action_series_index, action_series in enumerate(self.action_series_list):
-            if self.reward_series_list[action_series_index] >= 4:
+            if self.reward_series_list[action_series_index] >= 5:
                 #print('')
                 #print('---------------------')
                 #print(f'{action_series}: {self.reward_series_list[action_series_index]}')

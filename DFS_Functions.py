@@ -1,6 +1,6 @@
 import numpy as np
 import collections
-from DFS_Universal_Rules import action_subactions, move_subactions, action_subactions, attack_subactions, free_subactions, object_subactions
+from DFS_Universal_Rules import action_subactions, move_subactions, attack_subactions, free_subactions, subactions_req_objects, effect_subactions, effect_dictionary
 
 
 
@@ -147,6 +147,286 @@ def check_visibility(entity_location, enemy_locations, world_grid):
     return list_of_visibilities
 
 
+
+def analyze_reward_distribution(reward_series_full_list, action_series_full_list):
+    total_count = len(reward_series_full_list)
+    
+    print(f'Total count: {total_count}')
+    print(f'High: {max(reward_series_full_list)}')
+    print(f'Low: {min(reward_series_full_list)}')
+    print()
+
+    # Count occurrences of each reward value
+    reward_counts = collections.Counter(reward_series_full_list)
+    
+    # Calculate and print percentages for all reward values
+    print("Reward Distribution:")
+    for reward in sorted(reward_counts.keys()):
+        count = reward_counts[reward]
+        percentage = (count / total_count) * 100
+        print(f'% of {reward}s: {percentage:.2f}%')
+    print()
+
+    print(f"Total Qualifiers: {len([x for x in reward_series_full_list if x >= 6])}")
+    print()
+
+    # Print individual rewards and actions
+    #print("Individual Rewards and Actions:")
+    #for i, (reward, action) in enumerate(zip(reward_series_full_list, action_series_full_list)):
+    #    print(f'{i}: {reward} - {action}')
+
+def generate_pseudo_history(acting_entity,sequence, post_location_reward_list, object_subaction_index):
+    potential_objects = []
+    worldly_objects = acting_entity.world.objects
+
+    action_series = post_location_reward_list[0]
+    location_series = post_location_reward_list[1]
+    object_series = [x for x in action_series if x in subactions_req_objects]
+    print(f'object series: {object_series}')
+    print(f'object subaction index: {object_subaction_index}')
+    object_subaction = object_series[object_subaction_index]
+    pseudo_inventory = acting_entity.inventory.copy()
+    #pseudo_weapon_equipped = acting_entity.weapon_equipped.copy()
+    pseudo_armor_equipped = acting_entity.equipped_armor.copy()
+    pseudo_main_hand = acting_entity.main_hand.copy()
+    pseudo_off_hand = acting_entity.off_hand.copy()
+    pseudo_world = worldly_objects.copy()
+
+    # now to go through the process that would happen if the sequence was followed
+    for i in range(len(sequence)):
+        temp_object = sequence[i]
+        subaction = object_series[i]
+        
+        if subaction in [4,7]: # pickup
+            if temp_object in pseudo_world:
+                pseudo_world.remove(temp_object)
+                pseudo_inventory.append(temp_object)
+        
+
+        if subaction in [31,32]: # unequip - main_hand
+            if temp_object in pseudo_main_hand:
+                pseudo_main_hand.remove(temp_object)
+                pseudo_inventory.append(temp_object)
+
+        if subaction in [40,41]: # unequip - off_hand
+            if temp_object in pseudo_off_hand:
+                pseudo_off_hand.remove(temp_object)
+                pseudo_inventory.append(temp_object)
+
+        if subaction in [25,26]: # equip - main_hand
+            if temp_object in pseudo_inventory:
+                pseudo_inventory.remove(temp_object)
+                pseudo_main_hand.append(temp_object)
+        
+        if subaction in [37,38]: # equip - off_hand
+            if temp_object in pseudo_inventory:
+                pseudo_inventory.remove(temp_object)
+                pseudo_off_hand.append(temp_object)
+
+
+        if subaction in [13]: # don shield
+            if temp_object in pseudo_inventory:
+                pseudo_inventory.remove(temp_object)
+                pseudo_armor_equipped.append(temp_object)
+        
+        if subaction in [39]: # doff shield
+            if temp_object in pseudo_armor_equipped:
+                pseudo_armor_equipped.remove(temp_object)
+                pseudo_inventory.append(temp_object)
+
+        
+        if subaction in [29,30]: # drop object
+            if temp_object in pseudo_inventory:
+                pseudo_inventory.remove(temp_object)
+                pseudo_world.append(temp_object)
+
+        if subaction in [42,45]: # drop object - main_hand
+            if temp_object in pseudo_main_hand:
+                pseudo_main_hand.remove(temp_object)
+                pseudo_world.append(temp_object)
+
+        if subaction in [43,46]: # drop object - off_hand
+            if temp_object in pseudo_off_hand:
+                pseudo_off_hand.remove(temp_object)
+                pseudo_world.append(temp_object)
+        
+
+        if subaction in [31,32]: # unequip - main_hand
+            if temp_object in pseudo_main_hand:
+                pseudo_main_hand.remove(temp_object)
+                pseudo_inventory.append(temp_object)
+
+        if subaction in [40,41]: # unequip - off_hand
+            if temp_object in pseudo_off_hand:
+                pseudo_off_hand.remove(temp_object)
+                pseudo_inventory.append(temp_object)
+
+        if subaction in [25,26]: # equip - main_hand
+            if temp_object in pseudo_inventory:
+                pseudo_inventory.remove(temp_object)
+                pseudo_main_hand.append(temp_object)
+        
+        if subaction in [37,38]: # equip - off_hand
+            if temp_object in pseudo_inventory:
+                pseudo_inventory.remove(temp_object)
+                pseudo_off_hand.append(temp_object)
+
+
+        if subaction in [13]: # don shield
+            if temp_object in pseudo_inventory:
+                pseudo_inventory.remove(temp_object)
+                pseudo_armor_equipped.append(temp_object)
+        
+        if subaction in [39]: # doff shield
+            if temp_object in pseudo_armor_equipped:
+                pseudo_armor_equipped.remove(temp_object)
+                pseudo_inventory.append(temp_object)
+
+        
+        if subaction in [29,30]: # drop object
+            if temp_object in pseudo_inventory:
+                pseudo_inventory.remove(temp_object)
+                pseudo_world.append(temp_object)
+
+        if subaction in [42,45]: # drop object - main_hand
+            if temp_object in pseudo_main_hand:
+                pseudo_main_hand.remove(temp_object)
+                pseudo_world.append(temp_object)
+
+        if subaction in [43,46]: # drop object - off_hand
+            if temp_object in pseudo_off_hand:
+                pseudo_off_hand.remove(temp_object)
+                pseudo_world.append(temp_object)
+        
+        if subaction in [44,47]: # drop object - both hands
+            if temp_object in pseudo_main_hand:
+                pseudo_main_hand.remove(temp_object)
+            
+            if temp_object in pseudo_off_hand:
+                pseudo_off_hand.remove(temp_object)
+        
+            pseudo_world.append(temp_object)
+
+    return pseudo_inventory, pseudo_main_hand, pseudo_off_hand, pseudo_armor_equipped, pseudo_world
+
+
+def damage_calc1(subaction, acting_entity, main_hand, off_hand):
+    damage = 0
+    if subaction in attack_subactions:
+        if subaction in [16,18]: # grapple and shove
+            return 0    # these don't deal damage
+        
+        if subaction in subactions_req_objects:
+            if subaction in [5,48]:
+                if subaction == 48 and main_hand[0] == off_hand[0] and main_hand[0].hands == 2:
+                    damage = main_hand[0].damage + acting_entity.strength_mod
+                
+                if subaction == 5:
+                    damage = main_hand[0].damage + acting_entity.strength_mod
+                
+            if subaction == 15:
+                damage = main_hand[0].damage
+
+
+        elif subaction == 36: # unarmed strike
+            damage = max(acting_entity.strength_mod, 1)
+
+    else:
+        #print('not an attack subaction')
+        pass
+
+    return damage
+    # need to identify the entity, the weapon, and the target
+    # eventually the input needs to be changed to the the act_loc_obj_rew
+
+def damage_calc2(act_loc_obj_rew, acting_entity):
+    action_series = act_loc_obj_rew[0]
+    location_series = act_loc_obj_rew[1]
+    object_series = act_loc_obj_rew[2]
+    reward = act_loc_obj_rew[3]
+
+    attack_and_effect_series = [x for x in action_series if x in attack_subactions or x in effect_subactions]
+    attack_series = [x for x in action_series if x in attack_subactions]
+
+    pseudo_inventory, pseudo_main_hand, pseudo_off_hand, pseudo_armor_equipped, pseudo_world = generate_pseudo_history(acting_entity, object_series, act_loc_obj_rew, len(object_series))
+
+    # I'm going to need to calculate the damage for each damage dealing subaction within the action_series
+    damage_series = []
+
+    for subaction in attack_series:
+        subaction_damage = 0
+        # first find the order of attacks, then identify the effects used that are associated with the attack
+        relevant_effects = attack_and_effect_series[attack_series.index(subaction):]
+        
+        for i in relevant_effects:
+            if effect_dictionary[i].type == 'damage_bonus':
+                subaction_damage += effect_dictionary[i].effect
+
+        
+        # this is currently setup to assign a single effect to only the next attack, not all attacks
+        # perhaps there should be sub_effects and turn_effects,
+        # sub_effects are only applied to the next attack, while turn_effects are applied to all attacks of a certain type in the turn
+        # turn_effects are complicated enough to require representation in a list (or even a class???) 
+
+        # or perhaps all effects need more details... such as duration, application circumstances, etc...
+
+
+
+
+
+def process_turn(act_loc_obj_rew, acting_entity):
+    # move actions 
+    # object actions
+    # dealing damage
+    action_series = act_loc_obj_rew[0]
+    location_series = act_loc_obj_rew[1]
+    object_series = act_loc_obj_rew[2]
+    reward = act_loc_obj_rew[3]
+
+    # should this go subaction by subaction to check for reactions?
+
+    for subaction in action_series:
+        # this goes subaction by subaction
+        check_reactions(subaction, acting_entity)
+        # this is where the observer pattern will come in
+
+        # global list/dictionary of observers??? that gets checked each time a subaction is made as a shortcut
+        # the following elements are relevant and need to be represented: 
+        # - the entity that can react
+        # - the reacting subaction
+        # - the subaction which triggers the reacting subaction
+        # - the situation which is required for the reacting subaction (proximity, line of sight, etc.)
+        # - the reward value required for the reacting subaction to be triggered (risk the reacting entity takes in reacting)
+        # - the reward value that the reacting entity gets for reacting
+
+
+def check_reactions(subaction, acting_entity):
+    pass
+
+    # process turn will go subaction by subaction to check for reactions, 
+    # so this function will be given the entity acting and the subaction
+    # it will need to check each entity in the world to see if they have a subaction that follows the rules in order to react
+    # then it will need to calculate if the reward value is high enough to react or not
+
+
+    # this will need a 
+
+
+
+
+
+
+
+
+
+
+
+
+###### Reward Calculation Functions ######
+
+
+
+
 def precalc_reward(action_series, entity):
     reward_value = 0
     act_series_len = len(action_series)
@@ -286,32 +566,6 @@ def precalc_reward_series(action_series_full_list, acting_entity):
 
 
 
-def analyze_reward_distribution(reward_series_full_list, action_series_full_list):
-    total_count = len(reward_series_full_list)
-    
-    print(f'Total count: {total_count}')
-    print(f'High: {max(reward_series_full_list)}')
-    print(f'Low: {min(reward_series_full_list)}')
-    print()
-
-    # Count occurrences of each reward value
-    reward_counts = collections.Counter(reward_series_full_list)
-    
-    # Calculate and print percentages for all reward values
-    print("Reward Distribution:")
-    for reward in sorted(reward_counts.keys()):
-        count = reward_counts[reward]
-        percentage = (count / total_count) * 100
-        print(f'% of {reward}s: {percentage:.2f}%')
-    print()
-
-    print(f"Total Qualifiers: {len([x for x in reward_series_full_list if x >= 5])}")
-    print()
-
-    # Print individual rewards and actions
-    #print("Individual Rewards and Actions:")
-    #for i, (reward, action) in enumerate(zip(reward_series_full_list, action_series_full_list)):
-    #    print(f'{i}: {reward} - {action}')
 
 def post_loc_series_reward_calc(all_action_series, all_location_series, all_reward_series, acting_entity):
     act_loc_rew_zip = list(zip(all_action_series, all_location_series, all_reward_series))
@@ -460,55 +714,6 @@ def post_obj_reward_series_calc(action_series_full_list, location_series_full_li
     return post_object_list
 
 
-def process_combat_zip(combat_zip):
-    action_series = combat_zip[0]
-    location_series = combat_zip[1]
-
-    #tar_act_series = [x for x in action_series if x in ]
-
-
-def create_act_loc_obj_rew(post_location_reward_list, object_series_full_list, acting_entity):
-    post_object_list = []
-    filtered_post_location_reward_list = [x for x in post_location_reward_list if x[2] >= 4]
-
-
-    print(f'len of post_location_reward_list {len(post_location_reward_list)}')
-    print(f'len of object_series_full_list {len(object_series_full_list)}')
-    print(f'len of filtered_post_location_reward_list {len(filtered_post_location_reward_list)}')
-
-    # how is it making sure that the object_series from object_series_full_list line up with the act_loc series that remain post-filtering?
-    
-
-    for i in range(len(filtered_post_location_reward_list)):
-
-
-        #print(f'i for filtered_post_location_reward_list: {i}')
-
-        action_series = filtered_post_location_reward_list[i][0]
-        location_series = filtered_post_location_reward_list[i][1]
-        reward = filtered_post_location_reward_list[i][2]
-
-        object_series_list = object_series_full_list[i]
-    #    print(f'object_series_list for {i}: {object_series_list}')
-
-        for j in range(len(object_series_list)):
-    #        print(f'j for object_series_list: {j}')
-
-            obj_series = object_series_list[j]
-    #        print(f'obj_series: {obj_series}')
-
-            act_loc_obj_rew_item = (action_series, location_series, obj_series, reward)
-            post_object_list.append(act_loc_obj_rew_item)
-            
-
-        else:
-            act_loc_obj_rew_item = (action_series, location_series, [], reward)
-            post_object_list.append(act_loc_obj_rew_item)
-
-    # sort the list by reward value
-    post_object_list = sorted(post_object_list, key=lambda x: x[3],reverse=True)
-    return post_object_list
-
 
 def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
     #print(action_series_full_list)
@@ -582,6 +787,8 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
 
 
                 # the potential damage, without taking the target into account
+                damage_calc()
+
 
                 # the risk based on the number of enemies that can be seen
 
@@ -594,7 +801,7 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
         else:
             # if statement if any item in action_series in object_subactiions
             post_obj_reward = reward
-            if any(item in action_series for item in object_subactions):
+            if any(item in action_series for item in subactions_req_objects):
                 post_obj_reward -= 10
 
             act_loc_obj_rew_item = (action_series, location_series, [], post_obj_reward)
@@ -604,47 +811,3 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
     post_object_list = sorted(post_object_list, key=lambda x: x[3],reverse=True)
     return post_object_list
 
-
-def damage_calc():
-    pass
-
-    # need to identify the entity, the weapon, and the target
-    # so the input needs to be the act_loc_obj_rew
-
-
-def process_turn(act_loc_obj_rew, acting_entity):
-    # move actions 
-    # object actions
-    # dealing damage
-    action_series = act_loc_obj_rew[0]
-    location_series = act_loc_obj_rew[1]
-    object_series = act_loc_obj_rew[2]
-    reward = act_loc_obj_rew[3]
-
-    # should this go subaction by subaction to check for reactions?
-
-    for subaction in action_series:
-        # this goes subaction by subaction
-        check_reactions(subaction, acting_entity)
-        # this is where the observer pattern will come in
-
-        # global list/dictionary of observers??? that gets checked each time a subaction is made as a shortcut
-        # the following elements are relevant and need to be represented: 
-        # - the entity that can react
-        # - the reacting subaction
-        # - the subaction which triggers the reacting subaction
-        # - the situation which is required for the reacting subaction (proximity, line of sight, etc.)
-        # - the reward value required for the reacting subaction to be triggered (risk the reacting entity takes in reacting)
-        # - the reward value that the reacting entity gets for reacting
-
-
-def check_reactions(subaction, acting_entity):
-    pass
-
-    # process turn will go subaction by subaction to check for reactions, 
-    # so this function will be given the entity acting and the subaction
-    # it will need to check each entity in the world to see if they have a subaction that follows the rules in order to react
-    # then it will need to calculate if the reward value is high enough to react or not
-
-
-    # this will need a 
