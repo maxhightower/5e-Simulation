@@ -339,24 +339,24 @@ def damage_calc1(subaction, acting_entity, main_hand, off_hand):
     # need to identify the entity, the weapon, and the target
     # eventually the input needs to be changed to the the act_loc_obj_rew
 
-def damage_calc2(act_loc_obj_rew, acting_entity):
-    action_series = act_loc_obj_rew[0]
-    location_series = act_loc_obj_rew[1]
-    object_series = act_loc_obj_rew[2]
-    reward = act_loc_obj_rew[3]
+def damage_calc2(action_location_object_series, acting_entity):
+    action_series = action_location_object_series[0]
+    location_series = action_location_object_series[1]
+    object_series = action_location_object_series[2]
+    #reward = act_loc_obj_rew[3]
 
     attack_and_effect_series = [x for x in action_series if x in attack_subactions or x in effect_subactions]
     attack_series = [x for x in action_series if x in attack_subactions]
 
-    pseudo_inventory, pseudo_main_hand, pseudo_off_hand, pseudo_armor_equipped, pseudo_world = generate_pseudo_history(acting_entity, object_series, act_loc_obj_rew, len(object_series))
+    #pseudo_inventory, pseudo_main_hand, pseudo_off_hand, pseudo_armor_equipped, pseudo_world = generate_pseudo_history(acting_entity, object_series, act_loc_obj_rew, len(object_series))
 
     # I'm going to need to calculate the damage for each damage dealing subaction within the action_series
     damage_series = []
 
-    for subaction in attack_series:
+    for subaction_index in range(len(attack_series)):
         subaction_damage = 0
         # first find the order of attacks, then identify the effects used that are associated with the attack
-        relevant_effects = attack_and_effect_series[attack_series.index(subaction):]
+        relevant_effects = attack_and_effect_series[attack_series.index(attack_series[subaction_index]):]
         
         for i in relevant_effects:
             if effect_dictionary[i].type == 'damage_bonus':
