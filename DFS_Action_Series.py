@@ -140,7 +140,7 @@ def rule_limited_move_speed(sequence, next_num, acting_entity):
                 }
 
     speed_spent = 0
-    
+
     if 'prone' not in acting_entity.conditions:
         prone = 1
     else:
@@ -163,6 +163,8 @@ def rule_limited_move_speed(sequence, next_num, acting_entity):
             return False
         
     return True
+
+
 
 def rule_one_of_each_free_action(sequence, next_num, acting_entity):
     # free_subactions = [[4,25,27,29,31],[14]] # can do one of each list

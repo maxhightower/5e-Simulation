@@ -26,7 +26,7 @@ subaction_dict = {
     '15': 'Attack (Weapon) (Off_Hand)',
     '16': 'Grapple',
     '17': 'Escape Grapple',
-    '18': 'Shove',
+    '18': 'Shove - Push',
     '19': 'Go Prone',
     '20': 'Stand Up',
     '21': 'Stabilize Creature',
@@ -60,7 +60,8 @@ subaction_dict = {
     '49': 'Object (Free) Self Equip Both_Hands',
     '50': 'Object (Action) Self Equip Both_Hands',
     '51': 'Object (Free) Self Unequip (Both_Hands)',
-    #'52': 'Object (Action) Self Unequip (Both_Hands)',
+    '52': 'Object (Action) Self Unequip (Both_Hands)',
+    #'53': 'Shove - Prone',
 
 
 }
@@ -75,20 +76,20 @@ move_subactions = [0,1,2,3,23,24]
     # crawl
     # squeeze
 
-action_subactions = [5,6,7,8,9,10,11,12,13,16,17,18,21,22,26,28,30,32,33,34,35,36,38,39,41,45,46,47,48,50,52]
-attack_subactions = [5,16,18,36,48]
+action_subactions = [5,6,7,8,9,10,11,12,13,16,17,18,21,22,26,28,30,32,33,34,35,36,38,39,41,45,46,47,48,50,52,53]
+attack_subactions = [5,16,18,36,48,53]
 free_subactions = [[4,25,27,29,31,37,40,42,43,44],[14]] # can do one of each list
 bonus_subactions = [15]
 object_subactions = [4,7,25,26,27,28,29,30,31,32,37,38,40,41,42,43,44,45,46,47,49,50,51,52]
 object_action_subactions = [7,26,28,30,32,38,41,45,46,47,50,52]
 object_free_subactions = [4,25,27,29,31,37,40,42,43,44,49,51]
 
-subactions_req_targets = [0,1,2,3,4,5,7,10,15,23,24,27,28,29,30,35,36,48]
+subactions_req_targets = [0,1,2,3,4,5,7,10,15,23,24,27,28,29,30,35,36,48,53]
 # subactions_req_targets = move_subactions + object_subactions + attack_subactions
 
 subactions_req_allies = [10,21,22,35]
 subactions_req_objects = [4,5,7,13,15,25,26,29,30,31,32,33,34,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52]
-subactions_req_entity = [5,10,15,16,18,21,22,35,36,48]
+subactions_req_entity = [5,10,15,16,18,21,22,35,36,48,53]
 
 # conjoined subactions are where when you do one subaction, you can do another subaction without cost
 conjoined_subactions = []
@@ -197,6 +198,7 @@ target_distance_scores = { # the distance from which a location can be per subac
             35: 1,
             36: 1,
             48: 1,
+            53: 1,
         }
 
 def add_optional_rule_action_options():

@@ -83,8 +83,8 @@ class RuleBasedObjectSequenceDFS:
         location_series = post_location_reward_list[1]
         object_series = [x for x in action_series if x in subactions_req_objects]
 
-        print(f'object series: {object_series}')
-        print(f'object subaction index: {object_subaction_index}') 
+        #print(f'object series: {object_series}')
+        #print(f'object subaction index: {object_subaction_index}') 
         
         object_subaction = object_series[object_subaction_index]
 
@@ -222,7 +222,10 @@ class RuleBasedObjectSequenceDFS:
         
         worldly_objects = self.acting_entity.world.objects
         
+        reward_series_list = [i[2] for i in post_location_reward_list]
+
         act_loc_rew_pass_count = 0
+        quality_threshold = np.percentile(reward_series_list, 90)
 
         #print(f'Post Location Reward List: {post_location_reward_list}')
 
@@ -231,15 +234,17 @@ class RuleBasedObjectSequenceDFS:
             #print(f'act_loc_rew: {act_loc_rew}') # ([25, 5, 0], [[1, 1], [1, 1]], 5.5)
     # need to change the qualifier to be the top 15% of rewards
 
-            if int(act_loc_rew[2]) >= 3:
+            if int(act_loc_rew[2]) >= quality_threshold:
                 act_loc_rew_pass_count += 1
 
 
 
                 for subaction_index in range(len(act_loc_rew[0])):
                     
+
                     subaction = act_loc_rew[0][subaction_index]
                     if subaction in subactions_req_objects:
+                        
 
                         potential_objects = self.get_potential_objects([], self.acting_entity, act_loc_rew)
                         
@@ -249,6 +254,12 @@ class RuleBasedObjectSequenceDFS:
 
                             #print(f'sequences: {sequences}')
                             self.object_series_list.append(sequences)
+
+            
+            # how to un-nest the object_series_list
+            
+
+
 
             #else:
                  #self.object_series_list.append([])
@@ -360,7 +371,9 @@ class RuleBasedLocationSequenceDFS3:
         for action_series_index, action_series in enumerate(self.action_series_list):
                 # need to change the qualifier to be the top 15% of rewards
 
-            if self.reward_series_list[action_series_index] >= 3:
+            quality_threshold = np.percentile(self.reward_series_list, 85)
+
+            if self.reward_series_list[action_series_index] >= quality_threshold:
                 #print('')
                 #print('---------------------')
                 #print(f'{action_series}: {self.reward_series_list[action_series_index]}')
@@ -462,6 +475,9 @@ def rule_spellcasting_with_shield(sequence, next_object, acting_entity, i):
     number = len(sequence)
     action = action_series[number]
 
+    pseudo_inventory, pseudo_main_hand, pseudo_off_hand, pseudo_armor_equipped, pseudo_world = generate_pseudo_history(acting_entity, sequence, i, len(sequence))
+
+
     if acting_entity.shield_proficient == False:
         # don or doff shield is action 13
         # if the cast action (action 11) is taken
@@ -470,14 +486,20 @@ def rule_spellcasting_with_shield(sequence, next_object, acting_entity, i):
             # you can be holding a shield and not donning it
 
             # if shield is in acting_entity.equipped_armor and 13 is not before 11, return False
-            if 'shield' in acting_entity.equipped_armor:
+            if 'shield' in pseudo_off_hand:
                 if 13 not in [action_series[i] for i in range(len(action_series)) if i < action_series.index(11)]:
                     return False
             
             # shield is not in acting_entity.equipped_armor and 13 is before 11, return False
-            if 'shield' not in acting_entity.equipped_armor:
+            if 'shield' not in pseudo_off_hand:
                 if 13 in [action_series[i] for i in range(len(action_series)) if i < action_series.index(11)]:
                     return False
+                
+    if acting_entity.shield_proficient == False:
+        # and 11 is before where 13 is in the action_series
+        if action == 13 and 11 in [action_series[i] for i in range(len(action_series)) if i < number]:
+            if next_object.type == 'shield':
+                return False
             
     return True
 
@@ -568,7 +590,7 @@ def rule_only_don_doff_shields(sequence, next_object, acting_entity, i):
             return False
     return True
 
-# can't drop off hand when shield is equipped
+# can't drop off hand when shield is equipped, because the 13 subaction is required
 def rule_cannot_drop_offhand_while_donning_shield(sequence, next_object, acting_entity, i):
     action_series = i[0]
     location_series = i[1]
@@ -580,6 +602,137 @@ def rule_cannot_drop_offhand_while_donning_shield(sequence, next_object, acting_
 
     pseudo_inventory, pseudo_main_hand, pseudo_off_hand, pseudo_armor_equipped, pseudo_world = generate_pseudo_history(acting_entity, sequence, i, len(sequence))
 
+    # [40,41,43,46]
+    if action in [40,41,43,46] and pseudo_off_hand[0].type == 'shield':
+        return False
+    
+    return True
+        
+
+def rule_cannot_both_hand_equip_one_handed_weapon(sequence, next_object, acting_entity, i):
+    action_series = i[0]
+    location_series = i[1]
+
+    obj_act = [x for x in action_series if x in subactions_req_objects]
+    obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
+
+    action = action_series[len(sequence)-1]
+
+    pseudo_inventory, pseudo_main_hand, pseudo_off_hand, pseudo_armor_equipped, pseudo_world = generate_pseudo_history(acting_entity, sequence, i, len(sequence))
+
+    # [49,50]
+    if action in [49,50]:
+        if next_object.type == 'weapon' and next_object.hands in [0,1]:
+            return False
+    
+    return True
+
+
+# need a rule that states you can't equip the same object to both off hand and main hand seperately
+
+# need a rule that states shields don't go to main hand, only off hand
+
+
+# need a rule removing redundant object actions
+def rule_no_redundant_equipping_unequipping_dropping(sequence, next_object, acting_entity, i):
+    action_series = i[0]
+    location_series = i[1]
+
+    obj_act = [x for x in action_series if x in subactions_req_objects]
+    obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
+
+    action = action_series[len(sequence)-1]
+    previous_action = action_series[len(sequence)-2]
+
+    # equipping
+    # if an object is equipped to main hand, and the current action is equipping to off hand
+    if any([25 in action_series, 26 in action_series]) and action in [37,38]:
+        # unless any unequip or drop actions happen in between the two
+        if 25 in action_series and 37 in action_series:
+            in_between_sequence = [action_series[i] for i in range(len(action_series)) if i > action_series.index(25) and i < action_series.index(37)]
+        
+        if 25 in action_series and 38 in action_series:
+            in_between_sequence = [action_series[i] for i in range(len(action_series)) if i > action_series.index(25) and i < action_series.index(38)]
+
+        if 26 in action_series and 37 in action_series:
+            in_between_sequence = [action_series[i] for i in range(len(action_series)) if i > action_series.index(26) and i < action_series.index(37)]
+        
+        if 26 in action_series and 38 in action_series:
+            in_between_sequence = [action_series[i] for i in range(len(action_series)) if i > action_series.index(26) and i < action_series.index(38)]
+        
+        if any([31,32,40,41,42,43]) in in_between_sequence:
+            return True
+        
+        else:
+            # if the object is the same between the two actions, return False
+            if acting_entity.main_hand[0] == acting_entity.off_hand[0]:
+                return False
+    
+
+    # unequipping
+    if any([31 in action_series, 32 in action_series]) and action in [40,41]:
+        # unless any unequip or drop actions happen in between the two
+        if 31 in action_series and 40 in action_series:
+            in_between_sequence = [action_series[i] for i in range(len(action_series)) if i > action_series.index(25) and i < action_series.index(37)]
+        
+        if 32 in action_series and 40 in action_series:
+            in_between_sequence = [action_series[i] for i in range(len(action_series)) if i > action_series.index(25) and i < action_series.index(38)]
+
+        if 31 in action_series and 41 in action_series:
+            in_between_sequence = [action_series[i] for i in range(len(action_series)) if i > action_series.index(26) and i < action_series.index(37)]
+        
+        if 32 in action_series and 41 in action_series:
+            in_between_sequence = [action_series[i] for i in range(len(action_series)) if i > action_series.index(26) and i < action_series.index(38)]
+        
+        if any([25,26,37,38,42,43]) in in_between_sequence:
+            return True
+        
+        else:
+            # if the object is the same between the two actions, return False
+            if acting_entity.main_hand[0] == acting_entity.off_hand[0]:
+                return False
+    
+
+
+    # dropping
+    if any([37 in action_series, 38 in action_series]) and action in [49,50]:
+        # unless any unequip or drop actions happen in between the two
+        if 37 in action_series and 49 in action_series:
+            in_between_sequence = [action_series[i] for i in range(len(action_series)) if i > action_series.index(25) and i < action_series.index(37)]
+        
+        if 37 in action_series and 50 in action_series:
+            in_between_sequence = [action_series[i] for i in range(len(action_series)) if i > action_series.index(25) and i < action_series.index(38)]
+
+        if 38 in action_series and 49 in action_series:
+            in_between_sequence = [action_series[i] for i in range(len(action_series)) if i > action_series.index(26) and i < action_series.index(37)]
+        
+        if 38 in action_series and 50 in action_series:
+            in_between_sequence = [action_series[i] for i in range(len(action_series)) if i > action_series.index(26) and i < action_series.index(38)]
+        
+        if any([25,26,31,32,40,41]) in in_between_sequence:
+            return True
+        
+        else:
+            # if the object is the same between the two actions, return False
+            if acting_entity.main_hand[0] == acting_entity.off_hand[0]:
+                return False
+
+    return True
+
+
+def rule_one_free_hand_to_grapple(sequence, next_object, acting_entity, i):
+    action_series = i[0]
+    location_series = i[1]
+
+    obj_act = [x for x in action_series if x in subactions_req_objects]
+    obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
+
+    action = action_series[len(sequence)-1]
+
+
+
+
+
 
 object_rules = [
     rule_equip_status,
@@ -590,6 +743,10 @@ object_rules = [
     rule_one_handed_attack_with_two_handed_weapon,
     rule_only_drink_potions,
     rule_only_don_doff_shields,
+    rule_cannot_drop_offhand_while_donning_shield,
+    rule_cannot_both_hand_equip_one_handed_weapon,
+    rule_no_redundant_equipping_unequipping_dropping,
+
 
 
 

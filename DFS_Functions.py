@@ -168,8 +168,11 @@ def analyze_reward_distribution(reward_series_full_list, action_series_full_list
     print()
 
     # need to change the qualifier to be the top 15% of rewards
+    quality_threshold = np.percentile(reward_series_full_list, 90)
 
-    print(f"Total Qualifiers: {len([x for x in reward_series_full_list if x >= 3])}")
+    print(f'Quality Threshold: {quality_threshold}')
+
+    print(f"Total Qualifiers: {len([x for x in reward_series_full_list if x >= quality_threshold])}")
     print()
 
     # Print individual rewards and actions
@@ -464,7 +467,7 @@ def precalc_reward(action_series, entity):
     
     # if the entity goes prone at all
     if 19 in action_series:
-        reward_value -= 0.5
+        reward_value -= 0.25
 
     # if the entity ends the turn while prone
     if 19 in action_series:
@@ -474,12 +477,12 @@ def precalc_reward(action_series, entity):
 
     # if the action series is between 3 and 6, reward else punish
     if act_series_len >= 3:
-        reward_value += 0.25
+        reward_value += 0.5
     
     if act_series_len <= 7:
         reward_value += 0.25
 
-    if act_series_len > 8:
+    if act_series_len > 10:
         reward_value -= 0.5
 
     #if 5 not in action_series:
@@ -508,37 +511,37 @@ def precalc_reward(action_series, entity):
     # if the entity equips off hand and attacks with it, reward 
     if 37 in action_series:
         if 15 in action_series[action_series.index(37):]:
-            reward_value += 0.5
+            reward_value += 0.25
     if 38 in action_series:
         if 15 in action_series[action_series.index(38):]:
-            reward_value += 0.5
+            reward_value += 0.25
 
 
     
     # if the entity picks up an item, and then equips it, reward
     if 4 in action_series:
         if 13 in action_series[action_series.index(4):]:
-            reward_value += 1
+            reward_value += 0.25
         if 25 in action_series[action_series.index(4):]:
-            reward_value += 1
+            reward_value += 0.25
         if 26 in action_series[action_series.index(4):]:
-            reward_value += 1
+            reward_value += 0.25
         if 37 in action_series[action_series.index(4):]:
-            reward_value += 1
+            reward_value += 0.25
         if 38 in action_series[action_series.index(4):]:
-            reward_value += 1
+            reward_value += 0.25
 
     if 7 in action_series:
         if 13 in action_series[action_series.index(7):]:
-            reward_value += 1
+            reward_value += 0.25
         if 25 in action_series[action_series.index(7):]:
-            reward_value += 1
+            reward_value += 0.25
         if 26 in action_series[action_series.index(7):]:
-            reward_value += 1
+            reward_value += 0.25
         if 37 in action_series[action_series.index(7):]:
-            reward_value += 1
+            reward_value += 0.25
         if 38 in action_series[action_series.index(7):]:
-            reward_value += 1
+            reward_value += 0.25
 
     # for the number of attacks made, times the number of damage dealt, reward
     
@@ -573,6 +576,20 @@ def precalc_reward(action_series, entity):
     # perhaps dropping items should be discouraged
     if 29 in action_series or 30 in action_series:
         reward_value -= 1
+    
+
+    # if a subaction is taken, and then disengage is taken, and then movement is taken, reward
+    for i in range(len(action_series)):
+        if action_series[i] in move_subactions:
+            if 8 in action_series[:i]:
+                if any(x in action_series[:action_series.index(8)] for x in move_subactions):
+                    reward_value += 0.5
+
+
+    # if shove - push is taken, and then movement is taken, reward
+    if 53 in action_series:
+        if any(x in action_series for x in move_subactions):
+            reward_value += 0.5
     
 
 
