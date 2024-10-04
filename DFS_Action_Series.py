@@ -176,8 +176,19 @@ def rule_one_of_each_free_action(sequence, next_num, acting_entity):
 
 
 def rule_shield(sequence, next_num, acting_entity):
-    if next_num == 13 and 'shield' not in acting_entity.inventory or next_num == 13 and 'shield' not in acting_entity.equipped_armor:
-        return False
+    # we need to check if it's possible to don a shield before allowing sequence that does so
+    if next_num == 13:
+    # first lets check if a shield actually exists to be donned
+        # if there is not a shield in the inventory, then one must be picked up first
+        if not any(item.type == 'shield' for item in acting_entity.inventory):
+            # if there aren't any shields in the world, there isn't one to pick up
+            if not any(item.type == 'shield' for item in acting_entity.world.objects):
+                return False
+            
+            # if there are shields in the world, but none in the inventory, then the shield must be picked up first
+            if not any(item in sequence for item in [4,7]):
+                return False
+    
     return True
 
 def rule_concentration(sequence, next_num, acting_entity):
@@ -294,7 +305,7 @@ action_rules = [rule_only_one_action,
          rule_no_redundant_moves,
          rule_limited_move_speed,
          rule_one_of_each_free_action,
-         #rule_shield,
+         rule_shield,
          rule_concentration,
          rule_actions_requiring_allies,
          rule_off_hand_two_weapons_requirement,
