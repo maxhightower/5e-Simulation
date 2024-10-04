@@ -188,6 +188,7 @@ target_distance_scores = { # the distance from which a location can be per subac
             32: 1,
             35: 1,
             36: 1,
+            48: 1,
         }
 
 def add_optional_rule_action_options():

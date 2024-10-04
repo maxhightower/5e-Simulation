@@ -362,7 +362,14 @@ def damage_calc2(action_location_object_series, acting_entity):
             if effect_dictionary[i].type == 'damage_bonus':
                 subaction_damage += effect_dictionary[i].effect
 
-        
+        object_sequence = [object_series[x] for x in range(len(object_series)) if action_series[x] in attack_subactions]
+
+        pseudo_inventory, pseudo_main_hand, pseudo_off_hand, pseudo_armor_equipped, pseudo_world = generate_pseudo_history(acting_entity, object_sequence, action_location_object_series, subaction_index)
+
+        subaction_damage += damage_calc1(attack_series[subaction_index], acting_entity, pseudo_main_hand, pseudo_off_hand)
+
+        damage_series.append(subaction_damage)
+
         # this is currently setup to assign a single effect to only the next attack, not all attacks
         # perhaps there should be sub_effects and turn_effects,
         # sub_effects are only applied to the next attack, while turn_effects are applied to all attacks of a certain type in the turn
@@ -370,7 +377,7 @@ def damage_calc2(action_location_object_series, acting_entity):
 
         # or perhaps all effects need more details... such as duration, application circumstances, etc...
 
-
+    return damage_series
 
 
 
@@ -787,8 +794,8 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
 
 
                 # the potential damage, without taking the target into account
-                damage_calc()
-
+                damage_series = damage_calc2([action_series, location_series, obj_series],acting_entity)
+                post_obj_reward += sum(damage_series)
 
                 # the risk based on the number of enemies that can be seen
 
