@@ -229,6 +229,7 @@ class RuleBasedObjectSequenceDFS:
         for act_loc_rew in post_location_reward_list:
             action_series, location_series, reward = act_loc_rew
             #print(f'act_loc_rew: {act_loc_rew}') # ([25, 5, 0], [[1, 1], [1, 1]], 5.5)
+    # need to change the qualifier to be the top 15% of rewards
 
             if int(act_loc_rew[2]) >= 3:
                 act_loc_rew_pass_count += 1
@@ -357,6 +358,8 @@ class RuleBasedLocationSequenceDFS3:
         ]
 
         for action_series_index, action_series in enumerate(self.action_series_list):
+                # need to change the qualifier to be the top 15% of rewards
+
             if self.reward_series_list[action_series_index] >= 3:
                 #print('')
                 #print('---------------------')

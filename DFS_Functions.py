@@ -167,6 +167,8 @@ def analyze_reward_distribution(reward_series_full_list, action_series_full_list
         print(f'% of {reward}s: {percentage:.2f}%')
     print()
 
+    # need to change the qualifier to be the top 15% of rewards
+
     print(f"Total Qualifiers: {len([x for x in reward_series_full_list if x >= 3])}")
     print()
 

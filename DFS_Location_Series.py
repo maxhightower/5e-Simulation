@@ -102,6 +102,8 @@ class RuleBasedLocationSequenceDFS2:
         ]
 
         for action_series_index, action_series in enumerate(self.action_series_list):
+                # need to change the qualifier to be the top 15% of rewards
+
             if self.reward_series_list[action_series_index] >= 3:
                 #print('')
                 #print('---------------------')
