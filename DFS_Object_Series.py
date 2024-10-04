@@ -230,7 +230,7 @@ class RuleBasedObjectSequenceDFS:
             action_series, location_series, reward = act_loc_rew
             #print(f'act_loc_rew: {act_loc_rew}') # ([25, 5, 0], [[1, 1], [1, 1]], 5.5)
 
-            if int(act_loc_rew[2]) >= 5:
+            if int(act_loc_rew[2]) >= 3:
                 act_loc_rew_pass_count += 1
 
 
@@ -357,7 +357,7 @@ class RuleBasedLocationSequenceDFS3:
         ]
 
         for action_series_index, action_series in enumerate(self.action_series_list):
-            if self.reward_series_list[action_series_index] >= 5:
+            if self.reward_series_list[action_series_index] >= 3:
                 #print('')
                 #print('---------------------')
                 #print(f'{action_series}: {self.reward_series_list[action_series_index]}')

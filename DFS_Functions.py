@@ -167,7 +167,7 @@ def analyze_reward_distribution(reward_series_full_list, action_series_full_list
         print(f'% of {reward}s: {percentage:.2f}%')
     print()
 
-    print(f"Total Qualifiers: {len([x for x in reward_series_full_list if x >= 5])}")
+    print(f"Total Qualifiers: {len([x for x in reward_series_full_list if x >= 3])}")
     print()
 
     # Print individual rewards and actions
@@ -460,24 +460,25 @@ def precalc_reward(action_series, entity):
     #if entity.location in entity.world.enemy_adjacent_locations and 8 not in action_series and any(0 in action_series or 1 in action_series or 2 in action_series or 3 in action_series):
     #    reward_value -= 1
     
+    # if the entity goes prone at all
     if 19 in action_series:
-        reward_value -= 1
+        reward_value -= 0.5
 
     # if the entity ends the turn while prone
     if 19 in action_series:
         last_prone_index = len(action_series) - 1 - action_series[::-1].index(19)
         if 20 not in action_series[last_prone_index:]:
-            reward_value -= 1
+            reward_value -= 0.5
 
     # if the action series is between 3 and 6, reward else punish
     if act_series_len >= 3:
-        reward_value += 1
+        reward_value += 0.25
     
     if act_series_len <= 7:
-        reward_value += 1
+        reward_value += 0.25
 
     if act_series_len > 8:
-        reward_value -= 1
+        reward_value -= 0.5
 
     #if 5 not in action_series:
     #    reward_value -= 1
@@ -494,13 +495,22 @@ def precalc_reward(action_series, entity):
 
     
     # if 25 or 26 is in action_series, and 5 comes after it, reward
+    # aka if the equip subaction is followed by the attack subaction, reward
     if 25 in action_series:
         if 5 in action_series[action_series.index(25):]:
-            reward_value += 1
+            reward_value += 0.5
     if 26 in action_series:
         if 5 in action_series[action_series.index(26):]:
-            reward_value += 1
+            reward_value += 0.5
     
+    # if the entity equips off hand and attacks with it, reward 
+    if 37 in action_series:
+        if 15 in action_series[action_series.index(37):]:
+            reward_value += 0.5
+    if 38 in action_series:
+        if 15 in action_series[action_series.index(38):]:
+            reward_value += 0.5
+
 
     
     # if the entity picks up an item, and then equips it, reward
