@@ -74,7 +74,7 @@ class RuleBasedObjectSequenceDFS:
         # that can be interacted with based on the current sequence
     
         ###  ------  Setting Up Constants  ------  ###
-        object_subaction_index = max(len(sequence)-1,0)
+        object_subaction_index = len(sequence)
         potential_objects = []
         worldly_objects = acting_entity.world.objects
 
@@ -230,7 +230,7 @@ class RuleBasedObjectSequenceDFS:
             action_series, location_series, reward = act_loc_rew
             #print(f'act_loc_rew: {act_loc_rew}') # ([25, 5, 0], [[1, 1], [1, 1]], 5.5)
 
-            if int(act_loc_rew[2]) >= 6:
+            if int(act_loc_rew[2]) >= 5:
                 act_loc_rew_pass_count += 1
 
 
@@ -430,7 +430,7 @@ def rule_attack_with_weapons(sequence, next_object, acting_entity, i):
     print(f'sequence: {sequence}')
     print(f'action_series: {action_series}')
     
-    number = max(len(sequence)-1,0)
+    number = len(sequence)
     action = action_series[number]
 
     if action == 5:
@@ -456,7 +456,7 @@ def rule_spellcasting_with_shield(sequence, next_object, acting_entity, i):
     obj_act = [x for x in action_series if x in subactions_req_objects]
     obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
 
-    number = max(len(sequence)-1,0)
+    number = len(sequence)
     action = action_series[number]
 
     if acting_entity.shield_proficient == False:

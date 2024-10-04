@@ -167,7 +167,7 @@ def analyze_reward_distribution(reward_series_full_list, action_series_full_list
         print(f'% of {reward}s: {percentage:.2f}%')
     print()
 
-    print(f"Total Qualifiers: {len([x for x in reward_series_full_list if x >= 6])}")
+    print(f"Total Qualifiers: {len([x for x in reward_series_full_list if x >= 5])}")
     print()
 
     # Print individual rewards and actions
@@ -318,14 +318,17 @@ def damage_calc1(subaction, acting_entity, main_hand, off_hand):
         
         if subaction in subactions_req_objects:
             if subaction in [5,48]:
-                if subaction == 48 and main_hand[0] == off_hand[0] and main_hand[0].hands == 2:
-                    damage = main_hand[0].damage + acting_entity.strength_mod
+                if main_hand != [] and off_hand != []:
+                    if subaction == 48 and main_hand[0] == off_hand[0] and main_hand[0].hands == 2:
+                        damage = main_hand[0].damage + acting_entity.strength_mod
+
+                if main_hand != []:
+                    if subaction == 5:
+                        damage = main_hand[0].damage + acting_entity.strength_mod
                 
-                if subaction == 5:
-                    damage = main_hand[0].damage + acting_entity.strength_mod
-                
-            if subaction == 15:
-                damage = main_hand[0].damage
+            if off_hand != []:
+                if subaction == 15:
+                    damage = off_hand[0].damage
 
 
         elif subaction == 36: # unarmed strike
@@ -359,8 +362,9 @@ def damage_calc2(action_location_object_series, acting_entity):
         relevant_effects = attack_and_effect_series[attack_series.index(attack_series[subaction_index]):]
         
         for i in relevant_effects:
-            if effect_dictionary[i].type == 'damage_bonus':
-                subaction_damage += effect_dictionary[i].effect
+            if i in effect_subactions:
+                if effect_dictionary[i].type == 'damage_bonus':
+                    subaction_damage += effect_dictionary[i].effect
 
         object_sequence = [object_series[x] for x in range(len(object_series)) if action_series[x] in attack_subactions]
 

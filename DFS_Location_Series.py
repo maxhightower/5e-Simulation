@@ -102,7 +102,7 @@ class RuleBasedLocationSequenceDFS2:
         ]
 
         for action_series_index, action_series in enumerate(self.action_series_list):
-            if self.reward_series_list[action_series_index] >= 6:
+            if self.reward_series_list[action_series_index] >= 5:
                 #print('')
                 #print('---------------------')
                 #print(f'{action_series}: {self.reward_series_list[action_series_index]}')

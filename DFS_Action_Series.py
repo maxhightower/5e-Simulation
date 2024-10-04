@@ -181,9 +181,10 @@ def rule_shield(sequence, next_num, acting_entity):
     return True
 
 def rule_concentration(sequence, next_num, acting_entity):
-    if acting_entity.concentration == True:
+    if acting_entity.concentration == False and 11 not in sequence:
         if next_num == 14:
             return False
+
     return True
 
 def rule_actions_requiring_allies(sequence, next_num, acting_entity):
@@ -193,8 +194,12 @@ def rule_actions_requiring_allies(sequence, next_num, acting_entity):
     return True
 
 def rule_off_hand_two_weapons_requirement(sequence, next_num, acting_entity):
-    if next_num == 15 and len(acting_entity.weapon_equipped) < 2:
-        return False
+    list_of_subactions_that_equip_to_offhand = [37,38]
+    # if one of the numbers in list_of_subactions_that_equip_to_offhand is in the sequence
+    if not any(item in list_of_subactions_that_equip_to_offhand for item in sequence):
+        if next_num == 15 and acting_entity.off_hand == []:
+            return False
+
     return True
 
 def rule_condition_rules(sequence, next_num, acting_entity):
