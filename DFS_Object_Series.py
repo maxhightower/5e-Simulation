@@ -48,7 +48,7 @@ from DFS_Universal_Rules import action_subactions, move_subactions, action_subac
 
 
 
-class RuleBasedObjectSequenceDFS:
+class RuleBasedObjectSequenceDFS1:
     def __init__(self, post_location_reward_list, target_distance_scores, object_rules, acting_entity):
         self.post_location_reward_list = post_location_reward_list
         self.target_distance_scores = target_distance_scores
@@ -83,9 +83,6 @@ class RuleBasedObjectSequenceDFS:
         location_series = post_location_reward_list[1]
         object_series = [x for x in action_series if x in subactions_req_objects]
 
-        #print(f'object series: {object_series}')
-        #print(f'object subaction index: {object_subaction_index}') 
-        
         object_subaction = object_series[object_subaction_index]
 
 
