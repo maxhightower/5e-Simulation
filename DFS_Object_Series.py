@@ -614,6 +614,7 @@ def rule_one_free_hand_to_grapple(sequence, next_object, acting_entity, i):
 
 
 
+
 object_rules = [
     rule_equip_status,
     #rule_only_equip_weapons,

@@ -110,6 +110,55 @@ class effect:
         self.effect = effect
 
 
+class spell:
+    def __init__(self, name, level, school, casting_time, range, components, duration, description):
+        self.name = name
+        self.level = level
+        self.school = school
+        self.casting_time = casting_time
+        self.range = range
+        self.components = components
+        self.duration = duration
+        self.description = description
+
+class firebolt(spell):
+    def __init__(self):
+        super().__init__(
+            name='firebolt', 
+            level=0, 
+            school='evocation', 
+            casting_time='1 action', 
+            range='120 feet', 
+            components='V, S', 
+            duration='instantaneous', 
+            description='You hurl a mote of fire at a creature or object within range. Make a ranged spell attack against the target. On a hit, the target takes 1d10 fire damage. A flammable object hit by this spell ignites if it isn\'t being worn or carried.')
+
+class ray_of_frost(spell):
+    def __init__(self):
+        super().__init__(
+            name='ray_of_frost', 
+            level=0, 
+            school='evocation', 
+            casting_time='1 action', 
+            range='60 feet', 
+            components='V, S', 
+            duration='instantaneous', 
+            description='A frigid beam of blue-white light streaks toward a creature within range. Make a ranged spell attack against the target. On a hit, it takes 1d8 cold damage, and its speed is reduced by 10 feet until the start of your next turn.')
+
+class shield(spell):
+    def __init__(self):
+        super().__init__(
+            name='shield', 
+            level=1, 
+            school='abjuration', 
+            casting_time='1 reaction', 
+            range='self', 
+            components='V, S', 
+            duration='1 round', 
+            description='An invisible barrier of magical force appears and protects you. Until the start of your next turn, you have a +5 bonus to AC, including against the triggering attack, and you take no damage from magic missile.')
+    
+
+
 
 theoretical_turn_length = len(free_subactions) + 6 + 1 + 1
 
@@ -133,7 +182,7 @@ class entity:
 
         self.circumstances = {}
 
-        self.spells = {}
+        self.spells = []
 
         if self.is_spawned == False:
             self.location = [0,0]
@@ -176,6 +225,8 @@ class entity:
 
         # will need to have a add_entity() in order to add a key: value pair to circumstances per enemy in world
 
+    def add_spell(self, spell):
+        self.spells.append(spell)
 
 target_distance_scores = { # the distance from which a location can be per subaction
             0: 1,

@@ -187,8 +187,7 @@ def generate_pseudo_history(acting_entity,sequence, post_location_reward_list, o
     action_series = post_location_reward_list[0]
     location_series = post_location_reward_list[1]
     object_series = [x for x in action_series if x in subactions_req_objects]
-    print(f'object series: {object_series}')
-    print(f'object subaction index: {object_subaction_index}')
+
     object_subaction = object_series[object_subaction_index]
     pseudo_inventory = acting_entity.inventory.copy()
     #pseudo_weapon_equipped = acting_entity.weapon_equipped.copy()
@@ -347,6 +346,8 @@ def damage_calc1(subaction, acting_entity, main_hand, off_hand):
     # need to identify the entity, the weapon, and the target
     # eventually the input needs to be changed to the the act_loc_obj_rew
 
+    
+
 def damage_calc2(action_location_object_series, acting_entity):
     action_series = action_location_object_series[0]
     location_series = action_location_object_series[1]
@@ -388,6 +389,15 @@ def damage_calc2(action_location_object_series, acting_entity):
 
     return damage_series
 
+def probability_hit_calc(action_location_object_series, acting_entity, target_entity):
+    action_series = action_location_object_series[0]
+    location_series = action_location_object_series[1]
+    object_series = action_location_object_series[2]
+    #reward = act_loc_obj_rew[3]
+
+    
+
+    pass
 
 
 def process_turn(act_loc_obj_rew, acting_entity):
@@ -718,9 +728,9 @@ def post_obj_reward_series_calc(action_series_full_list, location_series_full_li
         reward = reward_series_full_list[i]
         object_series_list = object_series_full_list[i]
     
-        print(f'action series: {action_series}')
-        print(f'location series: {location_series}')
-        print(f'object series list: {object_series_list}')
+        #print(f'action series: {action_series}')
+        #print(f'location series: {location_series}')
+        #print(f'object series list: {object_series_list}')
 
 
         if object_series_list != []:
@@ -769,18 +779,18 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
         reward = act_loc_obj_rew_series[i][3]
         object_series_list = act_loc_obj_rew_series[i][2]
     
-        print(f'action series: {action_series}')
-        print(f'location series: {location_series}')
-        print(f'object series list: {object_series_list}')
-        print(f'reward: {reward}')
+        #print(f'action series: {action_series}')
+        #print(f'location series: {location_series}')
+        #print(f'object series list: {object_series_list}')
+        #print(f'reward: {reward}')
 
         # actions that are only move_actions
         move_act_series = [x for x in action_series if x in move_subactions]
-        print(f'move act series: {move_act_series}')
+        #print(f'move act series: {move_act_series}')
 
         # locations that are only move_actions
         move_loc_series = [location_series[y] for y in range(len(location_series)) if action_series[y] in move_subactions]
-        print(f'move loc series: {move_loc_series}')
+        #print(f'move loc series: {move_loc_series}')
 
 
 
@@ -828,7 +838,9 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
 
                 # the potential damage, without taking the target into account
                 damage_series = damage_calc2([action_series, location_series, obj_series],acting_entity)
+                print(f'damage series: {damage_series}')
                 post_obj_reward += sum(damage_series)
+                
 
                 # the risk based on the number of enemies that can be seen
 
