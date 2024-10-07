@@ -87,19 +87,20 @@ class graph:
         self.dfs_util(v, visited)
 
 class Object:
-    def __init__(self, name, type):
+    def __init__(self, name, type, flammable):
         self.name = name
         self.type = type
+        self.flammable = flammable
 
 # create subclass Coin that inherits from Object
 class Coin(Object):
     def __init__(self, name, type):
-        super().__init__(name, type)
+        super().__init__(name, type, flammable=False)
         self.type = 'treasure'
 
 class Weapon(Object):
     def __init__(self, name, type, damage, weight, hands):
-        super().__init__(name, type)
+        super().__init__(name, type, flammable=False)
         self.type = 'weapon'
         self.damage = damage
         self.weight = weight
@@ -107,12 +108,12 @@ class Weapon(Object):
 
 class Shield(Object):
     def __init__(self, name, type):
-        super().__init__(name, type)
+        super().__init__(name, type, flammable=False)
         self.type = 'shield'
 
 class Potion(Object):
     def __init__(self, name, type):
-        super().__init(name, type)
+        super().__init(name, type, flammable=False)
         self.type = 'potion'
 
 

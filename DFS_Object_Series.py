@@ -227,34 +227,42 @@ class RuleBasedObjectSequenceDFS1:
         #print(f'Post Location Reward List: {post_location_reward_list}')
 
         for act_loc_rew in post_location_reward_list:
+            # for each possible combination of actions,
+
             action_series, location_series, reward = act_loc_rew
             #print(f'act_loc_rew: {act_loc_rew}') # ([25, 5, 0], [[1, 1], [1, 1]], 5.5)
-    # need to change the qualifier to be the top 15% of rewards
 
             if int(act_loc_rew[2]) >= quality_threshold:
                 act_loc_rew_pass_count += 1
+                # as long as the benefit is tolerable
 
-
+                # perhaps doing it per subaction is too much????
+                    # but there should only be items generated for object subactions
 
                 for subaction_index in range(len(act_loc_rew[0])):
-                    
 
                     subaction = act_loc_rew[0][subaction_index]
                     if subaction in subactions_req_objects:
-                        
+                        # then for each action relating to an object
+
+                        # should the pseudo_history function be used here???
 
                         potential_objects = self.get_potential_objects([], self.acting_entity, act_loc_rew)
-                        
+                        # find all the obejcts that can be interacted with
+
                         for next_object in potential_objects:
+                            # and for each object that can be interacted with
                             
                             sequences = self.dfs([], next_object, self.acting_entity, act_loc_rew, potential_objects, post_location_reward_list)
+                            
+
 
                             #print(f'sequences: {sequences}')
                             self.object_series_list.append(sequences)
 
             
             # how to un-nest the object_series_list
-            
+
 
 
 

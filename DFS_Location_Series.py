@@ -103,10 +103,6 @@ class RuleBasedLocationSequenceDFS2:
         quality_threshold = np.percentile(self.reward_series_list, 90) 
 
         for action_series_index, action_series in enumerate(self.action_series_list):
-                # need to change the qualifier to be the top 15% of rewards
-
-            # first need to take all the rewards from the previous stage and then find what the top 15% are
-            # use reward_series_list to find the top 15% of rewards
 
             if self.reward_series_list[action_series_index] >= quality_threshold:
                 #print('')

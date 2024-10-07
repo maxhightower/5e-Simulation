@@ -121,17 +121,30 @@ class spell:
         self.duration = duration
         self.description = description
 
-class firebolt(spell):
+class fire_bolt(spell):
     def __init__(self):
         super().__init__(
             name='firebolt', 
             level=0, 
             school='evocation', 
             casting_time='1 action', 
-            range='120 feet', 
-            components='V, S', 
-            duration='instantaneous', 
-            description='You hurl a mote of fire at a creature or object within range. Make a ranged spell attack against the target. On a hit, the target takes 1d10 fire damage. A flammable object hit by this spell ignites if it isn\'t being worn or carried.')
+            range=24, # 120 feet so 120/5 = 24 spaces
+            components= ['v','s'], 
+            duration='instantaneous',)
+        
+        # attack check rules
+            # "ranged spell attack" against "target" (note: creature OR object)
+
+        # damage
+            # 1d10 fire damage
+
+        # upcast rules
+            # level dependent: 2d10 at 5th level, 3d10 at 11th level, 4d10 at 17th level
+        
+        # object interaction rules
+            # a flammable object hit ignites if not worn or carried
+
+    
 
 class ray_of_frost(spell):
     def __init__(self):
@@ -140,10 +153,15 @@ class ray_of_frost(spell):
             level=0, 
             school='evocation', 
             casting_time='1 action', 
-            range='60 feet', 
-            components='V, S', 
-            duration='instantaneous', 
-            description='A frigid beam of blue-white light streaks toward a creature within range. Make a ranged spell attack against the target. On a hit, it takes 1d8 cold damage, and its speed is reduced by 10 feet until the start of your next turn.')
+            range=12, # 60/5 = 12 spaces
+            components= ['v','s'], 
+            duration='instantaneous',)
+
+        # damage
+        # single target
+        # upcast rules
+
+
 
 class shield(spell):
     def __init__(self):
@@ -153,9 +171,8 @@ class shield(spell):
             school='abjuration', 
             casting_time='1 reaction', 
             range='self', 
-            components='V, S', 
-            duration='1 round', 
-            description='An invisible barrier of magical force appears and protects you. Until the start of your next turn, you have a +5 bonus to AC, including against the triggering attack, and you take no damage from magic missile.')
+            components= ['v','s'],
+            duration='1 round',)
     
 
 
