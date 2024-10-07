@@ -110,72 +110,6 @@ class effect:
         self.effect = effect
 
 
-class spell:
-    def __init__(self, name, level, school, casting_time, range, components, duration, description):
-        self.name = name
-        self.level = level
-        self.school = school
-        self.casting_time = casting_time
-        self.range = range
-        self.components = components
-        self.duration = duration
-        self.description = description
-
-class fire_bolt(spell):
-    def __init__(self):
-        super().__init__(
-            name='firebolt', 
-            level=0, 
-            school='evocation', 
-            casting_time='1 action', 
-            range=24, # 120 feet so 120/5 = 24 spaces
-            components= ['v','s'], 
-            duration='instantaneous',)
-        
-        # attack check rules
-            # "ranged spell attack" against "target" (note: creature OR object)
-
-        # damage
-            # 1d10 fire damage
-
-        # upcast rules
-            # level dependent: 2d10 at 5th level, 3d10 at 11th level, 4d10 at 17th level
-        
-        # object interaction rules
-            # a flammable object hit ignites if not worn or carried
-
-    
-
-class ray_of_frost(spell):
-    def __init__(self):
-        super().__init__(
-            name='ray_of_frost', 
-            level=0, 
-            school='evocation', 
-            casting_time='1 action', 
-            range=12, # 60/5 = 12 spaces
-            components= ['v','s'], 
-            duration='instantaneous',)
-
-        # damage
-        # single target
-        # upcast rules
-
-
-
-class shield(spell):
-    def __init__(self):
-        super().__init__(
-            name='shield', 
-            level=1, 
-            school='abjuration', 
-            casting_time='1 reaction', 
-            range='self', 
-            components= ['v','s'],
-            duration='1 round',)
-     
-
-
 
 theoretical_turn_length = len(free_subactions) + 6 + 1 + 1
 
@@ -199,8 +133,7 @@ class entity:
 
         self.circumstances = {}
 
-        self.spells = []
-        self.spell_slots = [] # with the index being the spell level
+        self.spells = {}
 
         if self.is_spawned == False:
             self.location = [0,0]
@@ -243,8 +176,6 @@ class entity:
 
         # will need to have a add_entity() in order to add a key: value pair to circumstances per enemy in world
 
-    def add_spell(self, spell):
-        self.spells.append(spell)
 
 target_distance_scores = { # the distance from which a location can be per subaction
             0: 1,

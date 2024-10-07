@@ -87,34 +87,44 @@ class graph:
         self.dfs_util(v, visited)
 
 class Object:
-    def __init__(self, name, type, flammable):
+    def __init__(self, name, type, flammable, casting_focus):
         self.name = name
         self.type = type
         self.flammable = flammable
+        self.casting_focus = casting_focus
 
 # create subclass Coin that inherits from Object
 class Coin(Object):
     def __init__(self, name, type):
-        super().__init__(name, type, flammable=False)
+        super().__init__(name, type, flammable=False, casting_focus=False)
         self.type = 'treasure'
 
 class Weapon(Object):
     def __init__(self, name, type, damage, weight, hands):
-        super().__init__(name, type, flammable=False)
+        super().__init__(name, type, flammable=False, casting_focus=False)
         self.type = 'weapon'
         self.damage = damage
         self.weight = weight
         self.hands = 0 # 0 is one-handed, 1 is two-handed, and 2 is versatile
 
 class Shield(Object):
-    def __init__(self, name, type):
-        super().__init__(name, type, flammable=False)
+    def __init__(self, name, type, hands):
+        super().__init__(name, type, flammable=False, casting_focus=False)
         self.type = 'shield'
+        self.hands = 0
 
 class Potion(Object):
-    def __init__(self, name, type):
-        super().__init(name, type, flammable=False)
+    def __init__(self, name, type, hands):
+        super().__init__(name, type, flammable=False, casting_focus=False)
         self.type = 'potion'
+        self.hands = 0
+
+class Wand(Object):
+    def __init__(self, name, type, hands):
+        super().__init__(name, type, flammable=False, casting_focus=True)
+        self.name = 'wand'
+        self.type = 'other'
+        self.hands = 0
 
 
 

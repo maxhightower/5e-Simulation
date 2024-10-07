@@ -83,12 +83,9 @@ class RuleBasedObjectSequenceDFS1:
         location_series = post_location_reward_list[1]
         object_series = [x for x in action_series if x in subactions_req_objects]
 
-        print(f'object series: {object_series}')
-        print(f'object subaction index: {object_subaction_index}')
-
         object_subaction = object_series[object_subaction_index]
 
-        print(f'get potential objects')
+
         pseudo_inventory, pseudo_main_hand, pseudo_off_hand, pseudo_armor_equipped, pseudo_world = generate_pseudo_history(acting_entity,sequence, post_location_reward_list, object_subaction_index)
 
 
@@ -159,9 +156,6 @@ class RuleBasedObjectSequenceDFS1:
             for object in pseudo_main_hand + pseudo_off_hand:
                 potential_objects.append(object)
 
-        # convert to set to remove duplicates
-        potential_objects = list(set(potential_objects))
-
         return potential_objects
     
     def check_rules(self, sequence, next_object, acting_entity, post_location_reward_list):
@@ -176,19 +170,13 @@ class RuleBasedObjectSequenceDFS1:
         obj_act_series = [i for i in action_series if i in subactions_req_objects]
         required_sequence_length = len(obj_act_series)
         
-        print(f'action series: {action_series}')
-        print(f'dfs; required sequence length: {required_sequence_length}')
-
         #all_sequences = []
         subaction_index = len(current_sequence)
 
         # the desired outcome
         if len(current_sequence) == len([x for x in act_loc_rew[0] if x in subactions_req_objects]):
             if self.check_rules(current_sequence, next_object, acting_entity, act_loc_rew):
-                print(f'dfs; finished sequence: {current_sequence}')
-                print('')
                 return current_sequence.copy()
-            
         
         # the contingency for if less objects are available
         #if len(current_sequence) == len(available_objects) and len(available_objects) < len([x for x in act_loc_rew[0] if x in subactions_req_objects]):
@@ -206,8 +194,6 @@ class RuleBasedObjectSequenceDFS1:
         for next_object in potential_objects:
             if self.check_rules(current_sequence, next_object, self.acting_entity, act_loc_rew):
                 current_sequence.append(next_object)
-                print(f'dfs; appending current sequence: {current_sequence}')
-
                 self.object_series_list.append(self.dfs(current_sequence, next_object, acting_entity, act_loc_rew, potential_objects, post_location_reward_list))
                 current_sequence.pop()
         
@@ -239,44 +225,36 @@ class RuleBasedObjectSequenceDFS1:
         quality_threshold = np.percentile(reward_series_list, 90)
 
         #print(f'Post Location Reward List: {post_location_reward_list}')
-        
+
         for act_loc_rew in post_location_reward_list:
-            # for each possible combination of actions,
-            print('')
             action_series, location_series, reward = act_loc_rew
             #print(f'act_loc_rew: {act_loc_rew}') # ([25, 5, 0], [[1, 1], [1, 1]], 5.5)
+    # need to change the qualifier to be the top 15% of rewards
 
             if int(act_loc_rew[2]) >= quality_threshold:
                 act_loc_rew_pass_count += 1
-                # as long as the benefit is tolerable
-
-                # perhaps doing it per subaction is too much????
-                    # but there should only be items generated for object subactions
 
 
 
-                #for subaction_index in range(len(act_loc_rew[0])):
-                    #subaction = act_loc_rew[0][subaction_index]
-                    #if subaction in subactions_req_objects:
-                        # then for each action relating to an object
-                print(f'action series: {action_series}')
-                print(f'location series: {location_series}')
-                
-                print(f'initial get potential objects')
-                potential_objects = self.get_potential_objects([], self.acting_entity, act_loc_rew)
-                        # find all the obejcts that can be interacted with
-                print(f'potential objects: {potential_objects}')
+                for subaction_index in range(len(act_loc_rew[0])):
+                    
 
-                print(f'beginning next_object loop')
-                for next_object in potential_objects:
-                    # and for each object that can be interacted with
+                    subaction = act_loc_rew[0][subaction_index]
+                    if subaction in subactions_req_objects:
+                        
+
+                        potential_objects = self.get_potential_objects([], self.acting_entity, act_loc_rew)
+                        
+                        for next_object in potential_objects:
                             
-                    sequences = self.dfs([], next_object, self.acting_entity, act_loc_rew, potential_objects, post_location_reward_list)
-                            
-                    self.object_series_list.append(sequences)
+                            sequences = self.dfs([], next_object, self.acting_entity, act_loc_rew, potential_objects, post_location_reward_list)
+
+                            #print(f'sequences: {sequences}')
+                            self.object_series_list.append(sequences)
 
             
-
+            # how to un-nest the object_series_list
+            
 
 
 
@@ -294,7 +272,6 @@ class RuleBasedObjectSequenceDFS1:
         return act_loc_obj_rew
 
         #return self.object_series_list
-
 
 
 
@@ -339,18 +316,18 @@ def rule_only_equip_weapons(sequence, next_object, acting_entity, i):
     return True
 
 def rule_attack_with_weapons(sequence, next_object, acting_entity, i):
-    #print(f'i: {i}')
+    print(f'i: {i}')
     action_series = i[0]
     location_series = i[1]
 
     obj_act = [x for x in action_series if x in subactions_req_objects]
     obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
 
-    #print(f'sequence: {sequence}')
-    #print(f'action_series: {action_series}')
+    print(f'sequence: {sequence}')
+    print(f'action_series: {action_series}')
     
-    #number = len(sequence)
-    action = action_series[-1]
+    number = len(sequence)
+    action = action_series[number]
 
     if action == 5:
         if next_object.type != 'weapon':
@@ -503,7 +480,6 @@ def rule_cannot_drop_offhand_while_donning_shield(sequence, next_object, acting_
 
     action = action_series[len(sequence)-1]
 
-    print('rule check')
     pseudo_inventory, pseudo_main_hand, pseudo_off_hand, pseudo_armor_equipped, pseudo_world = generate_pseudo_history(acting_entity, sequence, i, len(sequence))
 
     # [40,41,43,46]
@@ -521,7 +497,7 @@ def rule_cannot_both_hand_equip_one_handed_weapon(sequence, next_object, acting_
     obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
 
     action = action_series[len(sequence)-1]
-    print('rule check')
+
     pseudo_inventory, pseudo_main_hand, pseudo_off_hand, pseudo_armor_equipped, pseudo_world = generate_pseudo_history(acting_entity, sequence, i, len(sequence))
 
     # [49,50]
@@ -638,18 +614,17 @@ def rule_one_free_hand_to_grapple(sequence, next_object, acting_entity, i):
 
 
 
-
 object_rules = [
     rule_equip_status,
     #rule_only_equip_weapons,
     rule_attack_with_weapons,
-    #rule_spellcasting_with_shield,
+    rule_spellcasting_with_shield,
     rule_limit_hand_capacity,
     rule_one_handed_attack_with_two_handed_weapon,
     rule_only_drink_potions,
     rule_only_don_doff_shields,
-    #rule_cannot_drop_offhand_while_donning_shield,
-    #rule_cannot_both_hand_equip_one_handed_weapon,
+    rule_cannot_drop_offhand_while_donning_shield,
+    rule_cannot_both_hand_equip_one_handed_weapon,
     rule_no_redundant_equipping_unequipping_dropping,
 
 

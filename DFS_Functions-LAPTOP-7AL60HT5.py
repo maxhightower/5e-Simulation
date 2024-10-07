@@ -187,11 +187,8 @@ def generate_pseudo_history(acting_entity,sequence, post_location_reward_list, o
     action_series = post_location_reward_list[0]
     location_series = post_location_reward_list[1]
     object_series = [x for x in action_series if x in subactions_req_objects]
-
-    print(f'functions - pseudo; object_series: {object_series}')
-    print(f'functions - pseudo; object_subaction_index: {object_subaction_index}')
-    print(f'functions - pseudo; sequence: {sequence}')
-
+    #print(f'object series: {object_series}')
+    #print(f'object subaction index: {object_subaction_index}')
     object_subaction = object_series[object_subaction_index]
     pseudo_inventory = acting_entity.inventory.copy()
     #pseudo_weapon_equipped = acting_entity.weapon_equipped.copy()
@@ -350,8 +347,6 @@ def damage_calc1(subaction, acting_entity, main_hand, off_hand):
     # need to identify the entity, the weapon, and the target
     # eventually the input needs to be changed to the the act_loc_obj_rew
 
-    
-
 def damage_calc2(action_location_object_series, acting_entity):
     action_series = action_location_object_series[0]
     location_series = action_location_object_series[1]
@@ -392,67 +387,6 @@ def damage_calc2(action_location_object_series, acting_entity):
         # or perhaps all effects need more details... such as duration, application circumstances, etc...
 
     return damage_series
-
-def probability_hit_calc(action_location_object_series, acting_entity, target_entity):
-    action_series = action_location_object_series[0]
-    location_series = action_location_object_series[1]
-    object_series = action_location_object_series[2]
-    #reward = act_loc_obj_rew[3]
-
-    # the subaction should dictate which type of attack check is being made
-    # and thus the type of bonuses which are allowed (spellcasting, strength, dexterity, etc.)
-
-
-
-    armor_class = target_entity.ac
-
-    circumstances = []
-    # need to go through acting_entity's conditions and circumstances
-
-    #if sum([1 for x in circumstances if x == 'ADV']) > 0 and sum([1 for x in circumstances if x == 'DIS']) > 0:
-        
-    # attack bonus
-    attack_bonus = acting_entity.strength_mod + acting_entity.proficiency_bonus
-
-    # always hits on a 20
-
-    bonuses = []
-    for i in action_series:
-        if i in effect_subactions:
-            if effect_dictionary[i].type == 'attack_bonus':
-                bonuses.append(effect_dictionary[i].effect)
-    
-    attack_bonus += sum(bonuses)
-
-    # the probability of hitting is the probability of rolling a number that is greater than or equal to the target's armor class
-    # the probability of rolling a number between 1 and 20 is 1/20
-
-    probability = (21 - (armor_class - attack_bonus))/20
-
-
-    return probability
-
-def expected_damage(action_location_object_series, acting_entity, target_entity):
-    # this is the expected damage for a single attack
-    # taking into account:
-    # - effects, circumstances, and conditions
-    # - the probability of hitting
-    # - resistances and vulnerabilities
-
-    # chance of normal damage
-    # chance of critical damage
-    # chance of missing
-
-    # the damage will need to be separated by a list of damage types
-
-
-
-    expected_damage_results = []
-
-
-def calc_series_expected_damage(action_location_object_series, acting_entity, target_entity):
-    pass
-
 
 
 
@@ -533,23 +467,23 @@ def precalc_reward(action_series, entity):
     
     # if the entity goes prone at all
     if 19 in action_series:
-        reward_value -= 1
+        reward_value -= 0.25
 
     # if the entity ends the turn while prone
     if 19 in action_series:
         last_prone_index = len(action_series) - 1 - action_series[::-1].index(19)
         if 20 not in action_series[last_prone_index:]:
-            reward_value -= 1
+            reward_value -= 0.5
 
     # if the action series is between 3 and 6, reward else punish
     if act_series_len >= 3:
-        reward_value += 1
+        reward_value += 0.5
     
     if act_series_len <= 7:
-        reward_value += 1
+        reward_value += 0.25
 
     if act_series_len > 10:
-        reward_value -= 1
+        reward_value -= 0.5
 
     #if 5 not in action_series:
     #    reward_value -= 1
@@ -569,66 +503,66 @@ def precalc_reward(action_series, entity):
     # aka if the equip subaction is followed by the attack subaction, reward
     if 25 in action_series:
         if 5 in action_series[action_series.index(25):]:
-            reward_value += 1
+            reward_value += 0.5
     if 26 in action_series:
         if 5 in action_series[action_series.index(26):]:
-            reward_value += 1
+            reward_value += 0.5
     
     # if the entity equips off hand and attacks with it, reward 
     if 37 in action_series:
         if 15 in action_series[action_series.index(37):]:
-            reward_value += 1
+            reward_value += 0.25
     if 38 in action_series:
         if 15 in action_series[action_series.index(38):]:
-            reward_value += 1
+            reward_value += 0.25
 
 
     
     # if the entity picks up an item, and then equips it, reward
     if 4 in action_series:
         if 13 in action_series[action_series.index(4):]:
-            reward_value += 1
+            reward_value += 0.25
         if 25 in action_series[action_series.index(4):]:
-            reward_value += 1
+            reward_value += 0.25
         if 26 in action_series[action_series.index(4):]:
-            reward_value += 1
+            reward_value += 0.25
         if 37 in action_series[action_series.index(4):]:
-            reward_value += 1
+            reward_value += 0.25
         if 38 in action_series[action_series.index(4):]:
-            reward_value += 1
+            reward_value += 0.25
 
     if 7 in action_series:
         if 13 in action_series[action_series.index(7):]:
-            reward_value += 1
+            reward_value += 0.25
         if 25 in action_series[action_series.index(7):]:
-            reward_value += 1
+            reward_value += 0.25
         if 26 in action_series[action_series.index(7):]:
-            reward_value += 1
+            reward_value += 0.25
         if 37 in action_series[action_series.index(7):]:
-            reward_value += 1
+            reward_value += 0.25
         if 38 in action_series[action_series.index(7):]:
-            reward_value += 1
+            reward_value += 0.25
 
     # for the number of attacks made, times the number of damage dealt, reward
     
     # if the entity loses an item, slightly punish
     # 29, 30, 42, 43, 44, 45, 46, 47
     if 29 in action_series:
-        reward_value -= 1
+        reward_value -= 0.5
     if 30 in action_series:
-        reward_value -= 1
+        reward_value -= 0.5
     if 42 in action_series:
-        reward_value -= 1
+        reward_value -= 0.5
     if 43 in action_series:
-        reward_value -= 1
+        reward_value -= 0.5
     if 44 in action_series:
-        reward_value -= 1
+        reward_value -= 0.5
     if 45 in action_series:
-        reward_value -= 1
+        reward_value -= 0.5
     if 46 in action_series:
-        reward_value -= 1
+        reward_value -= 0.5
     if 47 in action_series:
-        reward_value -= 1
+        reward_value -= 0.5
 
     # if the entity unequips an item, and doesn't equip something later, punish
     # equip: 25, 26, 37, 38, 13
@@ -649,13 +583,13 @@ def precalc_reward(action_series, entity):
         if action_series[i] in move_subactions:
             if 8 in action_series[:i]:
                 if any(x in action_series[:action_series.index(8)] for x in move_subactions):
-                    reward_value += 1
+                    reward_value += 0.5
 
 
     # if shove - push is taken, and then movement is taken, reward
     if 53 in action_series:
         if any(x in action_series for x in move_subactions):
-            reward_value += 1
+            reward_value += 0.5
     
 
 
@@ -713,12 +647,12 @@ def post_loc_series_reward_calc(all_action_series, all_location_series, all_rewa
                 # punishing for each enemy that can see the entity
                 if move_path != []:   
                     vis_count = len(check_visibility(move_path[-1], acting_entity.world.enemy_locations, acting_entity.world))
-                    post_loc_reward -= 1
+                    post_loc_reward -= vis_count/2
 
 
                 # punishing slightly if the entity doesn't move
                 if move_path == []:
-                    post_loc_reward -= 1
+                    post_loc_reward -= 0.5
 
 
                 # if the object action targets entity's location, but inventory is empty...
@@ -784,9 +718,9 @@ def post_obj_reward_series_calc(action_series_full_list, location_series_full_li
         reward = reward_series_full_list[i]
         object_series_list = object_series_full_list[i]
     
-        #print(f'action series: {action_series}')
-        #print(f'location series: {location_series}')
-        #print(f'object series list: {object_series_list}')
+        print(f'action series: {action_series}')
+        print(f'location series: {location_series}')
+        print(f'object series list: {object_series_list}')
 
 
         if object_series_list != []:
@@ -835,18 +769,18 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
         reward = act_loc_obj_rew_series[i][3]
         object_series_list = act_loc_obj_rew_series[i][2]
     
-        #print(f'action series: {action_series}')
-        #print(f'location series: {location_series}')
-        #print(f'object series list: {object_series_list}')
-        #print(f'reward: {reward}')
+        print(f'action series: {action_series}')
+        print(f'location series: {location_series}')
+        print(f'object series list: {object_series_list}')
+        print(f'reward: {reward}')
 
         # actions that are only move_actions
         move_act_series = [x for x in action_series if x in move_subactions]
-        #print(f'move act series: {move_act_series}')
+        print(f'move act series: {move_act_series}')
 
         # locations that are only move_actions
         move_loc_series = [location_series[y] for y in range(len(location_series)) if action_series[y] in move_subactions]
-        #print(f'move loc series: {move_loc_series}')
+        print(f'move loc series: {move_loc_series}')
 
 
 
@@ -894,51 +828,13 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
 
                 # the potential damage, without taking the target into account
                 damage_series = damage_calc2([action_series, location_series, obj_series],acting_entity)
-                print(f'damage series: {damage_series}')
                 post_obj_reward += sum(damage_series)
-                
 
                 # the risk based on the number of enemies that can be seen
 
                 # the AC of an entity throughout the turn, such as donning armor or using a shield
 
-
-
-                # reward when you don shield, small penalty when you equip it
-                # if the action is 13 and object is shield, reward
-                if 13 in action_series:
-                    if obj_series[action_series.index(13)].type == 'shield':
-                        post_obj_reward += 1
-                    
-                if 13 in action_series:
-                    if obj_series[action_series.index(13)].type == 'shield':
-                        if acting_entity.shield_proficiency == False:
-                            post_obj_reward -= 1
-
-                # if the action is in [25,26,37,38] and the object is a shield, penalize
-                if any(x in action_series for x in [25,26,37,38]):
-                    if obj_series[action_series.index(25) or action_series.index(26) or action_series.index(37) or action_series.index(38)].type == 'shield':
-                        post_obj_reward -= 1
-
-                # if an item is equipped and then unequipped and then equipped again, punish
-
-                # if an item is picked up and then dropped, punish
-
-                # if an item is picked up and then equipped and then unequipped and then dropped, punish
-
-                # if an item is equipped and item.casting_focus == True, and the cast action (14) is taken, reward
-                if any(x in action_series for x in [25,26,37,38]):
-                    if obj_series[action_series.index(25) or action_series.index(26) or action_series.index(37) or action_series.index(38)].casting_focus == True:
-                        if 14 in [x for x in action_series if x in action_series[action_series.index(25) or action_series.index(26) or action_series.index(37) or action_series.index(38):]]:
-                            post_obj_reward += 1
-
-
-                # if an item is equipped and it is a potion and then drink potion (33) is taken, reward
-                if any(x in action_series for x in [25,26,37,38]):
-                    if obj_series[action_series.index(25) or action_series.index(26) or action_series.index(37) or action_series.index(38)].type == 'potion':
-                        if 33 in [x for x in action_series if x in action_series[action_series.index(25) or action_series.index(26) or action_series.index(37) or action_series.index(38):]]:
-                            post_obj_reward += 1
-
+                # 
 
                 new_act_loc_rew_series = (action_series, location_series, obj_series, post_obj_reward)
                 post_object_list.append(new_act_loc_rew_series)
