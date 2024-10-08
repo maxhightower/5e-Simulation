@@ -168,7 +168,7 @@ def analyze_reward_distribution(reward_series_full_list, action_series_full_list
     print()
 
     # need to change the qualifier to be the top 15% of rewards
-    quality_threshold = np.percentile(reward_series_full_list, 90)
+    quality_threshold = np.percentile(reward_series_full_list, 95)
 
     print(f'Quality Threshold: {quality_threshold}')
 
@@ -188,9 +188,9 @@ def generate_pseudo_history(acting_entity,sequence, post_location_reward_list, o
     location_series = post_location_reward_list[1]
     object_series = [x for x in action_series if x in subactions_req_objects]
 
-    print(f'functions - pseudo; object_series: {object_series}')
-    print(f'functions - pseudo; object_subaction_index: {object_subaction_index}')
-    print(f'functions - pseudo; sequence: {sequence}')
+    #print(f'functions - pseudo; object_series: {object_series}')
+    #print(f'functions - pseudo; object_subaction_index: {object_subaction_index}')
+    #print(f'functions - pseudo; sequence: {sequence}')
 
     object_subaction = object_series[object_subaction_index]
     pseudo_inventory = acting_entity.inventory.copy()

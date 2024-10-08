@@ -100,7 +100,7 @@ class RuleBasedLocationSequenceDFS2:
             for x in range(len(self.acting_entity.world.grid))
             for y in range(len(self.acting_entity.world.grid[x]))
         ]
-        quality_threshold = np.percentile(self.reward_series_list, 90) 
+        quality_threshold = np.percentile(self.reward_series_list, 95) 
 
         for action_series_index, action_series in enumerate(self.action_series_list):
 

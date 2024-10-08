@@ -83,12 +83,12 @@ class RuleBasedObjectSequenceDFS1:
         location_series = post_location_reward_list[1]
         object_series = [x for x in action_series if x in subactions_req_objects]
 
-        print(f'object series: {object_series}')
-        print(f'object subaction index: {object_subaction_index}')
+        #print(f'object series: {object_series}')
+        #print(f'object subaction index: {object_subaction_index}')
 
         object_subaction = object_series[object_subaction_index]
 
-        print(f'get potential objects')
+        #print(f'get potential objects')
         pseudo_inventory, pseudo_main_hand, pseudo_off_hand, pseudo_armor_equipped, pseudo_world = generate_pseudo_history(acting_entity,sequence, post_location_reward_list, object_subaction_index)
 
 
@@ -176,8 +176,8 @@ class RuleBasedObjectSequenceDFS1:
         obj_act_series = [i for i in action_series if i in subactions_req_objects]
         required_sequence_length = len(obj_act_series)
         
-        print(f'action series: {action_series}')
-        print(f'dfs; required sequence length: {required_sequence_length}')
+        #print(f'action series: {action_series}')
+        #print(f'dfs; required sequence length: {required_sequence_length}')
 
         #all_sequences = []
         subaction_index = len(current_sequence)
@@ -185,8 +185,8 @@ class RuleBasedObjectSequenceDFS1:
         # the desired outcome
         if len(current_sequence) == len([x for x in act_loc_rew[0] if x in subactions_req_objects]):
             if self.check_rules(current_sequence, next_object, acting_entity, act_loc_rew):
-                print(f'dfs; finished sequence: {current_sequence}')
-                print('')
+                #print(f'dfs; finished sequence: {current_sequence}')
+                #print('')
                 return current_sequence.copy()
             
         
@@ -206,7 +206,7 @@ class RuleBasedObjectSequenceDFS1:
         for next_object in potential_objects:
             if self.check_rules(current_sequence, next_object, self.acting_entity, act_loc_rew):
                 current_sequence.append(next_object)
-                print(f'dfs; appending current sequence: {current_sequence}')
+                #print(f'dfs; appending current sequence: {current_sequence}')
 
                 self.object_series_list.append(self.dfs(current_sequence, next_object, acting_entity, act_loc_rew, potential_objects, post_location_reward_list))
                 current_sequence.pop()
@@ -236,13 +236,13 @@ class RuleBasedObjectSequenceDFS1:
         reward_series_list = [i[2] for i in post_location_reward_list]
 
         act_loc_rew_pass_count = 0
-        quality_threshold = np.percentile(reward_series_list, 90)
+        quality_threshold = np.percentile(reward_series_list, 95)
 
         #print(f'Post Location Reward List: {post_location_reward_list}')
         
         for act_loc_rew in post_location_reward_list:
             # for each possible combination of actions,
-            print('')
+            #print('')
             action_series, location_series, reward = act_loc_rew
             #print(f'act_loc_rew: {act_loc_rew}') # ([25, 5, 0], [[1, 1], [1, 1]], 5.5)
 
@@ -259,15 +259,15 @@ class RuleBasedObjectSequenceDFS1:
                     #subaction = act_loc_rew[0][subaction_index]
                     #if subaction in subactions_req_objects:
                         # then for each action relating to an object
-                print(f'action series: {action_series}')
-                print(f'location series: {location_series}')
+                #print(f'action series: {action_series}')
+                #print(f'location series: {location_series}')
                 
-                print(f'initial get potential objects')
+                #print(f'initial get potential objects')
                 potential_objects = self.get_potential_objects([], self.acting_entity, act_loc_rew)
                         # find all the obejcts that can be interacted with
-                print(f'potential objects: {potential_objects}')
+                #print(f'potential objects: {potential_objects}')
 
-                print(f'beginning next_object loop')
+                #print(f'beginning next_object loop')
                 for next_object in potential_objects:
                     # and for each object that can be interacted with
                             
