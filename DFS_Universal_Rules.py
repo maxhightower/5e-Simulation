@@ -80,7 +80,7 @@ action_subactions = [5,6,7,8,9,10,11,12,13,16,17,18,21,22,26,28,30,32,33,34,35,3
 attack_subactions = [5,16,18,36,48,53]
 free_subactions = [[4,25,27,29,31,37,40,42,43,44],[14]] # can do one of each list
 bonus_subactions = [15]
-object_subactions = [4,7,25,26,27,28,29,30,31,32,37,38,40,41,42,43,44,45,46,47,49,50,51,52]
+object_subactions = [4,7,25,28,29,30,31,32,37,38,40,41,42,43,44,45,46,47,49,50,51,52] # removing 27,28 for now
 object_action_subactions = [7,26,28,30,32,38,41,45,46,47,50,52]
 object_free_subactions = [4,25,27,29,31,37,40,42,43,44,49,51]
 

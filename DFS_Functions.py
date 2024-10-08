@@ -709,6 +709,8 @@ def post_loc_series_reward_calc(all_action_series, all_location_series, all_rewa
                 if check_opportunity_attacks(move_path, acting_entity.world.enemy_locations):
                     post_loc_reward -= 1
                 
+                # each opportunity attack while flanked is even worse, additional punishment if that's the case
+
                 
                 # punishing for each enemy that can see the entity
                 if move_path != []:   
@@ -732,6 +734,15 @@ def post_loc_series_reward_calc(all_action_series, all_location_series, all_rewa
                 
                 # if the path is in a circle...
                 # if the 
+
+
+                # need to reward the entity for how hard it would be for an enemy to hit them
+                # this includes the move speed needed to reach them, including difficult terrain
+
+
+                # if the entity is flanked by enemies, punish
+                # if two or more enemies are in spaces adjacent to the entity,
+                
 
 
                 new_act_loc_rew_series = (action_series, loc_series, post_loc_reward)
@@ -902,6 +913,7 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
 
                 # the AC of an entity throughout the turn, such as donning armor or using a shield
 
+                # if the damage dealt would reduce the target to 0 hp, reward
 
 
                 # reward when you don shield, small penalty when you equip it
@@ -938,6 +950,14 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
                     if obj_series[action_series.index(25) or action_series.index(26) or action_series.index(37) or action_series.index(38)].type == 'potion':
                         if 33 in [x for x in action_series if x in action_series[action_series.index(25) or action_series.index(26) or action_series.index(37) or action_series.index(38):]]:
                             post_obj_reward += 1
+
+                # for each instance of DisADV an enemy would have against the entity, reward
+
+                # for each instance of ADV the entity would have against an enemy, reward
+
+                # for each instance of ADV an enemy would have against the entity, punish
+
+                # for each instance of DisADV the entity would have against an enemy, punish
 
 
                 new_act_loc_rew_series = (action_series, location_series, obj_series, post_obj_reward)

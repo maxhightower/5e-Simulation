@@ -246,7 +246,7 @@ class RuleBasedObjectSequenceDFS1:
             action_series, location_series, reward = act_loc_rew
             #print(f'act_loc_rew: {act_loc_rew}') # ([25, 5, 0], [[1, 1], [1, 1]], 5.5)
 
-            if int(act_loc_rew[2]) >= quality_threshold:
+            if int(act_loc_rew[2]) >= quality_threshold and len([x for x in act_loc_rew[0] if x in subactions_req_objects]) > 0:
                 act_loc_rew_pass_count += 1
                 # as long as the benefit is tolerable
 
