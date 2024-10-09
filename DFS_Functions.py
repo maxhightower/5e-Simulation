@@ -168,7 +168,7 @@ def analyze_reward_distribution(reward_series_full_list, action_series_full_list
     print()
 
     # need to change the qualifier to be the top 15% of rewards
-    quality_threshold = np.percentile(reward_series_full_list, 95)
+    quality_threshold = np.percentile(reward_series_full_list, 99)
 
     print(f'Quality Threshold: {quality_threshold}')
 
@@ -843,8 +843,8 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
 
         action_series = act_loc_obj_rew_series[i][0]
         location_series = act_loc_obj_rew_series[i][1]
-        reward = act_loc_obj_rew_series[i][3]
         object_series_list = act_loc_obj_rew_series[i][2]
+        reward = act_loc_obj_rew_series[i][3]
     
         #print(f'action series: {action_series}')
         #print(f'location series: {location_series}')

@@ -250,7 +250,8 @@ class RuleBasedObjectSequenceDFS1:
         reward_series_list = [i[2] for i in post_location_reward_list]
 
         act_loc_rew_pass_count = 0
-        quality_threshold = np.percentile(reward_series_list, 95)
+        quality_threshold = np.percentile(reward_series_list, 99)
+        print(f'Quality Threshold: {quality_threshold}')
 
         #print(f'Post Location Reward List: {post_location_reward_list}')
         
@@ -286,10 +287,10 @@ class RuleBasedObjectSequenceDFS1:
                     # and for each object that can be interacted with
                             
                     sequences = self.dfs([], next_object, self.acting_entity, act_loc_rew, potential_objects, post_location_reward_list)
-                            
-                    self.object_series_list.append(sequences)
+                    
+                    if sequences not in self.object_series_list:
+                        self.object_series_list.append(sequences)
 
-            
 
 
 
@@ -297,12 +298,24 @@ class RuleBasedObjectSequenceDFS1:
             #else:
                  #self.object_series_list.append([])
 
-                result = [action_series, location_series, self.object_series_list, reward]
-            #act_loc_obj_rew.append(result)
+            #print(len(self.object_series_list))
+
+            # turn self.object_series_list into a set of unique sequences
+            obj_act = [x for x in action_series if x in subactions_req_objects]
+
+            object_series_set = [tuple(i) for i in self.object_series_list]
+
+
             
-                if result not in act_loc_obj_rew:
-                    act_loc_obj_rew.append(result)
-                self.object_series_list = []
+            #print(len(object_series_set))
+            for i in object_series_set:
+                if len(i) == len(obj_act):
+                    result = [action_series, location_series, i, reward]
+
+                    if result not in act_loc_obj_rew:
+                        act_loc_obj_rew.append(result)
+            
+            self.object_series_list = []
 
         #print(f'act_loc_obj_rew pass count: {act_loc_rew_pass_count}')
         return act_loc_obj_rew
@@ -470,7 +483,7 @@ def rule_one_handed_attack_with_two_handed_weapon(sequence, next_object, acting_
     obj_act = [x for x in action_series if x in subactions_req_objects]
     obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
 
-    action = action_series[len(sequence)-1]
+    action = action_series[-1]
 
     if action in attack_subactions:
         if next_object.type == 'weapon':
@@ -486,7 +499,7 @@ def rule_only_drink_potions(sequence, next_object, acting_entity, i):
     obj_act = [x for x in action_series if x in subactions_req_objects]
     obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
 
-    action = action_series[len(sequence)-1]
+    action = action_series[-1]
 
     if action == 33:
         if next_object.type != 'potion':
@@ -500,7 +513,7 @@ def rule_only_don_doff_shields(sequence, next_object, acting_entity, i):
     obj_act = [x for x in action_series if x in subactions_req_objects]
     obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
 
-    action = action_series[len(sequence)-1]
+    action = action_series[-1]
 
     if action in [13,39]:
         if next_object.type != 'shield':
@@ -515,7 +528,7 @@ def rule_cannot_drop_offhand_while_donning_shield(sequence, next_object, acting_
     obj_act = [x for x in action_series if x in subactions_req_objects]
     obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
 
-    action = action_series[len(sequence)-1]
+    action = action_series[-1]
 
     print('rule check')
     pseudo_inventory, pseudo_main_hand, pseudo_off_hand, pseudo_armor_equipped, pseudo_world = generate_pseudo_history(acting_entity, sequence, i, len(sequence))
@@ -534,7 +547,7 @@ def rule_cannot_both_hand_equip_one_handed_weapon(sequence, next_object, acting_
     obj_act = [x for x in action_series if x in subactions_req_objects]
     obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
 
-    action = action_series[len(sequence)-1]
+    action = action_series[-1]
     print('rule check')
     pseudo_inventory, pseudo_main_hand, pseudo_off_hand, pseudo_armor_equipped, pseudo_world = generate_pseudo_history(acting_entity, sequence, i, len(sequence))
 
@@ -559,8 +572,8 @@ def rule_no_redundant_equipping_unequipping_dropping(sequence, next_object, acti
     obj_act = [x for x in action_series if x in subactions_req_objects]
     obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
 
-    action = action_series[len(sequence)-1]
-    previous_action = action_series[len(sequence)-2]
+    action = action_series[-1]
+    previous_action = action_series[-2]
 
     # equipping
     # if an object is equipped to main hand, and the current action is equipping to off hand
@@ -616,23 +629,27 @@ def rule_no_redundant_equipping_unequipping_dropping(sequence, next_object, acti
     if any([37 in action_series, 38 in action_series]) and action in [49,50]:
         # unless any unequip or drop actions happen in between the two
         if 37 in action_series and 49 in action_series:
-            in_between_sequence = [action_series[i] for i in range(len(action_series)) if i > action_series.index(25) and i < action_series.index(37)]
+            in_between_sequence = [action_series[i] for i in range(len(action_series)) if i > action_series.index(37) and i < action_series.index(49)]
         
         if 37 in action_series and 50 in action_series:
-            in_between_sequence = [action_series[i] for i in range(len(action_series)) if i > action_series.index(25) and i < action_series.index(38)]
+            in_between_sequence = [action_series[i] for i in range(len(action_series)) if i > action_series.index(37) and i < action_series.index(50)]
 
         if 38 in action_series and 49 in action_series:
-            in_between_sequence = [action_series[i] for i in range(len(action_series)) if i > action_series.index(26) and i < action_series.index(37)]
+            in_between_sequence = [action_series[i] for i in range(len(action_series)) if i > action_series.index(38) and i < action_series.index(49)]
         
         if 38 in action_series and 50 in action_series:
-            in_between_sequence = [action_series[i] for i in range(len(action_series)) if i > action_series.index(26) and i < action_series.index(38)]
+            in_between_sequence = [action_series[i] for i in range(len(action_series)) if i > action_series.index(38) and i < action_series.index(50)]
         
         if any([25,26,31,32,40,41]) in in_between_sequence:
             return True
         
         else:
-            # if the object is the same between the two actions, return False
-            if acting_entity.main_hand[0] == acting_entity.off_hand[0]:
+            if len(acting_entity.main_hand) > 0 and len(acting_entity.off_hand) > 0:
+                # if the object is the same between the two actions, return False
+                if acting_entity.main_hand[0] == acting_entity.off_hand[0]:
+                    return False
+            elif len(acting_entity.main_hand) > 0 or len(acting_entity.off_hand) > 0:
+                # if there is only one object 
                 return False
 
     return True
@@ -645,10 +662,13 @@ def rule_one_free_hand_to_grapple(sequence, next_object, acting_entity, i):
     obj_act = [x for x in action_series if x in subactions_req_objects]
     obj_loc = [location_series[i] for i in range(len(location_series)) if action_series[i] in obj_act]
 
-    action = action_series[len(sequence)-1]
+    action = action_series[-1]
 
 
-
+# objects need to be within range to pick them up
+def rule_object_interaction_range(sequence, next_object, acting_entity, i):
+    
+    return True
 
 
 
