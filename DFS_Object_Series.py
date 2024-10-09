@@ -86,7 +86,21 @@ class RuleBasedObjectSequenceDFS1:
         #print(f'object series: {object_series}')
         #print(f'object subaction index: {object_subaction_index}')
 
-        object_subaction = object_series[object_subaction_index]
+        try: 
+            object_subaction = object_series[object_subaction_index]
+
+        except:
+            
+
+            print(f'action series: {action_series}')
+            print(f'location series: {location_series}')
+            
+            print(f'sequence: {sequence}')
+            
+            print(f'object series: {object_series}')
+            print(f'object subaction index: {object_subaction_index}')
+
+            object_subaction = object_series[object_subaction_index]
 
         #print(f'get potential objects')
         pseudo_inventory, pseudo_main_hand, pseudo_off_hand, pseudo_armor_equipped, pseudo_world = generate_pseudo_history(acting_entity,sequence, post_location_reward_list, object_subaction_index)
