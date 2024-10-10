@@ -59,53 +59,85 @@ def calculate_full_path(entity_location, actions_locations_series):
     #         [ [1,1], [1,1], [1,1], [1,1], [1,1] ]
     #       ]
 
+    #print('')
+
     action_series = actions_locations_series[0]
     location_series = actions_locations_series[1]
 
     move_act_series = [x for x in action_series if x in move_subactions]
     move_loc_series = [location_series[y] for y in range(len(location_series)) if action_series[y] in move_subactions]
 
+    #print(f'move act series: {move_act_series}')
+    #print(f'move loc series: {move_loc_series}')
+
     starting_location = entity_location
     all_main_positions = [starting_location] + [loc for loc in move_loc_series]
+    #print(f'all main positions: {all_main_positions}')
 
     # need to go through each pair of locations and calculate the path between them
     full_path = []
-    for location_index in range(len(all_main_positions)):
-        location_pair = [all_main_positions[location_index], all_main_positions[location_index+1]]
-
-        calculated_distance = 0
-
-
-
-    """
-    Calculate the full path using Bresenham's line algorithm for each segment.
     
-    :param entity_location: Starting location of the entity
-    :param move_series_zip: List of (action, location) tuples for movement actions
-    :return: List of all coordinates in the path
-    """
+
+
+    if len(move_loc_series) <= 1:
+        return [starting_location] + move_loc_series
+    
+    else:
+
+        for location_index in range(len(all_main_positions)):
+            if (location_index + 1) > len(all_main_positions):
+                break
+            else:
+                location_pair = [all_main_positions[location_index], all_main_positions[location_index+1]]
+
+                #print(f'location pair: {location_pair}')
+                # the calculated distance is the distance formula
+                calculated_distance = np.linalg.norm(np.array(location_pair[0]) - np.array(location_pair[1]))
+                #print(f'calculated distance: {calculated_distance}')
+        
+                # if the distance is greater than 1, then the path needs to be calculated
+                if calculated_distance > 1:
+                    path = bresenham_line(location_pair[0], location_pair[1])
+                    full_path.extend(path)
+                else:
+                    full_path.append(location_pair[0])
+                    full_path.append(location_pair[1])
+
+            #print(f'full path: {full_path}')
+        
+            return full_path
+
+
+
+    #"""
+    #Calculate the full path using Bresenham's line algorithm for each segment.
+    
+    #:param entity_location: Starting location of the entity
+    #:param move_series_zip: List of (action, location) tuples for movement actions
+    #:return: List of all coordinates in the path
+    #"""
     # Create a list of all positions, starting with the entity's initial location
 
     #print(f'move series zip: {move_series_zip}')
     #print(f'entity location: {entity_location}')
 
-    all_positions = [entity_location]
-    for loc in actions_locations_series[1]:
-        all_positions.append(loc)
+    #all_positions = [entity_location]
+    #for loc in actions_locations_series[1]:
+    #    all_positions.append(loc)
     
     #all_positions = [entity_location] + [loc for _, loc in move_series_zip]
     #print(f'all_positions: {all_positions}')
 
     # Use list comprehension to get Bresenham lines for each segment
-    path_segments = [bresenham_line(start, end) 
-                     for start, end in zip(all_positions, all_positions[1:])]
+    #path_segments = [bresenham_line(start, end) 
+    #                 for start, end in zip(all_positions, all_positions[1:])]
     
     # Flatten the list of segments and remove duplicates while preserving order
-    full_path = []
-    for segment in path_segments:
-        full_path.extend(coord for coord in segment if coord not in full_path)
+    #full_path = []
+    #for segment in path_segments:
+    #    full_path.extend(coord for coord in segment if coord not in full_path)
     
-    return full_path
+    #return full_path
 
 
 def check_opportunity_attacks(full_path, enemy_locations, disengage_action=8):
@@ -355,12 +387,18 @@ def damage_calc1(subaction, acting_entity, main_hand, off_hand):
                         damage = main_hand[0].damage + acting_entity.strength_mod
 
                 if main_hand != []:
-                    if subaction == 5:
-                        damage = main_hand[0].damage + acting_entity.strength_mod
+                    if main_hand[0].type != 'weapon':
+                        damage = 1 + acting_entity.strength_mod
+                    else:
+                        if subaction == 5:
+                            damage = main_hand[0].damage + acting_entity.strength_mod
                 
             if off_hand != []:
                 if subaction == 15:
-                    damage = off_hand[0].damage
+                    if off_hand[0].type != 'weapon':
+                        damage = 1
+                    else:
+                        damage = off_hand[0].damage
 
 
         elif subaction == 36: # unarmed strike
@@ -867,7 +905,7 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
 
         action_series = act_loc_obj_rew_series[i][0]
         location_series = act_loc_obj_rew_series[i][1]
-        object_series_list = act_loc_obj_rew_series[i][2]
+        object_series = act_loc_obj_rew_series[i][2]
         reward = act_loc_obj_rew_series[i][3]
     
         #print(f'action series: {action_series}')
@@ -888,104 +926,163 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
         if move_loc_series != []:
 
             # move_act_loc needs to be a representation of each move_subaction being used (pulled from the action_series) and each location that it's moving to (pulled from the location_series)
-            move_act_loc = ([x for x in action_series if x in move_subactions],[location_series[y] for y in range(len(location_series)) if move_act_series[y] in move_subactions])
-            print(f'move action location series: {move_act_loc}')
+            #move_act_loc = ([x for x in action_series if x in move_subactions],[location_series[y] for y in range(len(location_series)) if move_act_series[y] in move_subactions])
+            #print(f'move action location series: {move_act_loc}')
 
 
-            move_path = calculate_full_path(acting_entity.location, move_act_loc)
+            move_path = calculate_full_path(acting_entity.location, [move_act_series,move_loc_series])
             print(f'move path: {move_path}')
 
 
-        if object_series_list != []:
-            for obj_series in object_series_list:
-                post_obj_reward = reward
+        if object_series != []:
+            post_obj_reward = reward
 
-                # if the object action targets entity's location, but inventory is empty...
+            # if the object action targets entity's location, but inventory is empty...
+            
+            # if they end their turn prone while adjacent to an enemy
+            if 19 in action_series and 20 not in action_series[:-action_series.index(19)]:
+                if move_path != [] and move_path[-1] in acting_entity.world.enemy_adjacent_locations:
+                    post_obj_reward -= 1
+            
+            # if the path is in a circle...
+            # if the 
+            
+            # if the pickup action was taken, and the object was a coin, reward
+                #if any([4 in action_series, 7 in action_series]):
+                    # the object associated with the subaction
+                #    obj = obj_series[action_series.index(4) or action_series.index(7)]
+                #    if obj.Type == 'coin':
+                #        post_obj_reward += 1
+            if 4 in action_series:
+                print(f'here 4: {object_series[action_series.index(4)]}')
+                if object_series[action_series.index(4)].name == 'coin':
+                    post_obj_reward += 1
+            if 7 in action_series:
+                print(f'here 7: {object_series[action_series.index(7)]}')
+                if object_series[action_series.index(7)].name == 'coin':
+                    post_obj_reward += 1
+
+
+            # the potential damage, without taking the target into account
+            damage_series = damage_calc2([action_series, location_series, object_series],acting_entity)
+            print(f'damage series: {damage_series}')
+            post_obj_reward += sum(damage_series)
+            
+
+            # the risk based on the number of enemies that can be seen
+
+            # the AC of an entity throughout the turn, such as donning armor or using a shield
+
+            # if the damage dealt would reduce the target to 0 hp, reward
+
+
+            # reward when you don shield, small penalty when you equip it
+            # if the action is 13 and object is shield, reward
+            if 13 in action_series:
+                if object_series[action_series.index(13)].type == 'shield':
+                    post_obj_reward += 1
                 
-                # if they end their turn prone while adjacent to an enemy
-                if 19 in action_series and 20 not in action_series[:-action_series.index(19)]:
-                    if move_path != [] and move_path[-1] in acting_entity.world.enemy_adjacent_locations:
+            if 13 in action_series:
+                if object_series[action_series.index(13)].type == 'shield':
+                    if acting_entity.shield_proficiency == False:
                         post_obj_reward -= 1
-                
-                # if the path is in a circle...
-                # if the 
-                
-                # if the pickup action was taken, and the object was a coin, reward
-                if obj_series != []:
-                    #if any([4 in action_series, 7 in action_series]):
-                        # the object associated with the subaction
-                    #    obj = obj_series[action_series.index(4) or action_series.index(7)]
-                    #    if obj.Type == 'coin':
-                    #        post_obj_reward += 1
-                    if 4 in action_series:
-                        print(f'here 4: {obj_series[action_series.index(4)]}')
-                        if obj_series[action_series.index(4)].name == 'coin':
-                            post_obj_reward += 1
-                    if 7 in action_series:
-                        print(f'here 7: {obj_series[action_series.index(7)]}')
-                        if obj_series[action_series.index(7)].name == 'coin':
-                            post_obj_reward += 1
+
+            # if the action is in [25,26,37,38] and the object is a shield, penalize
+            #if any(x in action_series for x in [25,26,37,38]):
+            #    if obj_series[action_series.index(25) or action_series.index(26) or action_series.index(37) or action_series.index(38)].type == 'shield':
+            #        post_obj_reward -= 1
+
+            print(f'action series: {action_series}')
+            print(f'object series: {object_series}')
+            obj_act_series = [x for x in action_series if x in subactions_req_objects]
+            print(f'obj act series: {obj_act_series}')
+
+            # rewrite the above using four if statements instead of the [or] statement
+            if 25 in action_series:
+                if object_series[obj_act_series.index(25)].type == 'shield':
+                    post_obj_reward -= 1
+            if 26 in action_series:
+                if object_series[obj_act_series.index(26)].type == 'shield':
+                    post_obj_reward -= 1
+            if 37 in action_series:
+                print(action_series.index(37))
+                if object_series[obj_act_series.index(37)].type == 'shield':
+                    post_obj_reward -= 1
+            if 38 in action_series:
+                if object_series[obj_act_series.index(38)].type == 'shield':
+                    post_obj_reward -= 1
 
 
-                # the potential damage, without taking the target into account
-                damage_series = damage_calc2([action_series, location_series, obj_series],acting_entity)
-                print(f'damage series: {damage_series}')
-                post_obj_reward += sum(damage_series)
-                
-
-                # the risk based on the number of enemies that can be seen
-
-                # the AC of an entity throughout the turn, such as donning armor or using a shield
-
-                # if the damage dealt would reduce the target to 0 hp, reward
 
 
-                # reward when you don shield, small penalty when you equip it
-                # if the action is 13 and object is shield, reward
-                if 13 in action_series:
-                    if obj_series[action_series.index(13)].type == 'shield':
+            # if an item is equipped and then unequipped and then equipped again, punish
+
+            # if an item is picked up and then dropped, punish
+
+            # if an item is picked up and then equipped and then unequipped and then dropped, punish
+
+            # if an item is equipped and item.casting_focus == True, and the cast action (14) is taken, reward
+            #if any(x in action_series for x in [25,26,37,38]):
+            #    if obj_series[action_series.index(25) or action_series.index(26) or action_series.index(37) or action_series.index(38)].casting_focus == True:
+            #        if 14 in [x for x in action_series if x in action_series[action_series.index(25) or action_series.index(26) or action_series.index(37) or action_series.index(38):]]:
+            #            post_obj_reward += 1
+
+            # rewrite the above using four if statements instead of the [or] statement
+            if 25 in action_series:
+                if object_series[obj_act_series.index(25)].casting_focus == True:
+                    if 14 in action_series[action_series.index(25):]:
                         post_obj_reward += 1
-                    
-                if 13 in action_series:
-                    if obj_series[action_series.index(13)].type == 'shield':
-                        if acting_entity.shield_proficiency == False:
-                            post_obj_reward -= 1
+            if 26 in action_series:
+                if object_series[obj_act_series.index(26)].casting_focus == True:
+                    if 14 in action_series[action_series.index(26):]:
+                        post_obj_reward += 1
+            if 37 in action_series:
+                if object_series[obj_act_series.index(37)].casting_focus == True:
+                    if 14 in action_series[action_series.index(37):]:
+                        post_obj_reward += 1
+            if 38 in action_series:
+                if object_series[obj_act_series.index(38)].casting_focus == True:
+                    if 14 in action_series[action_series.index(38):]:
+                        post_obj_reward += 1
+            
 
-                # if the action is in [25,26,37,38] and the object is a shield, penalize
-                if any(x in action_series for x in [25,26,37,38]):
-                    if obj_series[action_series.index(25) or action_series.index(26) or action_series.index(37) or action_series.index(38)].type == 'shield':
-                        post_obj_reward -= 1
+            # if an item is equipped and it is a potion and then drink potion (33) is taken, reward
+            #if any(x in action_series for x in [25,26,37,38]):
+            #    if object_series[obj_act_series.index(25) or obj_act_series.index(26) or obj_act_series.index(37) or obj_act_series.index(38)].type == 'potion':
+            #        if 33 in [x for x in action_series if x in action_series[action_series.index(25) or action_series.index(26) or action_series.index(37) or action_series.index(38):]]:
+            #            post_obj_reward += 1
 
-                # if an item is equipped and then unequipped and then equipped again, punish
+            # rewrite the above using four if statements instead of the [or] statement
 
-                # if an item is picked up and then dropped, punish
-
-                # if an item is picked up and then equipped and then unequipped and then dropped, punish
-
-                # if an item is equipped and item.casting_focus == True, and the cast action (14) is taken, reward
-                if any(x in action_series for x in [25,26,37,38]):
-                    if obj_series[action_series.index(25) or action_series.index(26) or action_series.index(37) or action_series.index(38)].casting_focus == True:
-                        if 14 in [x for x in action_series if x in action_series[action_series.index(25) or action_series.index(26) or action_series.index(37) or action_series.index(38):]]:
-                            post_obj_reward += 1
-
-
-                # if an item is equipped and it is a potion and then drink potion (33) is taken, reward
-                if any(x in action_series for x in [25,26,37,38]):
-                    if obj_series[action_series.index(25) or action_series.index(26) or action_series.index(37) or action_series.index(38)].type == 'potion':
-                        if 33 in [x for x in action_series if x in action_series[action_series.index(25) or action_series.index(26) or action_series.index(37) or action_series.index(38):]]:
-                            post_obj_reward += 1
-
-                # for each instance of DisADV an enemy would have against the entity, reward
-
-                # for each instance of ADV the entity would have against an enemy, reward
-
-                # for each instance of ADV an enemy would have against the entity, punish
-
-                # for each instance of DisADV the entity would have against an enemy, punish
+            if 25 in action_series:
+                if object_series[obj_act_series.index(25)].type == 'potion':
+                    if 33 in action_series[action_series.index(25):]:
+                        post_obj_reward += 1
+            if 26 in action_series:
+                if object_series[obj_act_series.index(26)].type == 'potion':
+                    if 33 in action_series[action_series.index(26):]:
+                        post_obj_reward += 1
+            if 37 in action_series:
+                if object_series[obj_act_series.index(37)].type == 'potion':
+                    if 33 in action_series[action_series.index(37):]:
+                        post_obj_reward += 1
+            if 38 in action_series:
+                if object_series[obj_act_series.index(38)].type == 'potion':
+                    if 33 in action_series[action_series.index(38):]:
+                        post_obj_reward += 1
 
 
-                new_act_loc_rew_series = (action_series, location_series, obj_series, post_obj_reward)
-                post_object_list.append(new_act_loc_rew_series)
+            # for each instance of DisADV an enemy would have against the entity, reward
+
+            # for each instance of ADV the entity would have against an enemy, reward
+
+            # for each instance of ADV an enemy would have against the entity, punish
+
+            # for each instance of DisADV the entity would have against an enemy, punish
+
+
+            new_act_loc_rew_series = (action_series, location_series, object_series, post_obj_reward)
+            post_object_list.append(new_act_loc_rew_series)
         else:
             # if statement if any item in action_series in object_subactiions
             post_obj_reward = reward
