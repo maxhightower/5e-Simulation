@@ -52,7 +52,31 @@ def bresenham_line(start, end):
     return coordinates
 
 
-def calculate_full_path(entity_location, move_series_zip):
+def calculate_full_path(entity_location, actions_locations_series):
+    # the input should look like the following:
+    #       [ 
+    #         [0, 8, 0, 37, 0, 15, 0],
+    #         [ [1,1], [1,1], [1,1], [1,1], [1,1] ]
+    #       ]
+
+    action_series = actions_locations_series[0]
+    location_series = actions_locations_series[1]
+
+    move_act_series = [x for x in action_series if x in move_subactions]
+    move_loc_series = [location_series[y] for y in range(len(location_series)) if action_series[y] in move_subactions]
+
+    starting_location = entity_location
+    all_main_positions = [starting_location] + [loc for loc in move_loc_series]
+
+    # need to go through each pair of locations and calculate the path between them
+    full_path = []
+    for location_index in range(len(all_main_positions)):
+        location_pair = [all_main_positions[location_index], all_main_positions[location_index+1]]
+
+        calculated_distance = 0
+
+
+
     """
     Calculate the full path using Bresenham's line algorithm for each segment.
     
@@ -66,7 +90,7 @@ def calculate_full_path(entity_location, move_series_zip):
     #print(f'entity location: {entity_location}')
 
     all_positions = [entity_location]
-    for loc in move_series_zip[1]:
+    for loc in actions_locations_series[1]:
         all_positions.append(loc)
     
     #all_positions = [entity_location] + [loc for _, loc in move_series_zip]
@@ -839,7 +863,7 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
 
     for i in range(len(act_loc_obj_rew_series)):
         print('')
-        #print(act_loc_obj_rew_series[i])
+        print(act_loc_obj_rew_series[i])
 
         action_series = act_loc_obj_rew_series[i][0]
         location_series = act_loc_obj_rew_series[i][1]
@@ -853,11 +877,11 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
 
         # actions that are only move_actions
         move_act_series = [x for x in action_series if x in move_subactions]
-        #print(f'move act series: {move_act_series}')
+        print(f'move act series: {move_act_series}')
 
         # locations that are only move_actions
         move_loc_series = [location_series[y] for y in range(len(location_series)) if action_series[y] in move_subactions]
-        #print(f'move loc series: {move_loc_series}')
+        print(f'move loc series: {move_loc_series}')
 
 
 
