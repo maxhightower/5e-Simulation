@@ -2,7 +2,7 @@ import numpy as np
 import collections
 from DFS_Universal_Rules import action_subactions, move_subactions, attack_subactions, free_subactions, subactions_req_objects, effect_subactions, effect_dictionary
 
-from DFS_Entities import entity
+
 
 def adjacent_locations(pos):
     adjacent_locations_list = []
@@ -235,155 +235,6 @@ def analyze_reward_distribution(reward_series_full_list, action_series_full_list
     #print("Individual Rewards and Actions:")
     #for i, (reward, action) in enumerate(zip(reward_series_full_list, action_series_full_list)):
     #    print(f'{i}: {reward} - {action}')
-
-# I want to create an analyze_reward_distribution function that could take in an action_reward_series, action_location_reward_series, action_location_object_reward_series, and so on
-# and then output the distribution of rewards, the percentage of rewards that are above a certain threshold, and the percentage of rewards that are below a certain threshold
-
-def analyze_reward_distribution_series(any_series, acting_entity, percentile):
-    # the input should be the combined series, not separate lists
-
-    if len(any_series[0]) == 2: # two items means action and reward
-        reward_series_full_list = [x[1] for x in any_series]
-        action_series_full_list = [x[0] for x in any_series]
-
-    elif len(any_series[0]) == 3: # three items means action, location, and reward
-        action_series_full_list = [x[0] for x in any_series]
-        location_series_full_list = [x[1] for x in any_series]
-        reward_series_full_list = [x[2] for x in any_series]
-
-    elif len(any_series[0]) == 4: # four items means action, location, object, and reward
-        action_series_full_list = [x[0] for x in any_series]
-        location_series_full_list = [x[1] for x in any_series]
-        object_series_full_list = [x[2] for x in any_series]
-        reward_series_full_list = [x[3] for x in any_series]
-
-    total_count = len(any_series)
-    print(f'Total count: {total_count}')
-    print(f'High: {max(reward_series_full_list)}')
-    print(f'Low: {min(reward_series_full_list)}')
-    print()
-
-    # Count occurrences of each reward value
-    reward_counts = collections.Counter(reward_series_full_list)
-    
-    # Calculate and print percentages for all reward values
-    print("Reward Distribution:")
-    for reward in sorted(reward_counts.keys()):
-        count = reward_counts[reward]
-        percentage = (count / total_count) * 100
-        print(f'% of {reward}s: {percentage:.2f}%')
-    print()
-
-    # need to change the qualifier to be the top 15% of rewards
-    quality_threshold = np.percentile(reward_series_full_list, percentile)
-
-    print(f'Quality Threshold ({percentile}): {quality_threshold}')
-
-    print(f"Total Qualifiers: {len([x for x in reward_series_full_list if x >= quality_threshold])}")
-    print()
- 
-
- # Now what I want to do here is build a function that treats calculating the reward the same way rule checking is handled for DFS
- # in order for it to be more modular and flexible
-
-
-def check_rules_for_reward(any_one_series,ruleset,acting_entity):
-    reward = any_one_series[-1]
-
-    for rule in ruleset:
-        reward += rule(any_one_series, acting_entity)
-    
-    return reward
-
-
-def calc_new_reward(any_series, acting_entity):
-    # the input should be the combined series, not separate lists
-    results = []
-
-    # this function calculates the new reward values for the entire list of series
-
-    if len(any_series[0]) == 1 or len(any_series[0]) == 0: # only one item means action
-        ruleset = action_rules
-
-        for any_one_series in any_series:
-            new_reward = check_rules_for_reward(any_one_series, ruleset, acting_entity)
-            same_series_new_reward = [any_one_series[0], new_reward]
-            results.append(same_series_new_reward)
-
-
-    elif len(any_series[0]) == 3: # three items means action, location, and reward
-        ruleset = action_location_reward_rules
-
-        for any_one_series in any_series:
-            new_reward = check_rules_for_reward(any_one_series, ruleset, acting_entity)
-            same_series_new_reward = [any_one_series[0], any_one_series[1], new_reward]
-            results.append(same_series_new_reward)
-
-    elif len(any_series[0]) == 4: # four items means action, location, object, and reward
-        ruleset = action_location_object_reward_rules
-
-        for any_one_series in any_series:
-            new_reward = check_rules_for_reward(any_one_series, ruleset, acting_entity)
-            same_series_new_reward = [any_one_series[0], any_one_series[1], any_one_series[2], new_reward]
-            results.append(same_series_new_reward)
-            
-    else:
-        print('Invalid series length')
-
-    return results
-        
-
-action_rules = [
-    # for the number of actions taken, reward
-    # for the number of free actions taken, reward
-    # for the number of attacks made, reward
-    # if the entity goes prone at all, punish
-    # if the entity ends the turn while prone, punish
-    # if the action series is between 3 and 6, reward else punish
-    # if the action series is between 7 and 10, reward else punish
-    # if the action series is greater than 10, punish
-    # if 25 or 26 is in action_series, and 5 comes after it, reward (if the equip subaction is followed by the attack subaction, reward)
-    # if the entity equips off hand and attacks with it, reward
-    # if the entity picks up an item, and then equips it, reward
-    # if the entity loses an item, slightly punish
-    # for the number of attacks made, times the number of damage dealt, reward
-    # if the entity unequips an item, and doesn't equip something else, punish
-    # dropping items should be punished
-    # if a subaction is taken, followed by disengage, followed by movement, reward
-    # if shove-push is taken, followed by movement, reward
-
-]
-
-action_location_reward_rules = [
-    # if the move path prompts an opportunity attack, punish
-    # each opportunity attack that is while flanked is even more punished
-    # each enemy that can see the entity causes the entity to be punished
-    # slight punishment if the entity doesn't move
-    # if the entity turns prone while adjacent to an enemy, punish
-    # if an enemy can no longer move so that they would be adjacent to the entity, reward
-    # if the entity ends their turn flanked, punish
-
-]
-
-action_location_object_reward_rules = [
-    # if the entity picks up an item, and its a coin, reward
-    # if the entity picks up an item, and its a weapon, reward
-    # reward when the entity dons a shield, punish when the entity equips it
-    # reward equal to the damage dealt when the entity attacks
-    # if the damage dealt would reduce the target to 0 HP, reward
-    # if an item is equipped and item.casting_focus is true, and cast subaction is taken after, reward
-    # if an item is equipped and the item is a potion and then the drink potion subaction is taken, reward
-    # 
-
-]
-
-# action_location_object_entity_reward_rules
-# action_location_object_entity_spell_reward_rules
-
-
-
-
-
 
 def generate_pseudo_history(acting_entity,sequence, post_location_reward_list, object_subaction_index):
     potential_objects = []
@@ -1049,8 +900,8 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
     post_object_list = []
 
     for i in range(len(act_loc_obj_rew_series)):
-        #print('')
-        #print(act_loc_obj_rew_series[i])
+        print('')
+        print(act_loc_obj_rew_series[i])
 
         action_series = act_loc_obj_rew_series[i][0]
         location_series = act_loc_obj_rew_series[i][1]
@@ -1064,11 +915,11 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
 
         # actions that are only move_actions
         move_act_series = [x for x in action_series if x in move_subactions]
-        #print(f'move act series: {move_act_series}')
+        print(f'move act series: {move_act_series}')
 
         # locations that are only move_actions
         move_loc_series = [location_series[y] for y in range(len(location_series)) if action_series[y] in move_subactions]
-        #print(f'move loc series: {move_loc_series}')
+        print(f'move loc series: {move_loc_series}')
 
 
 
@@ -1080,7 +931,7 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
 
 
             move_path = calculate_full_path(acting_entity.location, [move_act_series,move_loc_series])
-            #print(f'move path: {move_path}')
+            print(f'move path: {move_path}')
 
 
         if object_series != []:
@@ -1103,18 +954,18 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
                 #    if obj.Type == 'coin':
                 #        post_obj_reward += 1
             if 4 in action_series:
-                #print(f'here 4: {object_series[action_series.index(4)]}')
+                print(f'here 4: {object_series[action_series.index(4)]}')
                 if object_series[action_series.index(4)].name == 'coin':
                     post_obj_reward += 1
             if 7 in action_series:
-                #print(f'here 7: {object_series[action_series.index(7)]}')
+                print(f'here 7: {object_series[action_series.index(7)]}')
                 if object_series[action_series.index(7)].name == 'coin':
                     post_obj_reward += 1
 
 
             # the potential damage, without taking the target into account
             damage_series = damage_calc2([action_series, location_series, object_series],acting_entity)
-            #print(f'damage series: {damage_series}')
+            print(f'damage series: {damage_series}')
             post_obj_reward += sum(damage_series)
             
 
@@ -1141,10 +992,10 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
             #    if obj_series[action_series.index(25) or action_series.index(26) or action_series.index(37) or action_series.index(38)].type == 'shield':
             #        post_obj_reward -= 1
 
-            #print(f'action series: {action_series}')
-            #print(f'object series: {object_series}')
+            print(f'action series: {action_series}')
+            print(f'object series: {object_series}')
             obj_act_series = [x for x in action_series if x in subactions_req_objects]
-            #print(f'obj act series: {obj_act_series}')
+            print(f'obj act series: {obj_act_series}')
 
             # rewrite the above using four if statements instead of the [or] statement
             if 25 in action_series:
@@ -1154,7 +1005,7 @@ def post_obj_reward_series_calc2(act_loc_obj_rew_series, acting_entity):
                 if object_series[obj_act_series.index(26)].type == 'shield':
                     post_obj_reward -= 1
             if 37 in action_series:
-                #print(action_series.index(37))
+                print(action_series.index(37))
                 if object_series[obj_act_series.index(37)].type == 'shield':
                     post_obj_reward -= 1
             if 38 in action_series:

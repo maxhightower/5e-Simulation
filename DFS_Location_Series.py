@@ -10,7 +10,7 @@ from DFS_World_States import world, world_grid_states
 import DFS_Action_Series
 
 from DFS_Universal_Rules import action_subactions, move_subactions, action_subactions, attack_subactions, free_subactions, subactions_req_targets, object_subactions, entity, target_distance_scores
-
+from DFS_Entities import entity
 
 # this one handles location series
 class RuleBasedLocationSequenceDFS2:

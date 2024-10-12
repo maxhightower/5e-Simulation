@@ -143,7 +143,7 @@ class fire_bolt(spell):
         
         # object interaction rules
             # a flammable object hit ignites if not worn or carried
-
+ 
     
 
 class ray_of_frost(spell):
@@ -287,3 +287,14 @@ def add_optional_rule_action_options():
     # - overrun = 1
     # - shove aside = 1
     # - tumble = 1
+
+size_options = ['tiny','small','medium','large','huge','gargantuan']
+
+size_space_orientation = {
+    'tiny':  ['1x1'],
+    'small': ['1x1'],
+    'medium': ['1x1'],
+    'large': ['2x2','1x4'],
+    'huge': ['3x3','2x4','1x9'],
+    'gargantuan': ['4x4','3x6','2x8','1x16'],
+}

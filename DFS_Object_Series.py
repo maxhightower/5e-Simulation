@@ -11,6 +11,7 @@ import DFS_Action_Series
 
 from DFS_Universal_Rules import action_subactions, move_subactions, action_subactions, attack_subactions, free_subactions, subactions_req_targets, object_subactions, target_distance_scores, subactions_req_objects
 
+from DFS_Entities import entity
 
 # what needs to happen in this DFS
 # given an action_series and location_series, 
@@ -92,13 +93,13 @@ class RuleBasedObjectSequenceDFS1:
         except:
             
 
-            print(f'action series: {action_series}')
-            print(f'location series: {location_series}')
+            #print(f'action series: {action_series}')
+            #print(f'location series: {location_series}')
             
-            print(f'sequence: {sequence}')
+            #print(f'sequence: {sequence}')
             
-            print(f'object series: {object_series}')
-            print(f'object subaction index: {object_subaction_index}')
+            #print(f'object series: {object_series}')
+            #print(f'object subaction index: {object_subaction_index}')
 
             object_subaction = object_series[object_subaction_index]
 
@@ -251,7 +252,7 @@ class RuleBasedObjectSequenceDFS1:
 
         act_loc_rew_pass_count = 0
         quality_threshold = np.percentile(reward_series_list, 99)
-        print(f'Quality Threshold: {quality_threshold}')
+        #print(f'Quality Threshold: {quality_threshold}')
 
         #print(f'Post Location Reward List: {post_location_reward_list}')
         

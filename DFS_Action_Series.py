@@ -11,6 +11,8 @@ from DFS_World_States import world, world_grid_states
 
 from DFS_Universal_Rules import action_subactions, move_subactions, action_subactions, attack_subactions, free_subactions, bonus_subactions, object_action_subactions, object_free_subactions, subactions_req_allies, entity, subaction_dict
 
+from DFS_Entities import entity
+
 
 class RuleBasedSequenceDFS:
     def __init__(self, min_length, max_length, start, end, rules, acting_entity):
