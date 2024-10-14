@@ -4,7 +4,7 @@ import numpy as np
 
 import DFS_Functions
 import DFS_World_States
-from DFS_Functions import adjacent_locations, chebyshev_distance, chebyshev_distance_entities, bresenham_line, calculate_full_path, check_opportunity_attacks, is_line_of_sight_clear, check_visibility
+from DFS_Functions import adjacent_locations, adjacent_locations_entities, chebyshev_distance, chebyshev_distance_entities, bresenham_line, calculate_full_path, check_opportunity_attacks, is_line_of_sight_clear, check_visibility
 from DFS_World_States import world, world_grid_states
 
 import DFS_Action_Series
@@ -142,6 +142,7 @@ def rule_location_spacing_rule(sequence, next_loc, acting_entity, action_series)
             23: 5,
             24: 6,
             54: acting_entity.speed/2,
+            56: acting_entity.speed/2,
             }
 
 
@@ -260,6 +261,7 @@ def rule_move_speed_efficiency(sequence, next_loc, acting_entity, action_series)
         23: 5,
         24: 6,
         54: acting_entity.speed/2,
+        56: acting_entity.speed/2,
         }
     # essentially, the move shouldn't use more speed than available via difficult terrain
     # will need to calculate the sum of the move speed spent according to each loc used on a move_subaction
@@ -394,3 +396,5 @@ location_rules = [
     rule_mount_must_have_entity,
     rule_mount_must_be_size_larger,
 ]
+
+location_rules_sources = ['standard'] * len(location_rules)

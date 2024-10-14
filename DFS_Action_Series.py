@@ -6,7 +6,7 @@ import multiprocessing
 
 import DFS_Functions
 import DFS_World_States
-from DFS_Functions import adjacent_locations, chebyshev_distance, bresenham_line, calculate_full_path, check_opportunity_attacks, is_line_of_sight_clear, check_visibility
+from DFS_Functions import adjacent_locations, adjacent_locations_entities, chebyshev_distance, chebyshev_distance_entities, bresenham_line, calculate_full_path, check_opportunity_attacks, is_line_of_sight_clear, check_visibility
 from DFS_World_States import world, world_grid_states
 
 from DFS_Universal_Rules import action_subactions, move_subactions, action_subactions, attack_subactions, free_subactions, bonus_subactions, object_action_subactions, object_free_subactions, subactions_req_allies, entity, subaction_dict
@@ -140,6 +140,7 @@ def rule_limited_move_speed(sequence, next_num, acting_entity):
                 23: 5,
                 24: 6,
                 54: move_speed/2,
+                56: move_speed/2,
                 }
 
     speed_spent = 0
@@ -301,6 +302,36 @@ def rule_object_number_limitation(sequence, next_num, acting_entity):
 
     # how should I actually limit object actions?
 
+def rule_mount_subaction_range(sequence, next_num, acting_entity):
+    # if there are no creatures within 1 space of the acting_entity, then the mount subactions are invalid
+    # **** must take into account that the entity could move to a space where a mount could be mounted****
+
+    # so at the very least, if it's the first subaction, then it's valid
+    if next_num == 54 and len(sequence) == 0:
+        for loc in adjacent_locations(acting_entity.location):
+            if not any(entity.location == loc for entity in acting_entity.world.entities):
+                return False
+        
+    #print(acting_entity)
+    #print(acting_entity.location)
+    # if there are no move_subactions in the sequence, then the mount subactions are invalid
+    if next_num == 54 and not any(x in sequence for x in move_subactions):
+        for loc in adjacent_locations_entities(acting_entity):
+            if not any(entity.location == loc for entity in acting_entity.world.entities):
+                return False
+
+    return True
+
+def rule_mount_once_per_turn(sequence, next_num, acting_entity):
+    # if there's already a mount subaction in the sequence, then the next mount subaction is invalid
+    if next_num == 54 and 54 in sequence:
+        return False
+    return True
+
+
+# how should action series take a controlled mount into account?
+# it should append the mount's subactions to the acting_entity's subactions
+# 
 
 
 
@@ -321,8 +352,26 @@ action_rules = [rule_only_one_action,
          rule_unequip_weapon,
          rule_equip_weapon,
          rule_object_number_limitation,
+         #rule_mount_subaction_range,
+         rule_mount_once_per_turn,
          
 ]
+
+action_rules_sources = ['standard'] * len(action_rules)
+
+
+controlled_mount_subactions = {
+    '0': 'Dash',
+    '1': 'Disengage',
+    '2': 'Dodge',
+    # and then it also gets its move speed subactions
+}
+
+mount_subaction_rules = [
+
+]
+
+mount_subaction_rules_sources = ['controlled_mount'] * len(mount_subaction_rules)
 
 
 '''

@@ -14,6 +14,26 @@ def adjacent_locations(pos):
         adjacent_locations_list.remove(pos)
     return adjacent_locations_list
 
+def adjacent_locations_entities(entity):
+    # need to use a function that can handle the entity's location being a list
+    # in order to handle different size creatures
+    adjacent_locations_list = []
+
+    #print(entity)
+    #print(entity.location)
+
+    for loc in entity.location:
+        for i in range(-1,2):
+            for j in range(-1,2):
+                adjacent_locations_list.append([loc[0]+i,loc[1]+j])
+
+    for loc in entity.location:
+        if loc in adjacent_locations_list:
+            adjacent_locations_list.remove(loc)
+
+    return adjacent_locations_list
+
+
 
 def chebyshev_distance(pos1,pos2):
     return max(abs(pos1[0]-pos2[0]),abs(pos1[1]-pos2[1]))
@@ -145,6 +165,27 @@ def calculate_full_path(entity_location, actions_locations_series):
     #    full_path.extend(coord for coord in segment if coord not in full_path)
     
     #return full_path
+
+def calculate_full_path_entities(entity, actions_locations_series):
+    full_path = []
+    entity_locations = entity.location
+    # the entity_locations is a list of the entity's location(s)
+
+    if entity.size in ['tiny','small','medium']:
+        # the width of the entity is 1
+        # so the path will only be 1 wide
+        
+        move_series = entity.locations[0] + actions_locations_series[1]
+        for i in range(len(move_series)):
+            full_path.extend(bresenham_line(entity_locations[0], move_series[i]))
+
+
+    else:
+        # the path will need to be calculated for each location
+        width = entity.width
+
+
+    return full_path
 
 
 def check_opportunity_attacks(full_path, enemy_locations, disengage_action=8):
@@ -294,6 +335,37 @@ def analyze_reward_distribution_series(any_series, acting_entity, percentile):
  # in order for it to be more modular and flexible
 
 
+# need a function to separate a move_speed into the appropriate number of subactions so that there can be no redundant or inefficient combinations
+def move_speed_to_subactions(move_speed):
+    labeled_move_speed_dictionary = {}
+    move_speed_subaction_list = []
+
+    # the move_speed should be a number
+    if move_speed % 5 == 0:
+        num_subactions = move_speed // 5
+    else:
+        num_subactions = move_speed // 5 + 1
+
+    for i in range(num_subactions):
+        labeled_move_speed_dictionary[i] = 5
+        move_speed_subaction_list.append(5)
+
+    if move_speed % 5 != 0:
+        labeled_move_speed_dictionary[num_subactions - 1] = move_speed % 5
+        move_speed_subaction_list[-1] = move_speed % 5
+
+    # add the text to the value of the dictionary that says 'move x spaces'
+    for key in labeled_move_speed_dictionary:
+        labeled_move_speed_dictionary[key] = f'move {labeled_move_speed_dictionary[key]} spaces'
+
+    # the output should be two things: labeled dictionary and list of subactions
+    return labeled_move_speed_dictionary, move_speed_subaction_list 
+    
+
+
+
+
+
 def check_rules_for_reward(any_one_series,ruleset,acting_entity):
     reward = any_one_series[-1]
 
@@ -358,6 +430,8 @@ action_rules = [
     # dropping items should be punished
     # if a subaction is taken, followed by disengage, followed by movement, reward
     # if shove-push is taken, followed by movement, reward
+    # if mount subaction is taken twice, punish
+    # if you mount and dismount in the same turn, punish
 
 ]
 
@@ -380,12 +454,20 @@ action_location_object_reward_rules = [
     # if the damage dealt would reduce the target to 0 HP, reward
     # if an item is equipped and item.casting_focus is true, and cast subaction is taken after, reward
     # if an item is equipped and the item is a potion and then the drink potion subaction is taken, reward
-    # 
+    
+    
 
 ]
 
-# action_location_object_entity_reward_rules
-# action_location_object_entity_spell_reward_rules
+action_location_object_entity_reward_rules = [
+    # if mount lacks barding, punish
+
+]
+
+
+action_location_object_entity_spell_reward_rules = [
+    # HP to allies that healed is rewarded
+]
 
 
 
@@ -1003,50 +1085,6 @@ def post_loc_series_reward_calc(all_action_series, all_location_series, all_rewa
 
     # if the Pickup subaction was made, a potion was picked up, and then the Consume Potion subaction was made, +1
 
-def post_obj_reward_series_calc(action_series_full_list, location_series_full_list, reward_series_full_list, object_series_full_list, acting_entity):
-    #print(action_series_full_list)
-
-
-    for i in range(len(action_series_full_list)):
-        action_series = action_series_full_list[i]
-        location_series = location_series_full_list[i]
-        reward = reward_series_full_list[i]
-        object_series_list = object_series_full_list[i]
-    
-        #print(f'action series: {action_series}')
-        #print(f'location series: {location_series}')
-        #print(f'object series list: {object_series_list}')
-
-
-        if object_series_list != []:
-            for obj_series in object_series_list:
-                post_obj_reward = reward
-
-                # if the object action targets entity's location, but inventory is empty...
-                
-                # if they end their turn prone while adjacent to an enemy
-                if 19 in action_series and 20 not in action_series[:-action_series.index(19)] and move_path[-1] in acting_entity.world.enemy_adjacent_locations:
-                    post_obj_reward -= 1
-                
-                # if the path is in a circle...
-                # if the 
-                
-                # if the pickup action was taken, and the object was a coin, reward
-                if 4 in action_series or 7 in action_series:
-                    # the object associated with the subaction
-                    obj = obj_series[action_series.index(4) or action_series.index(7)]
-                    if obj.Type == 'coin':
-                        post_obj_reward += 1
-
-
-                new_act_loc_rew_series = (action_series, location_series, obj_series, post_obj_reward)
-                post_object_list.append(new_act_loc_rew_series)
-
-
-
-    return_set = (action_series, location_series, object_series_list, post_obj_reward)
-    post_object_list = sorted(return_set, key=lambda x: x[2],reverse=True)
-    return post_object_list
 
 
 

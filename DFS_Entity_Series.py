@@ -4,7 +4,7 @@ import numpy as np
 
 import DFS_Functions
 import DFS_World_States
-from DFS_Functions import adjacent_locations, chebyshev_distance, bresenham_line, calculate_full_path, check_opportunity_attacks, is_line_of_sight_clear, check_visibility
+from DFS_Functions import adjacent_locations, adjacent_locations_entities, chebyshev_distance, chebyshev_distance_entities, bresenham_line, calculate_full_path, check_opportunity_attacks, is_line_of_sight_clear, check_visibility
 from DFS_World_States import world, world_grid_states
 
 
@@ -137,10 +137,38 @@ class RuleBasedEntitySequenceDFS:
 
 
 def rule_mount_target_must_be_willing(sequence, next_entity, acting_entity, act_loc_obj_rew):
-    if next_entity in acting_entity.world.enemies:
+    if next_entity in acting_entity.world.entities:
         return False
 
     return True
+
+def rule_mount_target_must_be_mountable(sequence, next_entity, acting_entity, act_loc_obj_rew):
+    if next_entity.is_mountable == False:
+        return False
+    
+    return True
+
+def rule_mount_target_must_be_unridden(sequence, next_entity, acting_entity, act_loc_obj_rew):
+    if next_entity.is_mounted == True:
+        return False
+
+    return True
+
+def rule_mount_must_be_size_larger(sequence, next_entity, acting_entity, act_loc_obj_rew):
+
+    sizes = ['tiny','small','medium','large','huge','gargantuan']
+    
+    acting_entity_size = acting_entity.size
+    acting_entity_size_index = sizes.index(acting_entity_size)
+
+    next_entity_size = next_entity.size
+    next_entity_size_index = sizes.index(next_entity_size)
+
+    if acting_entity_size_index >= next_entity_size_index:
+        return False
+
+    return True
+
 
 # Help (Attack)
 # Help (Skill Check)
@@ -151,5 +179,12 @@ def rule_mount_target_must_be_willing(sequence, next_entity, acting_entity, act_
 
 entity_rules = [
     rule_mount_target_must_be_willing,
+    rule_mount_target_must_be_mountable,
+    rule_mount_target_must_be_unridden,
+    rule_mount_must_be_size_larger,
+
+
 
 ]
+
+entity_rules_sources = ['standard'] * len(entity_rules)

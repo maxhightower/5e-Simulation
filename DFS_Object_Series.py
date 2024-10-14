@@ -4,7 +4,7 @@ import numpy as np
 
 import DFS_Functions
 import DFS_World_States
-from DFS_Functions import adjacent_locations, chebyshev_distance, bresenham_line, calculate_full_path, check_opportunity_attacks, is_line_of_sight_clear, check_visibility, generate_pseudo_history
+from DFS_Functions import adjacent_locations, adjacent_locations_entities, chebyshev_distance, chebyshev_distance_entities, bresenham_line, calculate_full_path, check_opportunity_attacks, is_line_of_sight_clear, check_visibility, generate_pseudo_history
 from DFS_World_States import world, world_grid_states
 
 import DFS_Action_Series
@@ -666,10 +666,14 @@ def rule_one_free_hand_to_grapple(sequence, next_object, acting_entity, i):
     action = action_series[-1]
 
 
+
 # objects need to be within range to pick them up
 def rule_object_interaction_range(sequence, next_object, acting_entity, i):
     
     return True
+
+
+
 
 
 
@@ -687,7 +691,6 @@ object_rules = [
     #rule_cannot_both_hand_equip_one_handed_weapon,
     rule_no_redundant_equipping_unequipping_dropping,
 
-
-
-
 ]
+
+object_rules_sources = ['standard'] * len(object_rules)

@@ -195,52 +195,71 @@ class world:
         world.enemy_adjacent_locations.append(adjacent_locations(enemy_id.location))
 
     
-    def add_entity(world,location,name,**orientation):
+    def add_entity(self,set_location,name):
         # the way that adding an entity to the program will work is as follows:
         #   actor = entity('player character',stage,'medium')
         #   stage.add_entity([0,0],actor)
         # so first the entity is created, then it is added to the stage
 
+        #print('add entity')
+        #print(f'name: {name}')
+        #print(f'location: {name.location}')
+        #print(f'set location: {set_location}')
 
-        if type == 'player character':
+        if name.type == 'player character':
             size = 'medium'
-            name = entity(type,world,size)
-            entity.location = [location]
-            print('add entity')
-            print(entity.location)
+            #name = entity(type,self,size)
+            
+            name.location = [set_location]
+            #print('add entity')
+            #print(f'new location: {name.location}')
             # this will be where character creation is handled
 
 
 
             # place character in world
-            world.grid[location[0],location[1]] = 2
-            world.grid2[location[0]][location[1]][5].append(name)
-            world.entity_locations.append(location)
+            self.grid[set_location[0],set_location[1]] = 2
+            self.grid2[set_location[0]][set_location[1]][5].append(name)
+            self.entity_locations.append(set_location)
 
-        elif type == 'monster':
-            name = entity(type,world,size)
+        elif name.type == 'monster':
+            #name = entity(type,self,size)
 
-            # we assume the location given is the center of the monster
+            # we assume the location given is the top left of the monster
             # given the size_options and size_space_orientation, we can determine the full space occupied by the monster
-            size_layouts = size_space_orientation[size_options[size]]
-            if len(size_layouts) > 1:
-                spaces_orientation = size_layouts[orientation]
-            else:
-                spaces_orientation = size_layouts[0]
+            spaces_orientation = name.orientation
+
+
+            size_layouts = size_space_orientation[size_options[size_options.index(name.size)]]
+
+
+            #if len(size_layouts) > 1:
+            #    print(orientation)
+            #    spaces_orientation = size_layouts[orientation]
+            #else:
+            #    print(orientation)
+            #    spaces_orientation = size_layouts[0]
             
             # use string manipulation to identify the length and heigth by splitting by 'x'
-            length = int(spaces_orientation.split('x')[0])
-            height = int(spaces_orientation.split('x')[1])
+            name.length = int(spaces_orientation.split('x')[0])
+            name.height = int(spaces_orientation.split('x')[1])
 
             name.locations_occupying = []
 
-            middle = [location[0],location[1]]
-            for i in range(length):
+            for i in range(length): 
                 for j in range(height):
-                    name.locations_occupying.append([middle[0]+i,middle[1]+j])
-                    world.grid[middle[0]+i,middle[1]+j] = 2
-                    world.grid2[middle[0]+i][middle[1]+j][5].append(name)
-                    world.entity_locations.append([middle[0]+i,middle[1]+j])
+                    name.locations_occupying.append([set_location[0]+i,set_location[1]+j])
+                    name.location = [set_location[0],set_location[1]]
+                
+            for loc in name.locations_occupying:
+                self.grid[loc[0],loc[1]] = 2
+                self.grid2[loc[0]][loc[1]][5].append(name)
+                self.entity_locations.append(loc)
+
+            
+
+        #print(name.location)
+
 
 
 

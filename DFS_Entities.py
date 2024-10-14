@@ -1,11 +1,12 @@
 # DFS_Entities
 import numpy as np
-from DFS_Universal_Rules import subaction_dict, size_options, size_space_orientation
+from DFS_Universal_Rules import subaction_dict, size_options, size_space_orientation, target_distance_scores
 
 
 
 subaction_dict_monster = {}
 move_cost_dict_mosnter = {}
+target_distance_scores_monster = {}
 
 
 # need a function that breaks the move_speed a monster is capable of into a number of subactions that aren't redundant
@@ -25,22 +26,29 @@ move_cost_dict_mosnter = {}
 
 
 class entity:
-    def __init__(self,type, world, size, *args):
+    def __init__(self,type, world, location, size, *args):
         self.type = type                # player character, monster, npc
         self.world = world
-        self.location = None           # need to change this to a list so that it can handle large+ entity sizes
+        self.location = location           # need to change this to a list so that it can handle large+ entity sizes
         
+        # perhaps subactions should be stored as a list...so that appending is easier
+        # and then a seperate list can be used to store the sources of each subaction...
+
+
 
         # kwargs[0] represents the template for if they are a monster
         if self.type == 'monster':
-            self.template = args[0]
+            self.template = args[0] 
+                # input templates such as: ['name', 'sourcebook','year']
+
             self.subaction_dict = subaction_dict_monster
             self.move_cost_dict = move_cost_dict_mosnter
+            self.target_distance_scores = target_distance_scores_monster
 
-            orientation = args[1]
+            self.orientation = args[1]
             size_layouts = size_space_orientation[size]
             if len(size_layouts) > 1:
-                spaces_orientation = orientation
+                spaces_orientation = self.orientation
             else:
                 spaces_orientation = size_layouts[0]
             
@@ -59,7 +67,11 @@ class entity:
         else:
             # elif self.type == 'player character':
             self.template = None
+
             self.subaction_dict = subaction_dict
+            self.subaction_sources = []
+            self.target_distance_scores = target_distance_scores
+
 
             self.size = size
             self.space_orientation = size_space_orientation[size]
@@ -116,7 +128,7 @@ class entity:
         self.strength_mod = 1
 
         # want to implement entity size
-        self.size = 'medium'
+        #self.size = 'medium'
         # self.space_orientation = '1x1'
             # medium options: '1x1'
             # large options: '2x2', '1x4'
@@ -157,6 +169,20 @@ class entity:
 
     def add_spell(self, spell):
         self.spells.append(spell)
+
+        # concepts for implementation
+        # 1. seperate spell subaction list for if the cast action is taken
+        #       self.spell_subactions.append(len(spell_subactions))
+        #       self.spell_class_object_ids_to_subactions[spell] = len(spell_subactions)
+        #       self.spell_subactions_sources.append(self.source)
+
+        # 2. spell subactions also go in the subaction_dict
+        #       self.subaction_dict[len(spell_subactions)] = spell.name
+        #       self.subaction_dict_sources[len(spell_subactions)] = self.source
+
+
+        # if the spell is an action, bonus action, or reaction
+        # append it to the relevant list
 
 
     def create_entity(self, type):

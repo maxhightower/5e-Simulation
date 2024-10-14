@@ -64,15 +64,19 @@ subaction_dict = {
     '53': 'Shove - Prone',
     '54': 'Mount',
     #'55': 'Feed Potion',
+    #'56': 'Dismount',
 
 }
+
+# might need to separate the subactions into seperate lists (such as move, object, attack, skill, utility, etc)
+# and then also have relevant lists for description and source...
 
 
 # does picking up an item automatically equip it?
 # no it goes straight to inventory
 
 
-move_subactions = [0,1,2,3,23,24,54]
+move_subactions = [0,1,2,3,23,24,54,56]
     # jump
     # crawl
     # squeeze
@@ -85,7 +89,7 @@ object_subactions = [4,7,25,28,29,30,31,32,37,38,40,41,42,43,44,45,46,47,49,50,5
 object_action_subactions = [7,26,28,30,32,38,41,45,46,47,50,52,55]
 object_free_subactions = [4,25,27,29,31,37,40,42,43,44,49,51]
 
-subactions_req_targets = [0,1,2,3,4,5,7,10,15,23,24,27,28,29,30,35,36,48,53,54,55]
+subactions_req_targets = [0,1,2,3,4,5,7,10,15,23,24,27,28,29,30,35,36,48,53,54,55,56]
 # subactions_req_targets = move_subactions + object_subactions + attack_subactions
 
 subactions_req_allies = [10,21,22,35,55]
@@ -102,6 +106,12 @@ turn_effects = []
 
 effect_dictionary = {} # this will assign the effect_subaction_number to the effect_class
 
+cast_subactions = []
+
+# perhaps all of the above belongs in a catalog for each individual entity...
+# and then if rules are different for different creatures it can be represented there???
+
+
 class effect:
     def __init__(self, name, type, duration, target, effect):
         self.name = name
@@ -112,7 +122,7 @@ class effect:
 
 
 class spell:
-    def __init__(self, name, level, school, casting_time, range, components, duration, description):
+    def __init__(self, name, level, school, casting_time, range, components, duration, description, spell_rules):
         self.name = name
         self.level = level
         self.school = school
@@ -121,6 +131,8 @@ class spell:
         self.components = components
         self.duration = duration
         self.description = description
+
+        self.spell_rules = spell_rules
 
 class fire_bolt(spell):
     def __init__(self):
@@ -131,7 +143,8 @@ class fire_bolt(spell):
             casting_time='1 action', 
             range=24, # 120 feet so 120/5 = 24 spaces
             components= ['v','s'], 
-            duration='instantaneous',)
+            duration='instantaneous',
+            spell_rules=[])
         
         # attack check rules
             # "ranged spell attack" against "target" (note: creature OR object)
@@ -156,7 +169,8 @@ class ray_of_frost(spell):
             casting_time='1 action', 
             range=12, # 60/5 = 12 spaces
             components= ['v','s'], 
-            duration='instantaneous',)
+            duration='instantaneous',
+            spell_rules=[])
 
         # damage
         # single target
@@ -173,7 +187,8 @@ class shield(spell):
             casting_time='1 reaction', 
             range='self', 
             components= ['v','s'],
-            duration='1 round',)
+            duration='1 round',
+            spell_rules=[])
      
 
 
@@ -244,8 +259,9 @@ class entity:
 
         # will need to have a add_entity() in order to add a key: value pair to circumstances per enemy in world
 
-    def add_spell(self, spell):
+    def add_spell(self, spell, source):
         self.spells.append(spell)
+
 
 target_distance_scores = { # the distance from which a location can be per subaction
             0: 1,
@@ -271,6 +287,7 @@ target_distance_scores = { # the distance from which a location can be per subac
             53: 1,
             54: 1,
             55: 1,
+            56: 1,
         }
 
 
