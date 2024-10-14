@@ -139,6 +139,7 @@ def rule_limited_move_speed(sequence, next_num, acting_entity):
                 20: move_speed/2,
                 23: 5,
                 24: 6,
+                54: move_speed/2,
                 }
 
     speed_spent = 0

@@ -18,6 +18,13 @@ def adjacent_locations(pos):
 def chebyshev_distance(pos1,pos2):
     return max(abs(pos1[0]-pos2[0]),abs(pos1[1]-pos2[1]))
 
+def chebyshev_distance_entities(entity1, pos2):
+    # because the entity's location is stored as a list, due to a large entity taking up multiple spaces
+    # the list of location's occupied needs to be checked for the closest space to the target
+    # and from there to the target is the distance
+    distances = [chebyshev_distance(x,pos2) for x in entity1.location]
+    return min(distances)
+
 def bresenham_line(start, end):
     """
     Implementation of Bresenham's line algorithm.

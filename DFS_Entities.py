@@ -4,8 +4,9 @@ from DFS_Universal_Rules import subaction_dict, size_options, size_space_orienta
 
 
 
-subaction_dict_monster = {
-}
+subaction_dict_monster = {}
+move_cost_dict_mosnter = {}
+
 
 # need a function that breaks the move_speed a monster is capable of into a number of subactions that aren't redundant
 # so 30 movement speed would be 6 subactions of 5 feet each
@@ -34,7 +35,8 @@ class entity:
         if self.type == 'monster':
             self.template = args[0]
             self.subaction_dict = subaction_dict_monster
-            
+            self.move_cost_dict = move_cost_dict_mosnter
+
             orientation = args[1]
             size_layouts = size_space_orientation[size]
             if len(size_layouts) > 1:
@@ -51,6 +53,8 @@ class entity:
             self.length = length
             self.height = height
 
+            self.is_mountable = args[2]
+            self.speed = args[3]
 
         else:
             # elif self.type == 'player character':
@@ -62,7 +66,19 @@ class entity:
             self.length = 1
             self.height = 1
 
+            self.is_mountable = False
+            self.speed = 6
 
+            self.move_cost_dict = {
+                0: 1, 
+                1: 2, 
+                2: 3, 
+                3: 4, 
+                20: self.speed/2,
+                23: 5,
+                24: 6,
+                54: self.speed/2,
+                }
 
         # self.template will be used to pull the relevant information from the monster manual
 
@@ -89,7 +105,6 @@ class entity:
         self.spell_slots = [] # with the index being the spell level
 
 
-        self.speed = 6
         self.coins = 0
 
         self.shield_proficient = False # because shield is considered medium armor, the default should be false
@@ -129,6 +144,8 @@ class entity:
 
         # how should this be implemented?
 
+        self.is_mounted = False
+        self.is_ridden = False
 
 
 

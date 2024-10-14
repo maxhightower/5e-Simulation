@@ -136,6 +136,20 @@ class RuleBasedEntitySequenceDFS:
         return results
 
 
+def rule_mount_target_must_be_willing(sequence, next_entity, acting_entity, act_loc_obj_rew):
+    if next_entity in acting_entity.world.enemies:
+        return False
+
+    return True
+
+# Help (Attack)
+# Help (Skill Check)
+# Stabilize Creature
+# Wake Creature
+
+
+
 entity_rules = [
+    rule_mount_target_must_be_willing,
 
 ]

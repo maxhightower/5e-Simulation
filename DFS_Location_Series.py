@@ -4,7 +4,7 @@ import numpy as np
 
 import DFS_Functions
 import DFS_World_States
-from DFS_Functions import adjacent_locations, chebyshev_distance, bresenham_line, calculate_full_path, check_opportunity_attacks, is_line_of_sight_clear, check_visibility
+from DFS_Functions import adjacent_locations, chebyshev_distance, chebyshev_distance_entities, bresenham_line, calculate_full_path, check_opportunity_attacks, is_line_of_sight_clear, check_visibility
 from DFS_World_States import world, world_grid_states
 
 import DFS_Action_Series
@@ -51,8 +51,12 @@ class RuleBasedLocationSequenceDFS2:
         # identify which locations/spaces can be accessed within that distance
         locations_accessible = []
         for loc in grid_locations:
-            if chebyshev_distance(entity_location, loc) <= distance_allowable:
+            #if chebyshev_distance(entity_location, loc) <= distance_allowable:
+            #    locations_accessible.append(loc)
+
+            if chebyshev_distance_entities(acting_entity, loc) <= distance_allowable:
                 locations_accessible.append(loc)
+
 
         #print(f'locations accessible {locations_accessible}')
         #print(f'entity is at {entity_location}; allowable distance for action {subaction} is {distance_allowable}; locations accessible are {locations_accessible}')
@@ -137,6 +141,7 @@ def rule_location_spacing_rule(sequence, next_loc, acting_entity, action_series)
             20: acting_entity.speed/2,
             23: 5,
             24: 6,
+            54: acting_entity.speed/2,
             }
 
 
@@ -236,6 +241,9 @@ def rule_hide_in_low_light(sequence, next_loc, acting_entity, action_series):
             return False
     return True
 
+# what about large creatures hiding in low light?
+
+
 
 def rule_move_space_efficiency(sequence, next_loc, acting_entity, action_series):
     pass
@@ -251,6 +259,7 @@ def rule_move_speed_efficiency(sequence, next_loc, acting_entity, action_series)
         20: acting_entity.speed/2,
         23: 5,
         24: 6,
+        54: acting_entity.speed/2,
         }
     # essentially, the move shouldn't use more speed than available via difficult terrain
     # will need to calculate the sum of the move speed spent according to each loc used on a move_subaction
@@ -293,6 +302,8 @@ def rule_move_speed_efficiency(sequence, next_loc, acting_entity, action_series)
     
     return True
 
+# what about large creatures? if a single space is difficult terrain, is the whole space difficult terrain?
+
 
 def rule_enemy_attempt_2(sequence, next_loc, acting_entity, action_series):
     tar_act_req = [x for x in action_series if x in subactions_req_targets]
@@ -327,6 +338,46 @@ def rule_object_attempt_2(sequence, next_loc, acting_entity, action_series):
 
     return True
 
+def rule_mount_must_have_entity(sequence, next_loc, acting_entity, action_series):
+    tar_act_req = [x for x in action_series if x in subactions_req_targets]
+    action_index = len(sequence)
+    entity_loc_series = [sequence[loc_index] for loc_index in range(len(sequence)) if tar_act_req[loc_index] in move_subactions]
+    if len(entity_loc_series) < 1:
+        entity_location = acting_entity.location
+    else:
+        entity_location = entity_loc_series[-1]
+    
+    action = tar_act_req[action_index]
+    if action == 54:
+       if acting_entity.world.grid2[next_loc[0]][next_loc[1]][5] == []:
+            return False
+    
+    return True
+
+def rule_mount_must_be_size_larger(sequence, next_loc, acting_entity, action_series):
+    tar_act_req = [x for x in action_series if x in subactions_req_targets]
+    action_index = len(sequence)
+    entity_loc_series = [sequence[loc_index] for loc_index in range(len(sequence)) if tar_act_req[loc_index] in move_subactions]
+    if len(entity_loc_series) < 1:
+        entity_location = acting_entity.location
+    else:
+        entity_location = entity_loc_series[-1]
+    
+    action = tar_act_req[action_index]
+
+    sizes = ['tiny','small','medium','large','huge','gargantuan']
+
+    if len(acting_entity.world.grid2[next_loc[0]][next_loc[1]][5]) == 1:
+        if action == 54:
+            mount_size = acting_entity.world.grid2[next_loc[0]][next_loc[1]][5][0].size
+            entity_size = acting_entity.size
+            mount_size_index = sizes.index(mount_size)
+            entity_size_index = sizes.index(entity_size)
+            if mount_size_index <= entity_size_index:
+                return False
+
+    return True
+
 
 location_rules = [
     #rule_location_spacing_rule,
@@ -340,4 +391,6 @@ location_rules = [
     #rule_move_speed_efficiency,
     rule_enemy_attempt_2,
     rule_object_attempt_2,
+    rule_mount_must_have_entity,
+    rule_mount_must_be_size_larger,
 ]

@@ -205,7 +205,12 @@ class world:
         if type == 'player character':
             size = 'medium'
             name = entity(type,world,size)
+            entity.location = [location]
+            print('add entity')
+            print(entity.location)
             # this will be where character creation is handled
+
+
 
             # place character in world
             world.grid[location[0],location[1]] = 2
@@ -279,6 +284,7 @@ class world:
     def add_item_to_inventory(world,entity,item):
         entity.inventory.append(item)
         world.objects.append(item)
+
 
 #    def visualize(self, dfs_path=None):
 #        pos = {i: (i % self.size, self.size - 1 - i // self.size) for i in range(self.size * self.size)}
