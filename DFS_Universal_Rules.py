@@ -111,6 +111,16 @@ cast_subactions = []
 # perhaps all of the above belongs in a catalog for each individual entity...
 # and then if rules are different for different creatures it can be represented there???
 
+# what if instead each one had a unique code and then there's a corresponding dictionary that has the description and source
+# so the code would work something like
+# first two digits represent the type: 00 for movement, 01 for attacks, 02 for objects, 03 for misc, 04 for effects, etc
+# the next four digits represent the unique subaction for that type, 
+
+# how do these then get applied to an entity?
+# well the move speed determines the move subactions, which go first...
+# or should the basic actions that all creatures have go first??? those being attack, dash, disengage, dodge, hide, help, opportunity attack, ready, search, use object, 
+
+
 
 class effect:
     def __init__(self, name, type, duration, target, effect):

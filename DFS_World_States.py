@@ -246,8 +246,8 @@ class world:
 
             name.locations_occupying = []
 
-            for i in range(length): 
-                for j in range(height):
+            for i in range(name.length): 
+                for j in range(name.height):
                     name.locations_occupying.append([set_location[0]+i,set_location[1]+j])
                     name.location = [set_location[0],set_location[1]]
                 
