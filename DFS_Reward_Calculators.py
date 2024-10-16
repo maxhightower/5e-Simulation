@@ -4,7 +4,7 @@ import collections
 from DFS_Universal_Rules import action_subactions, move_subactions, attack_subactions, free_subactions, subactions_req_objects, effect_subactions, effect_dictionary
 
 from DFS_Entities import entity
-from DFS_Functions import adjacent_locations, adjacent_locations_entities, chebyshev_distance, chebyshev_distance_entities, bresenham_line, calculate_full_path, calculate_full_path_entities, check_opportunity_attacks, is_line_of_sight_clear, check_visibility, move_speed_to_subactions, generate_pseudo_history, damage_calc1, damage_calc2, probability_hit_calc, expected_damage, calc_series_expected_damage 
+from DFS_Functions import adjacent_locations, adjacent_locations_entities, chebyshev_distance, chebyshev_distance_entities, bresenham_line, calculate_full_path, calculate_full_path_entities, check_opportunity_attacks, is_line_of_sight_clear, check_visibility, move_speed_to_subactions, generate_pseudo_history, damage_calc1, damage_calc2, probability_hit_calc, expected_damage, calc_series_expected_damage, 
 
 
 

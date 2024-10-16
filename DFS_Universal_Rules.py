@@ -120,14 +120,6 @@ cast_subactions = []
 # well the move speed determines the move subactions, which go first...
 # or should the basic actions that all creatures have go first??? those being attack, dash, disengage, dodge, hide, help, opportunity attack, ready, search, use object, 
 
-universal_subactions = {
-    'names': [],
-    'source': [],
-}
-
-player_character_subactions = {
-    
-}
 
 
 class effect:
