@@ -4,6 +4,8 @@ from DFS_Universal_Rules import action_subactions, move_subactions, attack_subac
 
 from DFS_Entities import entity
 
+
+
 def adjacent_locations(pos):
     adjacent_locations_list = []
     # for an 8 directional grid
@@ -186,6 +188,7 @@ def calculate_full_path_entities(entity, actions_locations_series):
 
 
     return full_path
+
 
 
 def check_opportunity_attacks(full_path, enemy_locations, disengage_action=8):
