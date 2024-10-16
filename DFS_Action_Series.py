@@ -2,7 +2,7 @@
 
 import numpy as np
 import multiprocessing
-
+ 
 
 import DFS_Functions
 import DFS_World_States
@@ -336,7 +336,7 @@ def rule_mount_once_per_turn(sequence, next_num, acting_entity):
 
 
 
-action_rules = [rule_only_one_action, 
+action_rules_permit = [rule_only_one_action, 
          rule_only_one_bonus_action, 
          rule_no_redundant_moves,
          rule_limited_move_speed,
@@ -357,7 +357,7 @@ action_rules = [rule_only_one_action,
          
 ]
 
-action_rules_sources = ['standard'] * len(action_rules)
+action_rules_sources = ['standard'] * len(action_rules_permit)
 
 
 controlled_mount_subactions = {
@@ -413,3 +413,39 @@ class ParallelizedRuleBasedSequenceDFS:
         
         return [seq for sublist in partial_results for seq in sublist]
 '''
+
+class RuleBasedSequenceDFS2:
+    def __init__(self, acting_entity):
+        self.acting_entity = acting_entity
+        self.min_length = 0
+        self.max_length = len(acting_entity.subaction_catalog['free_subactions_reps']) + acting_entity.speed + 1 + 1
+        self.start = 0
+        self.end = len(acting_entity.subactions)
+        self.rules = acting_entity.dfs_rules['action_rules']
+        self.sequences = []
+
+    def check_rules(self, sequence, next_num, acting_entity):
+        # Apply all rules to the current sequence and next number
+        return all(rule(sequence, next_num, acting_entity) for rule in self.rules)
+
+    def dfs(self, current_sequence):
+        # Check if the current sequence is within the desired length range
+        if self.min_length <= len(current_sequence) <= self.max_length:
+            self.sequences.append(current_sequence.copy())
+        
+        # Continue exploring if we haven't reached the maximum length
+        if len(current_sequence) < self.max_length:
+            for next_num in range(self.start, self.end + 1):
+                if self.check_rules(current_sequence, next_num, self.acting_entity):
+                    current_sequence.append(next_num)
+                    self.dfs(current_sequence)
+                    current_sequence.pop()  # Backtrack
+
+
+    def generate_sequences(self):
+        #print(self.rules)
+        self.dfs([])
+        return self.sequences
+    
+
+# now to redefine the action rules...

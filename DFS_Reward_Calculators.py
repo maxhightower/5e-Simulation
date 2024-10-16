@@ -4,12 +4,15 @@ import collections
 from DFS_Universal_Rules import action_subactions, move_subactions, attack_subactions, free_subactions, subactions_req_objects, effect_subactions, effect_dictionary
 
 from DFS_Entities import entity
-from DFS_Functions import adjacent_locations, adjacent_locations_entities, chebyshev_distance, chebyshev_distance_entities, bresenham_line, calculate_full_path, calculate_full_path_entities, check_opportunity_attacks, is_line_of_sight_clear, check_visibility, move_speed_to_subactions, generate_pseudo_history, damage_calc1, damage_calc2, probability_hit_calc, expected_damage, calc_series_expected_damage, 
+from DFS_Functions import adjacent_locations, adjacent_locations_entities, chebyshev_distance, chebyshev_distance_entities, bresenham_line, calculate_full_path, calculate_full_path_entities, check_opportunity_attacks, is_line_of_sight_clear, check_visibility, move_speed_to_subactions, generate_pseudo_history, damage_calc1, damage_calc2, probability_hit_calc, expected_damage, calc_series_expected_damage
 
 
 
 def check_rules_for_reward(any_one_series,ruleset,acting_entity):
-    reward = any_one_series[-1]
+    if len(any_one_series) == 1:
+        reward = 0
+    else:
+        reward = any_one_series[-1]
 
     for rule in ruleset:
         reward += rule(any_one_series, acting_entity)
@@ -24,7 +27,7 @@ def calc_new_reward(any_series, acting_entity):
     # this function calculates the new reward values for the entire list of series
 
     if len(any_series[0]) == 1 or len(any_series[0]) == 0: # only one item means action
-        ruleset = action_rules
+        ruleset = action_rules_reward
 
         for any_one_series in any_series:
             new_reward = check_rules_for_reward(any_one_series, ruleset, acting_entity)
@@ -52,18 +55,77 @@ def calc_new_reward(any_series, acting_entity):
         print('Invalid series length')
 
     return results
-        
 
-action_rules = [
+def rule_number_of_actions(any_one_series, acting_entity):
+    # need to access the action_subactions_text, action_subactions_reps from acting_entity.subaction_catalog
+    for i in any_one_series[0]:
+        if i in acting_entity.subaction_catalog['action_subactions_reps']:
+            return 1
+
+def rule_number_of_free_actions(any_one_series, acting_entity):
+    # there are multiple lists within the free_subactions_reps list and only one per list can be taken
+    # so its the number of lists that free actions are taken from
+    free_subaction_lists = acting_entity.subaction_catalog['free_subactions_reps']
+    # free_subaction_lists looks like [[4,25,27,29,31],[14]]
+    for i in any_one_series[0]:
+        for j in free_subaction_lists:
+            if i in j:
+                return 1
+    
+
+
+def rule_number_of_attacks(any_one_series, acting_entity):
+    for i in any_one_series[0]:
+        if i in acting_entity.subaction_catalog['attack_subactions_reps']:
+            return 1
+
+def rule_prone(any_one_series, acting_entity):
+    # need to find the index of 'prone' string from subaction_catalog['action_subactions_text']
+    prone_index = acting_entity.subaction_catalog['move_subactions_text'].index('go prone')
+    prone_value = acting_entity.subaction_catalog['move_subactions_reps'][prone_index]
+
+    if prone_value in any_one_series[0]:
+        return -1
+
+def rule_prone_end(any_one_series, acting_entity):
+    prone_index = acting_entity.subaction_catalog['move_subactions_text'].index('go prone')
+    prone_value = acting_entity.subaction_catalog['move_subactions_reps'][prone_index]
+
+    stand_index = acting_entity.subaction_catalog['move_subactions_text'].index('stand up')
+    stand_value = acting_entity.subaction_catalog['move_subactions_reps'][stand_index]
+
+    if prone_value in any_one_series[0]:
+        if stand_value not in any_one_series[any_one_series[0].index(prone_value):]:
+            return -1
+
+def rule_action_series_length(any_one_series, acting_entity):
+    act_series_len = len(any_one_series[0])
+    if act_series_len >= 3:
+        return 1
+    if act_series_len <= 7:
+        return 1
+    if act_series_len > 10:
+        return -1
+    return 0
+
+
+action_rules_reward = [
     # for the number of actions taken, reward
+    rule_number_of_actions,
     # for the number of free actions taken, reward
+    rule_number_of_free_actions,
     # for the number of attacks made, reward
+    rule_number_of_attacks,
     # if the entity goes prone at all, punish
+    rule_prone,
     # if the entity ends the turn while prone, punish
+    rule_prone_end,
     # if the action series is between 3 and 6, reward else punish
     # if the action series is between 7 and 10, reward else punish
     # if the action series is greater than 10, punish
+    rule_action_series_length,
     # if 25 or 26 is in action_series, and 5 comes after it, reward (if the equip subaction is followed by the attack subaction, reward)
+
     # if the entity equips off hand and attacks with it, reward
     # if the entity picks up an item, and then equips it, reward
     # if the entity loses an item, slightly punish
@@ -76,6 +138,18 @@ action_rules = [
     # if you mount and dismount in the same turn, punish
 
 ]
+
+
+
+
+
+
+
+
+
+
+
+
 
 action_location_reward_rules = [
     # if the move path prompts an opportunity attack, punish

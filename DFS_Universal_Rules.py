@@ -5,7 +5,14 @@ import numpy as np
 # and then what's below is the default for player characters???
 # according to the rules, monsters aren't limited by the same system that player characters are
 
+universal_subactions = {
+    'names': [],
+    'source': [],
+}
 
+player_character_subactions = {
+    
+}
 
 subaction_dict = {
     '0': 'Move_One',                # needs a target
