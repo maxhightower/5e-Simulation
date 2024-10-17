@@ -9,7 +9,9 @@ from DFS_Functions import adjacent_locations, adjacent_locations_entities, cheby
 
 
 def check_rules_for_reward(any_one_series,ruleset,acting_entity):
-    if len(any_one_series) == 1:
+    print(any_one_series)
+
+    if len(any_one_series) in [0,1]:
         reward = 0
     else:
         reward = any_one_series[-1]
@@ -57,35 +59,64 @@ def calc_new_reward(any_series, acting_entity):
     return results
 
 def rule_number_of_actions(any_one_series, acting_entity):
+    if len(any_one_series) in [0,1]:
+        for i in any_one_series:
+            if i in acting_entity.subaction_catalog['action_subactions_reps']:
+                return 1
+    else:
+
     # need to access the action_subactions_text, action_subactions_reps from acting_entity.subaction_catalog
-    for i in any_one_series[0]:
-        if i in acting_entity.subaction_catalog['action_subactions_reps']:
-            return 1
+        for i in any_one_series[0]:
+            if i in acting_entity.subaction_catalog['action_subactions_reps']:
+                return 1
+    return 0
 
 def rule_number_of_free_actions(any_one_series, acting_entity):
-    # there are multiple lists within the free_subactions_reps list and only one per list can be taken
-    # so its the number of lists that free actions are taken from
-    free_subaction_lists = acting_entity.subaction_catalog['free_subactions_reps']
-    # free_subaction_lists looks like [[4,25,27,29,31],[14]]
-    for i in any_one_series[0]:
-        for j in free_subaction_lists:
-            if i in j:
+    if len(any_one_series) in [0,1]:
+        for i in any_one_series:
+            if i in acting_entity.subaction_catalog['free_subactions_reps']:
                 return 1
+    else:
+
+
+        # there are multiple lists within the free_subactions_reps list and only one per list can be taken
+        # so its the number of lists that free actions are taken from
+        free_subaction_lists = acting_entity.subaction_catalog['free_subactions_reps']
+        # free_subaction_lists looks like [[4,25,27,29,31],[14]]
+        for i in any_one_series[0]:
+            for j in free_subaction_lists:
+                if i in j:
+                    return 1
+    return 0
     
 
 
 def rule_number_of_attacks(any_one_series, acting_entity):
-    for i in any_one_series[0]:
-        if i in acting_entity.subaction_catalog['attack_subactions_reps']:
-            return 1
+    if len(any_one_series) in [0,1]:
+        for i in any_one_series:
+            if i in acting_entity.subaction_catalog['attack_subactions_reps']:
+                return 1
+    else:
+        for i in any_one_series[0]:
+            if i in acting_entity.subaction_catalog['attack_subactions_reps']:
+                return 1
+    
+    return 0
 
 def rule_prone(any_one_series, acting_entity):
+
     # need to find the index of 'prone' string from subaction_catalog['action_subactions_text']
     prone_index = acting_entity.subaction_catalog['move_subactions_text'].index('go prone')
     prone_value = acting_entity.subaction_catalog['move_subactions_reps'][prone_index]
 
-    if prone_value in any_one_series[0]:
-        return -1
+    if len(any_one_series) in [0,1]:
+        if prone_value in any_one_series:
+            return -1
+    else:
+        if prone_value in any_one_series[0]:
+            return -1
+
+    return 0
 
 def rule_prone_end(any_one_series, acting_entity):
     prone_index = acting_entity.subaction_catalog['move_subactions_text'].index('go prone')
@@ -94,18 +125,93 @@ def rule_prone_end(any_one_series, acting_entity):
     stand_index = acting_entity.subaction_catalog['move_subactions_text'].index('stand up')
     stand_value = acting_entity.subaction_catalog['move_subactions_reps'][stand_index]
 
-    if prone_value in any_one_series[0]:
-        if stand_value not in any_one_series[any_one_series[0].index(prone_value):]:
-            return -1
+    if len(any_one_series) in [0,1]:
+        if prone_value in any_one_series:
+            if stand_value not in any_one_series[any_one_series.index(prone_value):]:
+                return -1
+    else:
+
+        if prone_value in any_one_series[0]:
+            if stand_value not in any_one_series[any_one_series[0].index(prone_value):]:
+                return -1
+            
+    return 0
 
 def rule_action_series_length(any_one_series, acting_entity):
-    act_series_len = len(any_one_series[0])
+    if len(any_one_series) in [0,1]:
+        act_series_len = len(any_one_series)
+    else:
+        act_series_len = len(any_one_series[0])
+    
     if act_series_len >= 3:
         return 1
     if act_series_len <= 7:
         return 1
     if act_series_len > 10:
         return -1
+    return 0
+
+def rule_equip_hand_followed_by_attack_with_hand(any_one_series, acting_entity):
+    equip_main_hand_free_index = acting_entity.subaction_catalog['action_subactions_text'].index('object--free--self_equip_main_hand')
+    equip_main_hand_free = acting_entity.subaction_catalog['action_subactions_reps'].index(equip_main_hand_free_index)
+    
+    equip_main_hand_action = acting_entity.subaction_catalog['action_subactions_reps'].index('object--action--self_equip_main_hand')
+    
+
+    equip_off_hand_free = acting_entity.subaction_catalog['action_subactions_reps'].index('object--free--self_equip_off_hand')
+    equip_off_hand_action = acting_entity.subaction_catalog['action_subactions_reps'].index('object--action--self_equip_off_hand')
+
+    equip_both_hand_free = acting_entity.subaction_catalog['action_subactions_reps'].index('object--free--self_equip_both_hands')
+    equip_both_hand_action = acting_entity.subaction_catalog['action_subactions_reps'].index('object--action--self_equip_both_hands')
+
+    attack_main_hand = acting_entity.subaction_catalog['action_subactions_reps'].index('attack--weapon--main_hand')
+    attack_off_hand = acting_entity.subaction_catalog['action_subactions_reps'].index('attack--weapon--off_hand')
+    attack_both_hands = acting_entity.subaction_catalog['action_subactions_reps'].index('attack--weapon--both_hands')
+
+    if len(any_one_series) in [0,1]:
+        if equip_main_hand_free in any_one_series:
+            if attack_main_hand in any_one_series[any_one_series.index(equip_main_hand_free):]:
+                return 1
+        if equip_main_hand_action in any_one_series:
+            if attack_main_hand in any_one_series[any_one_series.index(equip_main_hand_action):]:
+                return 1
+        
+        if equip_off_hand_free in any_one_series:
+            if attack_off_hand in any_one_series[any_one_series.index(equip_off_hand_free):]:
+                return 1
+        if equip_off_hand_action in any_one_series:
+            if attack_off_hand in any_one_series[any_one_series.index(equip_off_hand_action):]:
+                return 1
+        
+        if equip_both_hand_free in any_one_series:
+            if attack_both_hands in any_one_series[any_one_series.index(equip_both_hand_free):]:
+                return 1
+        if equip_both_hand_action in any_one_series:
+            if attack_both_hands in any_one_series[any_one_series.index(equip_both_hand_action):]:
+                return 1
+    else:
+
+        if equip_main_hand_free in any_one_series[0]:
+            if attack_main_hand in any_one_series[any_one_series[0].index(equip_main_hand_free):]:
+                return 1
+        if equip_main_hand_action in any_one_series[0]:
+            if attack_main_hand in any_one_series[any_one_series[0].index(equip_main_hand_action):]:
+                return 1
+            
+        if equip_off_hand_free in any_one_series[0]:
+            if attack_off_hand in any_one_series[any_one_series[0].index(equip_off_hand_free):]:
+                return 1
+        if equip_off_hand_action in any_one_series[0]:
+            if attack_off_hand in any_one_series[any_one_series[0].index(equip_off_hand_action):]:
+                return 1
+            
+        if equip_both_hand_free in any_one_series[0]:
+            if attack_both_hands in any_one_series[any_one_series[0].index(equip_both_hand_free):]:
+                return 1
+        if equip_both_hand_action in any_one_series[0]:
+            if attack_both_hands in any_one_series[any_one_series[0].index(equip_both_hand_action):]:
+                return 1
+            
     return 0
 
 
@@ -124,7 +230,8 @@ action_rules_reward = [
     # if the action series is between 7 and 10, reward else punish
     # if the action series is greater than 10, punish
     rule_action_series_length,
-    # if 25 or 26 is in action_series, and 5 comes after it, reward (if the equip subaction is followed by the attack subaction, reward)
+    # if 25 (object free self equip main haind) or 26 (object action self equip main hand) is in action_series, and 5 (attack weapon main hand) comes after it, reward (if the equip subaction is followed by the attack subaction, reward)
+    rule_equip_hand_followed_by_attack_with_hand,
 
     # if the entity equips off hand and attacks with it, reward
     # if the entity picks up an item, and then equips it, reward
