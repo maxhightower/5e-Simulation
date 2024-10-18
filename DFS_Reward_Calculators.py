@@ -152,66 +152,77 @@ def rule_action_series_length(any_one_series, acting_entity):
     return 0
 
 def rule_equip_hand_followed_by_attack_with_hand(any_one_series, acting_entity):
-    equip_main_hand_free_index = acting_entity.subaction_catalog['action_subactions_text'].index('object--free--self_equip_main_hand')
-    equip_main_hand_free = acting_entity.subaction_catalog['action_subactions_reps'].index(equip_main_hand_free_index)
+    equip_main_hand_free_index_in_text = acting_entity.subaction_catalog['object_subactions_text'].index('object--free--self_equip_main_hand')
+    equip_main_hand_free_index_rep = acting_entity.subaction_catalog['object_subactions_reps'][equip_main_hand_free_index_in_text]
     
-    equip_main_hand_action = acting_entity.subaction_catalog['action_subactions_reps'].index('object--action--self_equip_main_hand')
+    equip_main_hand_action_index_in_text = acting_entity.subaction_catalog['object_subactions_text'].index('object--action--self_equip_main_hand')
+    equip_main_hand_action_index_rep = acting_entity.subaction_catalog['object_subactions_reps'][equip_main_hand_action_index_in_text]
+
+    equip_off_hand_free_index_in_text = acting_entity.subaction_catalog['object_subactions_text'].index('object--free--self_equip_off_hand')
+    equip_off_hand_free_index_rep = acting_entity.subaction_catalog['object_subactions_reps'][equip_off_hand_free_index_in_text]
+
+    equip_off_hand_action_index_in_text = acting_entity.subaction_catalog['object_subactions_text'].index('object--action--self_equip_off_hand')
+    equip_off_hand_action_index_rep = acting_entity.subaction_catalog['object_subactions_reps'][equip_off_hand_action_index_in_text]
+
+    equip_both_hand_free_index_in_text = acting_entity.subaction_catalog['object_subactions_text'].index('object--free--self_equip_both_hands')
+    equip_both_hand_free_index_rep = acting_entity.subaction_catalog['object_subactions_reps'][equip_both_hand_free_index_in_text]
+
+    equip_both_hand_action_index_in_text = acting_entity.subaction_catalog['object_subactions_text'].index('object--action--self_equip_both_hands')
+    equip_both_hand_action_index_rep = acting_entity.subaction_catalog['object_subactions_reps'][equip_both_hand_action_index_in_text]
+
+    attack_main_hand_index_in_text = acting_entity.subaction_catalog['attack_subactions_text'].index('attack--weapon--main_hand')
+    attack_main_hand_index_rep = acting_entity.subaction_catalog['attack_subactions_reps'][attack_main_hand_index_in_text]
+
+    attack_off_hand_index_in_text = acting_entity.subaction_catalog['attack_subactions_text'].index('attack--weapon--off_hand')
+    attack_off_hand_index_rep = acting_entity.subaction_catalog['attack_subactions_reps'][attack_off_hand_index_in_text]
+
+    attack_both_hands_index_in_text = acting_entity.subaction_catalog['attack_subactions_text'].index('attack--weapon--both_hands')
+    attack_both_hands_index_rep = acting_entity.subaction_catalog['attack_subactions_reps'][attack_both_hands_index_in_text]
     
-
-    equip_off_hand_free = acting_entity.subaction_catalog['action_subactions_reps'].index('object--free--self_equip_off_hand')
-    equip_off_hand_action = acting_entity.subaction_catalog['action_subactions_reps'].index('object--action--self_equip_off_hand')
-
-    equip_both_hand_free = acting_entity.subaction_catalog['action_subactions_reps'].index('object--free--self_equip_both_hands')
-    equip_both_hand_action = acting_entity.subaction_catalog['action_subactions_reps'].index('object--action--self_equip_both_hands')
-
-    attack_main_hand = acting_entity.subaction_catalog['action_subactions_reps'].index('attack--weapon--main_hand')
-    attack_off_hand = acting_entity.subaction_catalog['action_subactions_reps'].index('attack--weapon--off_hand')
-    attack_both_hands = acting_entity.subaction_catalog['action_subactions_reps'].index('attack--weapon--both_hands')
-
     if len(any_one_series) in [0,1]:
-        if equip_main_hand_free in any_one_series:
-            if attack_main_hand in any_one_series[any_one_series.index(equip_main_hand_free):]:
+        if equip_main_hand_free_index_rep in any_one_series:
+            if attack_main_hand_index_in_text in any_one_series[any_one_series.index(equip_main_hand_free_index_rep):]:
                 return 1
-        if equip_main_hand_action in any_one_series:
-            if attack_main_hand in any_one_series[any_one_series.index(equip_main_hand_action):]:
+        if equip_main_hand_action_index_rep in any_one_series:
+            if attack_main_hand_index_in_text in any_one_series[any_one_series.index(equip_main_hand_action_index_rep):]:
                 return 1
-        
-        if equip_off_hand_free in any_one_series:
-            if attack_off_hand in any_one_series[any_one_series.index(equip_off_hand_free):]:
+            
+        if equip_off_hand_free_index_rep in any_one_series:
+            if attack_off_hand_index_in_text in any_one_series[any_one_series.index(equip_off_hand_free_index_rep):]:
                 return 1
-        if equip_off_hand_action in any_one_series:
-            if attack_off_hand in any_one_series[any_one_series.index(equip_off_hand_action):]:
+        if equip_off_hand_action_index_rep in any_one_series:
+            if attack_off_hand_index_in_text in any_one_series[any_one_series.index(equip_off_hand_action_index_rep):]:
                 return 1
-        
-        if equip_both_hand_free in any_one_series:
-            if attack_both_hands in any_one_series[any_one_series.index(equip_both_hand_free):]:
+            
+        if equip_both_hand_free_index_rep in any_one_series:
+            if attack_both_hands_index_in_text in any_one_series[any_one_series.index(equip_both_hand_free_index_rep):]:
                 return 1
-        if equip_both_hand_action in any_one_series:
-            if attack_both_hands in any_one_series[any_one_series.index(equip_both_hand_action):]:
+        if equip_both_hand_action_index_rep in any_one_series:
+            if attack_both_hands_index_in_text in any_one_series[any_one_series.index(equip_both_hand_action_index_rep):]:
                 return 1
+            
     else:
+        if equip_main_hand_free_index_rep in any_one_series[0]:
+            if attack_main_hand_index_in_text in any_one_series[0][any_one_series[0].index(equip_main_hand_free_index_rep):]:
+                return 1
+        if equip_main_hand_action_index_rep in any_one_series[0]:
+            if attack_main_hand_index_in_text in any_one_series[0][any_one_series[0].index(equip_main_hand_action_index_rep):]:
+                return 1
+            
+        if equip_off_hand_free_index_rep in any_one_series[0]:
+            if attack_off_hand_index_in_text in any_one_series[0][any_one_series[0].index(equip_off_hand_free_index_rep):]:
+                return 1
+        if equip_off_hand_action_index_rep in any_one_series[0]:
+            if attack_off_hand_index_in_text in any_one_series[0][any_one_series[0].index(equip_off_hand_action_index_rep):]:
+                return 1
+            
+        if equip_both_hand_free_index_rep in any_one_series[0]:
+            if attack_both_hands_index_in_text in any_one_series[0][any_one_series[0].index(equip_both_hand_free_index_rep):]:
+                return 1
+        if equip_both_hand_action_index_rep in any_one_series[0]:
+            if attack_both_hands_index_in_text in any_one_series[0][any_one_series[0].index(equip_both_hand_action_index_rep):]:
+                return 1
 
-        if equip_main_hand_free in any_one_series[0]:
-            if attack_main_hand in any_one_series[any_one_series[0].index(equip_main_hand_free):]:
-                return 1
-        if equip_main_hand_action in any_one_series[0]:
-            if attack_main_hand in any_one_series[any_one_series[0].index(equip_main_hand_action):]:
-                return 1
-            
-        if equip_off_hand_free in any_one_series[0]:
-            if attack_off_hand in any_one_series[any_one_series[0].index(equip_off_hand_free):]:
-                return 1
-        if equip_off_hand_action in any_one_series[0]:
-            if attack_off_hand in any_one_series[any_one_series[0].index(equip_off_hand_action):]:
-                return 1
-            
-        if equip_both_hand_free in any_one_series[0]:
-            if attack_both_hands in any_one_series[any_one_series[0].index(equip_both_hand_free):]:
-                return 1
-        if equip_both_hand_action in any_one_series[0]:
-            if attack_both_hands in any_one_series[any_one_series[0].index(equip_both_hand_action):]:
-                return 1
-            
     return 0
 
 
