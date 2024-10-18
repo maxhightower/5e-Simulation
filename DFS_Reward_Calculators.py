@@ -25,16 +25,22 @@ def check_rules_for_reward(any_one_series,ruleset,acting_entity):
 def calc_new_reward(any_series, acting_entity):
     # the input should be the combined series, not separate lists
     results = []
+        
+
 
     # this function calculates the new reward values for the entire list of series
-
     if len(any_series[0]) == 1 or len(any_series[0]) == 0: # only one item means action
         ruleset = action_rules_reward
 
         for any_one_series in any_series:
-            new_reward = check_rules_for_reward(any_one_series, ruleset, acting_entity)
-            same_series_new_reward = [any_one_series[0], new_reward]
-            results.append(same_series_new_reward)
+            if any_one_series == []:
+                new_reward = check_rules_for_reward(any_one_series, ruleset, acting_entity)
+                same_series_new_reward = [any_one_series,new_reward]
+                results.append(same_series_new_reward)
+            else:
+                new_reward = check_rules_for_reward(any_one_series, ruleset, acting_entity)
+                same_series_new_reward = [any_one_series[0], new_reward]
+                results.append(same_series_new_reward)
 
 
     elif len(any_series[0]) == 3: # three items means action, location, and reward
