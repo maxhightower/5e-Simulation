@@ -93,12 +93,29 @@ class entity:
         }
 
         self.dfs_rules = {
-            'action_rules': [],
-            'location_rules': [],
-            'object_rules': [],
-            'entity_rules': [],
-            'spell_rules': [],
+            'action_rules': {
+                'permit': [],
+                'reward': []
+            },
+            'location_rules': {
+                'permit': [],
+                'reward': [],
+            },
+            'object_rules': {
+                'permit': [],
+                'reward': [],
+            },
+            'entity_rules': {
+                'permit': [],
+                'reward': [],
+            },
+            'spell_rules': {
+                'permit': [],
+                'reward': [],
+            }
         }
+
+
 
         #self.reward_rules = {}   # just a concept for now... 
 
@@ -132,6 +149,8 @@ class entity:
             self.is_mountable = args[2]
             self.speed = args[3]
 
+            self.name = 'monster'
+
         else:
             # elif self.type == 'player character':
             self.template = None
@@ -159,6 +178,8 @@ class entity:
                 24: 6,
                 54: self.speed/2,
                 }
+            
+            self.name = 'player_character'
 
         # self.template will be used to pull the relevant information from the monster manual
 
@@ -928,8 +949,8 @@ class entity:
         self.subactions.append(end_concentration)
 
 
-    def add_rules_for_dfs(self, rules, target):
-        self.dfs_rules[target] = rules
+    def add_rules_for_dfs(self, rules, target, type):
+        self.dfs_rules[target][type] = rules
 
 
     def update_subactions(self):

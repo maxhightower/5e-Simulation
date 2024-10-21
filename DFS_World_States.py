@@ -206,6 +206,10 @@ class world:
         #print(f'location: {name.location}')
         #print(f'set location: {set_location}')
 
+        set_location = [set_location[0]-5,set_location[1]-5]
+
+        sizes = [1,2,3,4,5]
+
         if name.type == 'player character':
             size = 'medium'
             #name = entity(type,self,size)
@@ -233,6 +237,24 @@ class world:
             size_layouts = size_space_orientation[size_options[size_options.index(name.size)]]
 
 
+            # I'm going to be ignoring size_layouts for now and simply using squares
+            if name.size in ['tiny','small','medium']:
+                temp_length = 1
+                temp_height = 1
+            elif name.size in ['large']:
+                temp_length = 2
+                temp_height = 2
+            elif name.size in ['huge']:
+                temp_length = 3
+                temp_height = 3
+            elif name.size in ['gargantuan']:
+                temp_length = 4
+                temp_height = 4
+            elif name.size in ['colossal']:
+                temp_length = 5
+                temp_height = 5
+            
+
             #if len(size_layouts) > 1:
             #    print(orientation)
             #    spaces_orientation = size_layouts[orientation]
@@ -255,6 +277,12 @@ class world:
                 self.grid[loc[0],loc[1]] = 2
                 self.grid2[loc[0]][loc[1]][5].append(name)
                 self.entity_locations.append(loc)
+
+        # will need a check to see if the location is already occupied by another entity
+        # if so, it will be shunted to the nearest open space
+        # and a message will be printed about the new location
+
+        self.entities.append(name)
 
             
 
@@ -303,6 +331,45 @@ class world:
     def add_item_to_inventory(world,entity,item):
         entity.inventory.append(item)
         world.objects.append(item)
+
+
+
+    def show_map(world):
+        # first I'll need to create a new list of lists to store just the entity data
+        # the map goes from -5 to 5 so the world.size is 11
+
+        # now plot
+        plt.figure(figsize = [10,10])
+        plt.imshow(world.grid, cmap='viridis', interpolation='nearest') 
+        # show all x and y ticks
+        # subtract 5 from the x and y ticks to get the correct location
+
+        plt.xticks(np.arange(0,world.size,1),np.arange(-5,6,1))
+        plt.yticks(np.arange(0,world.size,1),np.arange(-5,6,1))
+
+        # add a grid
+        plt.grid(color='black',linewidth=0.5,alpha=0.5)
+
+        plt.gca().invert_yaxis()
+
+        # add a text label for each cell where if the cell is occupied, it will display the entity name
+        for i in range(world.size):
+            for j in range(world.size):
+                if len(world.grid2[i][j][5]) > 0:
+                    plt.text(j,i,world.grid2[i][j][5][0].name,ha='center',va='center',color='black')
+                elif len(world.grid2[i][j][6]) > 0:
+                    plt.text(j,i,world.grid2[i][j][6][0].name,ha='center',va='center',color='black')                    
+
+        # need to add a check for if monsters of bigger sizes to combine the text
+        # need to add a check for if multiple entities are in the same cell
+        # need to add a check for if multiple objects are in the same cell
+        # need to add a check for if an entity and an object are in the same cell
+
+        plt.show()
+
+        # I'll do on using 3d voxels later...
+
+
 
 
 #    def visualize(self, dfs_path=None):

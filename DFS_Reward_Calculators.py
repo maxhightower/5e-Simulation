@@ -6,10 +6,10 @@ from DFS_Universal_Rules import action_subactions, move_subactions, attack_subac
 from DFS_Entities import entity
 from DFS_Functions import adjacent_locations, adjacent_locations_entities, chebyshev_distance, chebyshev_distance_entities, bresenham_line, calculate_full_path, calculate_full_path_entities, check_opportunity_attacks, is_line_of_sight_clear, check_visibility, move_speed_to_subactions, generate_pseudo_history, damage_calc1, damage_calc2, probability_hit_calc, expected_damage, calc_series_expected_damage
 
-
+ 
 
 def check_rules_for_reward(any_one_series,ruleset,acting_entity):
-    print(any_one_series)
+    #print(any_one_series)
 
     if len(any_one_series) in [0,1]:
         reward = 0
@@ -32,10 +32,14 @@ def calc_new_reward(any_series, acting_entity):
     if len(any_series[0]) == 1 or len(any_series[0]) == 0: # only one item means action
         ruleset = action_rules_reward
 
+
         for any_one_series in any_series:
+            action_series = any_series
+
             if any_one_series == []:
                 new_reward = check_rules_for_reward(any_one_series, ruleset, acting_entity)
-                same_series_new_reward = [any_one_series,new_reward]
+                same_series_new_reward = [action_series, new_reward]
+                #print(f'action series, new reward: {action_series} {new_reward}')
                 results.append(same_series_new_reward)
             else:
                 new_reward = check_rules_for_reward(any_one_series, ruleset, acting_entity)
@@ -44,7 +48,7 @@ def calc_new_reward(any_series, acting_entity):
 
 
     elif len(any_series[0]) == 3: # three items means action, location, and reward
-        ruleset = action_location_reward_rules
+        ruleset = action_location_reward_rules_reward
 
         for any_one_series in any_series:
             new_reward = check_rules_for_reward(any_one_series, ruleset, acting_entity)
@@ -52,7 +56,7 @@ def calc_new_reward(any_series, acting_entity):
             results.append(same_series_new_reward)
 
     elif len(any_series[0]) == 4: # four items means action, location, object, and reward
-        ruleset = action_location_object_reward_rules
+        ruleset = action_location_object_reward_rules_reward
 
         for any_one_series in any_series:
             new_reward = check_rules_for_reward(any_one_series, ruleset, acting_entity)
@@ -62,7 +66,12 @@ def calc_new_reward(any_series, acting_entity):
     else:
         print('Invalid series length')
 
+    
+
     return results
+
+
+
 
 def rule_number_of_actions(any_one_series, acting_entity):
     if len(any_one_series) in [0,1]:
@@ -72,10 +81,13 @@ def rule_number_of_actions(any_one_series, acting_entity):
     else:
 
     # need to access the action_subactions_text, action_subactions_reps from acting_entity.subaction_catalog
-        for i in any_one_series[0]:
-            if i in acting_entity.subaction_catalog['action_subactions_reps']:
+        #print(f'series test: {any_one_series}')
+        #print(any_one_series)
+        for i in range(len(any_one_series)):
+            if any_one_series[i] in acting_entity.subaction_catalog['action_subactions_reps']:
                 return 1
     return 0
+
 
 def rule_number_of_free_actions(any_one_series, acting_entity):
     if len(any_one_series) in [0,1]:
@@ -89,7 +101,7 @@ def rule_number_of_free_actions(any_one_series, acting_entity):
         # so its the number of lists that free actions are taken from
         free_subaction_lists = acting_entity.subaction_catalog['free_subactions_reps']
         # free_subaction_lists looks like [[4,25,27,29,31],[14]]
-        for i in any_one_series[0]:
+        for i in any_one_series:
             for j in free_subaction_lists:
                 if i in j:
                     return 1
@@ -103,7 +115,7 @@ def rule_number_of_attacks(any_one_series, acting_entity):
             if i in acting_entity.subaction_catalog['attack_subactions_reps']:
                 return 1
     else:
-        for i in any_one_series[0]:
+        for i in any_one_series:
             if i in acting_entity.subaction_catalog['attack_subactions_reps']:
                 return 1
     
@@ -119,7 +131,7 @@ def rule_prone(any_one_series, acting_entity):
         if prone_value in any_one_series:
             return -1
     else:
-        if prone_value in any_one_series[0]:
+        if prone_value in any_one_series:
             return -1
 
     return 0
@@ -137,8 +149,8 @@ def rule_prone_end(any_one_series, acting_entity):
                 return -1
     else:
 
-        if prone_value in any_one_series[0]:
-            if stand_value not in any_one_series[any_one_series[0].index(prone_value):]:
+        if prone_value in any_one_series:
+            if stand_value not in any_one_series[any_one_series.index(prone_value):]:
                 return -1
             
     return 0
@@ -147,7 +159,7 @@ def rule_action_series_length(any_one_series, acting_entity):
     if len(any_one_series) in [0,1]:
         act_series_len = len(any_one_series)
     else:
-        act_series_len = len(any_one_series[0])
+        act_series_len = len(any_one_series)
     
     if act_series_len >= 3:
         return 1
@@ -208,25 +220,25 @@ def rule_equip_hand_followed_by_attack_with_hand(any_one_series, acting_entity):
                 return 1
             
     else:
-        if equip_main_hand_free_index_rep in any_one_series[0]:
-            if attack_main_hand_index_in_text in any_one_series[0][any_one_series[0].index(equip_main_hand_free_index_rep):]:
+        if equip_main_hand_free_index_rep in any_one_series:
+            if attack_main_hand_index_in_text in any_one_series[any_one_series.index(equip_main_hand_free_index_rep):]:
                 return 1
-        if equip_main_hand_action_index_rep in any_one_series[0]:
-            if attack_main_hand_index_in_text in any_one_series[0][any_one_series[0].index(equip_main_hand_action_index_rep):]:
-                return 1
-            
-        if equip_off_hand_free_index_rep in any_one_series[0]:
-            if attack_off_hand_index_in_text in any_one_series[0][any_one_series[0].index(equip_off_hand_free_index_rep):]:
-                return 1
-        if equip_off_hand_action_index_rep in any_one_series[0]:
-            if attack_off_hand_index_in_text in any_one_series[0][any_one_series[0].index(equip_off_hand_action_index_rep):]:
+        if equip_main_hand_action_index_rep in any_one_series:
+            if attack_main_hand_index_in_text in any_one_series[any_one_series.index(equip_main_hand_action_index_rep):]:
                 return 1
             
-        if equip_both_hand_free_index_rep in any_one_series[0]:
-            if attack_both_hands_index_in_text in any_one_series[0][any_one_series[0].index(equip_both_hand_free_index_rep):]:
+        if equip_off_hand_free_index_rep in any_one_series:
+            if attack_off_hand_index_in_text in any_one_series[any_one_series.index(equip_off_hand_free_index_rep):]:
                 return 1
-        if equip_both_hand_action_index_rep in any_one_series[0]:
-            if attack_both_hands_index_in_text in any_one_series[0][any_one_series[0].index(equip_both_hand_action_index_rep):]:
+        if equip_off_hand_action_index_rep in any_one_series:
+            if attack_off_hand_index_in_text in any_one_series[any_one_series.index(equip_off_hand_action_index_rep):]:
+                return 1
+            
+        if equip_both_hand_free_index_rep in any_one_series:
+            if attack_both_hands_index_in_text in any_one_series[any_one_series.index(equip_both_hand_free_index_rep):]:
+                return 1
+        if equip_both_hand_action_index_rep in any_one_series:
+            if attack_both_hands_index_in_text in any_one_series[any_one_series.index(equip_both_hand_action_index_rep):]:
                 return 1
 
     return 0
@@ -236,7 +248,7 @@ action_rules_reward = [
     # for the number of actions taken, reward
     rule_number_of_actions,
     # for the number of free actions taken, reward
-    rule_number_of_free_actions,
+    #rule_number_of_free_actions,
     # for the number of attacks made, reward
     rule_number_of_attacks,
     # if the entity goes prone at all, punish
@@ -275,7 +287,7 @@ action_rules_reward = [
 
 
 
-action_location_reward_rules = [
+action_location_reward_rules_reward = [
     # if the move path prompts an opportunity attack, punish
     # each opportunity attack that is while flanked is even more punished
     # each enemy that can see the entity causes the entity to be punished
@@ -286,7 +298,7 @@ action_location_reward_rules = [
 
 ]
 
-action_location_object_reward_rules = [
+action_location_object_reward_rules_reward = [
     # if the entity picks up an item, and its a coin, reward
     # if the entity picks up an item, and its a weapon, reward
     # reward when the entity dons a shield, punish when the entity equips it
@@ -299,13 +311,13 @@ action_location_object_reward_rules = [
 
 ]
 
-action_location_object_entity_reward_rules = [
+action_location_object_entity_reward_rules_reward = [
     # if mount lacks barding, punish
 
 ]
 
 
-action_location_object_entity_spell_reward_rules = [
+action_location_object_entity_spell_reward_rules_reward = [
     # HP to allies that healed is rewarded
 ]
 

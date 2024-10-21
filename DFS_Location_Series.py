@@ -398,3 +398,132 @@ location_rules = [
 ]
 
 location_rules_sources = ['standard'] * len(location_rules)
+
+
+class RuleBasedLocationSequenceDFS3:
+    def __init__(self, acting_entity, action_reward_series_full_list):
+        self.acting_entity = acting_entity
+        self.action_reward_series_full_list = action_reward_series_full_list
+        self.target_distance_scores = acting_entity.target_distance_scores
+        self.location_rules_permit = acting_entity.dfs_rules['location_rules']
+
+
+        self.location_series_list = []
+        
+        self.sequences = []
+        
+
+
+    # I think what I want to have happen is that self.sequences will be filled per action_series 
+    # then appended to location_series_list 
+    # then reset and used for the next action_series
+
+    def get_potential_locations(self, sub_index, tar_act_series, current_sequence, grid_locations):
+        # identify the distance the subaction allows
+        #print('')
+        #print('--entered potential locations--')
+        subaction = tar_act_series[sub_index]
+        distance_allowable = target_distance_scores[subaction]
+
+        # identify the entity's location at that given subaction
+        entity_loc_series = [current_sequence[loc_index] for loc_index in range(len(current_sequence)) if tar_act_series[loc_index] in move_subactions]
+        
+        #print(f'Entity_loc_series: {entity_loc_series}')
+        if len(entity_loc_series) < 1:
+            entity_location = self.acting_entity.location
+        else:
+            entity_location = entity_loc_series[-1]
+
+
+        # identify which locations/spaces can be accessed within that distance
+        locations_accessible = []
+        for loc in grid_locations:
+            #if chebyshev_distance(entity_location, loc) <= distance_allowable:
+            #    locations_accessible.append(loc)
+
+            if chebyshev_distance_entities(self.acting_entity, loc) <= distance_allowable:
+                locations_accessible.append(loc)
+
+
+        #print(f'locations accessible {locations_accessible}')
+        #print(f'entity is at {entity_location}; allowable distance for action {subaction} is {distance_allowable}; locations accessible are {locations_accessible}')
+
+        #print(f'Locations accessible: {locations_accessible}')
+        #print(' ')
+        return locations_accessible
+
+
+    def check_rules(self, sequence, next_loc, action_reward_series):
+        return all(location_rule(sequence, next_loc, self.acting_entity, action_reward_series[0]) for location_rule in self.location_rules_permit)
+
+
+    def dfs(self, action_reward_series, current_sequence, grid_locations):
+        print(action_reward_series)
+        if action_reward_series[0] in [[]]:
+            return [[]]
+        
+        else:
+
+            tar_act_series = [i for i in action_reward_series[0] if i in subactions_req_targets]
+            required_sequence_length = len(tar_act_series)
+            
+            if len(current_sequence) == required_sequence_length:
+                #print(f'finishing if current sequence: {current_sequence}')
+                return [current_sequence.copy()]  # Return a list containing the completed sequence
+            
+            all_sequences = []
+            sub_index = len(current_sequence)  # This ensures we're looking at the correct subaction
+            
+            locations_accessible = self.get_potential_locations(
+                sub_index=sub_index,
+                tar_act_series=tar_act_series,
+                current_sequence=current_sequence,
+                acting_entity=self.acting_entity,
+                grid_locations=grid_locations
+            )
+
+            for next_loc in locations_accessible:
+                if self.check_rules(current_sequence, next_loc, self.acting_entity, tar_act_series):
+                    current_sequence.append(next_loc)
+                    all_sequences.extend(self.dfs(action_reward_series[0], current_sequence, grid_locations))
+                    current_sequence.pop()
+            
+        #print(f'sequences being returned from dfs to results 1 {all_sequences[:20]}')
+        return all_sequences
+
+    def generate_sequences(self):
+        grid_locations = [
+            [x - 5, y - 5]
+            for x in range(len(self.acting_entity.world.grid))
+            for y in range(len(self.acting_entity.world.grid[x]))
+        ]
+        quality_threshold = np.percentile([x[1] for x in self.action_reward_series_full_list], 99) 
+        print(f'Quality threshold: {quality_threshold}')
+
+        for action_reward_series in self.action_reward_series_full_list:
+            action_series = action_reward_series[0]
+            reward = action_reward_series[1]
+
+            if reward >= quality_threshold:
+                #print('')
+                #print('---------------------')
+                #print(f'{action_series}: {self.reward_series_list[action_series_index]}')
+                
+                sequences = self.dfs(
+                    action_reward_series=action_reward_series,
+                    current_sequence=[],
+                    grid_locations=grid_locations
+                )
+                
+                self.location_series_list.append(sequences)
+            
+            else: 
+                self.location_series_list.append([])
+        
+        #print(f'Finished generate sequences: {self.location_series_list}')
+        return self.location_series_list
+
+
+location_rules_permit = [
+
+]

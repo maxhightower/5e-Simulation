@@ -421,7 +421,7 @@ class RuleBasedSequenceDFS2:
         self.max_length = len(acting_entity.subaction_catalog['free_subactions_reps']) + acting_entity.speed + 1 + 1
         self.start = 0
         self.end = len(acting_entity.subactions)
-        self.rules = acting_entity.dfs_rules['action_rules']
+        self.rules = acting_entity.dfs_rules['action_rules']['permit']
         self.sequences = []
 
     def check_rules(self, sequence, next_num, acting_entity):
@@ -432,6 +432,7 @@ class RuleBasedSequenceDFS2:
         # Check if the current sequence is within the desired length range
         if self.min_length <= len(current_sequence) <= self.max_length:
             self.sequences.append(current_sequence.copy())
+            #print(current_sequence)
         
         # Continue exploring if we haven't reached the maximum length
         if len(current_sequence) < self.max_length:
@@ -449,3 +450,21 @@ class RuleBasedSequenceDFS2:
     
 
 # now to redefine the action rules...
+def rule_only_one_action2(sequence, next_num, acting_entity):
+    if next_num in acting_entity.subaction_catalog['action_subactions_reps'] and sum(1 for seq in sequence if seq in acting_entity.subaction_catalog['action_subactions_reps']) == 1:
+        return False
+    return True
+
+def rule_only_one_bonus_action2(sequence, next_num, acting_entity):
+    if next_num in acting_entity.subaction_catalog['bonus_subactions_reps'] and sum(1 for seq in sequence if seq in acting_entity.subaction_catalog['bonus_subactions_reps']) == 1:
+        return False
+    return True
+
+def rule_no_redundant_moves2(sequence, next_num, acting_entity):
+    pass
+
+action_rules_permit2 = [
+    rule_only_one_action2,
+    rule_only_one_bonus_action2
+
+]
