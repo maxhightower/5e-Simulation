@@ -53,6 +53,9 @@ def bresenham_line(start, end):
     :param end: Tuple of (x, y) for the ending point
     :return: List of tuples representing all points on the line
     """
+    print(f'start: {start}')
+    print(f'end: {end}')
+
     x1, y1 = start
     x2, y2 = end
     dx = abs(x2 - x1)
@@ -171,13 +174,17 @@ def calculate_full_path_entities(entity, actions_locations_series):
     entity_locations = entity.location
     # the entity_locations is a list of the entity's location(s)
 
+    print(f'actions_locations_series: {actions_locations_series}')
+
     if entity.size in ['tiny','small','medium']:
         # the width of the entity is 1
         # so the path will only be 1 wide
         
-        move_series = entity.locations[0] + actions_locations_series[1]
+        move_series = entity_locations[0] + actions_locations_series[1]
+        print(f'move series: {move_series}')
+
         for i in range(len(move_series)):
-            full_path.extend(bresenham_line(entity_locations[0], move_series[i]))
+            full_path.append(bresenham_line(entity_locations[0], move_series[i]))
 
 
     else:

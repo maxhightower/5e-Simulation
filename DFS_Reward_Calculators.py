@@ -22,43 +22,40 @@ def check_rules_for_reward(any_one_series,ruleset,acting_entity):
     return reward
 
 
-def calc_new_reward(any_series, acting_entity):
+def calc_new_reward(any_series_full_list, acting_entity, stage):
     # the input should be the combined series, not separate lists
     results = []
-        
+    
+    if stage == 'action': # hard code the situation into it
+        ruleset = acting_entity.dfs_rules['action_rules']['reward']
 
-
-    # this function calculates the new reward values for the entire list of series
-    if len(any_series[0]) == 1 or len(any_series[0]) == 0: # only one item means action
-        ruleset = action_rules_reward
-
-
-        for any_one_series in any_series:
-            action_series = any_series
+        for any_one_series in any_series_full_list:
 
             if any_one_series == []:
-                new_reward = check_rules_for_reward(any_one_series, ruleset, acting_entity)
-                same_series_new_reward = [action_series, new_reward]
+                action_series = any_one_series
+
+                new_reward = check_rules_for_reward(action_series, ruleset, acting_entity)
+                same_series_new_reward = (action_series, new_reward)
                 #print(f'action series, new reward: {action_series} {new_reward}')
                 results.append(same_series_new_reward)
             else:
+                action_series = any_one_series[0]
                 new_reward = check_rules_for_reward(any_one_series, ruleset, acting_entity)
-                same_series_new_reward = [any_one_series[0], new_reward]
+                same_series_new_reward = (any_one_series[0], new_reward)
                 results.append(same_series_new_reward)
 
-
-    elif len(any_series[0]) == 3: # three items means action, location, and reward
+    elif stage == 'action_location_reward':
         ruleset = action_location_reward_rules_reward
 
-        for any_one_series in any_series:
+        for any_one_series in any_series_full_list:
             new_reward = check_rules_for_reward(any_one_series, ruleset, acting_entity)
             same_series_new_reward = [any_one_series[0], any_one_series[1], new_reward]
             results.append(same_series_new_reward)
 
-    elif len(any_series[0]) == 4: # four items means action, location, object, and reward
+    elif stage == 'action_location_object_reward':
         ruleset = action_location_object_reward_rules_reward
 
-        for any_one_series in any_series:
+        for any_one_series in any_series_full_list:
             new_reward = check_rules_for_reward(any_one_series, ruleset, acting_entity)
             same_series_new_reward = [any_one_series[0], any_one_series[1], any_one_series[2], new_reward]
             results.append(same_series_new_reward)
@@ -518,7 +515,7 @@ def post_loc_series_reward_calc(all_action_series, all_location_series, all_rewa
                 move_act_loc = ([x for x in action_series if x in move_subactions],[loc_series[y] for y in range(len(loc_series)) if action_series[y] in move_subactions])
                 #print(f'move act loc: {move_act_loc}')
 
-                move_path = calculate_full_path_entities(acting_entity.location, move_act_loc)
+                move_path = calculate_full_path_entities(acting_entity, move_act_loc)
                 #print(f'move path: {move_path}')
 
                 if check_opportunity_attacks(move_path, acting_entity.world.enemy_locations):
