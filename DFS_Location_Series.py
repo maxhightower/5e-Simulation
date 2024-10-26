@@ -405,7 +405,7 @@ class RuleBasedLocationSequenceDFS3:
         self.acting_entity = acting_entity
         self.action_reward_series_full_list = action_reward_series_full_list
         self.target_distance_scores = acting_entity.target_distance_scores
-        self.location_rules_permit = acting_entity.dfs_rules['location_rules']
+        self.location_rules_permit = acting_entity.dfs_rules['location_rules']['permit']
 
 
         self.location_series_list = []
@@ -457,14 +457,15 @@ class RuleBasedLocationSequenceDFS3:
         return all(location_rule(sequence, next_loc, self.acting_entity, action_reward_series[0]) for location_rule in self.location_rules_permit)
 
 
+
     def dfs(self, action_reward_series, current_sequence, grid_locations):
-        print(action_reward_series)
-        if action_reward_series[0] in [[]]:
-            return [[]]
+        #print(f'start of dfs: {action_reward_series}')
+        if len(action_reward_series) == 0:
+            return action_reward_series
         
         else:
 
-            tar_act_series = [i for i in action_reward_series[0] if i in subactions_req_targets]
+            tar_act_series = [i for i in action_reward_series if i in subactions_req_targets]
             required_sequence_length = len(tar_act_series)
             
             if len(current_sequence) == required_sequence_length:
@@ -478,20 +479,21 @@ class RuleBasedLocationSequenceDFS3:
                 sub_index=sub_index,
                 tar_act_series=tar_act_series,
                 current_sequence=current_sequence,
-                acting_entity=self.acting_entity,
                 grid_locations=grid_locations
             )
 
             for next_loc in locations_accessible:
-                if self.check_rules(current_sequence, next_loc, self.acting_entity, tar_act_series):
+                if self.check_rules(current_sequence, next_loc, tar_act_series):
                     current_sequence.append(next_loc)
-                    all_sequences.extend(self.dfs(action_reward_series[0], current_sequence, grid_locations))
+                    all_sequences.extend(self.dfs(action_reward_series, current_sequence, grid_locations))
                     current_sequence.pop()
             
         #print(f'sequences being returned from dfs to results 1 {all_sequences[:20]}')
         return all_sequences
 
     def generate_sequences(self):
+        action_location_reward_series_list = []
+
         grid_locations = [
             [x - 5, y - 5]
             for x in range(len(self.acting_entity.world.grid))
@@ -501,9 +503,11 @@ class RuleBasedLocationSequenceDFS3:
         print(f'Quality threshold: {quality_threshold}')
 
         for action_reward_series in self.action_reward_series_full_list:
+            #print(f'for loop in generate_sequences: {action_reward_series}')
+
             action_series = action_reward_series[0]
             reward = action_reward_series[1]
-
+            #print(f"Reward: {reward}")
             if reward >= quality_threshold:
                 #print('')
                 #print('---------------------')
@@ -514,16 +518,61 @@ class RuleBasedLocationSequenceDFS3:
                     current_sequence=[],
                     grid_locations=grid_locations
                 )
-                
+
                 self.location_series_list.append(sequences)
-            
+
             else: 
                 self.location_series_list.append([])
+
+            action_location_reward_series_list.append([action_series, self.location_series_list[-1], reward])
         
         #print(f'Finished generate sequences: {self.location_series_list}')
-        return self.location_series_list
+        return action_location_reward_series_list
+
+def rule_move_subactions_targetable_distance(sequence, next_loc, acting_entity, action_series):
+    move_points = acting_entity.subaction_catalog['move_cost_dict']
+    target_distance_scores = acting_entity.subaction_catalog['target_distance_scores']
+
+    tar_act_req = [x for x in action_series if x in acting_entity.subaction_catalog['subactions_req_targets']]
+
+    # if the location targeted is further away than the action allows, false
+
+    # first determine where the entity currently is located (this may have changed depending on the sequence)
+    entity_loc_series = [sequence[loc_index] for loc_index in range(len(sequence)) if action_series[loc_index] in acting_entity.subaction_catalog['move_subactions']]
+
+    if len(entity_loc_series) < 1:
+        entity_location = acting_entity.location[0]
+    else:
+        entity_location = entity_loc_series[-1]
+
+    # then determine the distance the action allows
+    distance_allowable = target_distance_scores[action_series[len(sequence)]]
+
+    # then determine the distance between the entity and the target location
+    distance_to_target = chebyshev_distance_entities(acting_entity, next_loc)
+
+    if distance_to_target > distance_allowable:
+        return False
+    
+    return True
+
+
+
+def rule_no_unaddressed_location_series(sequence, next_loc, acting_entity, action_series):
+    tar_act_req = [x for x in action_series if x in subactions_req_targets]
+    if len(sequence) + 1 < len(tar_act_req):
+        return False
+    return True
+
+def rule_no_excess_locations(sequence, next_loc, acting_entity, action_series):
+    tar_act_req = [x for x in action_series if x in subactions_req_targets]
+    if len(sequence) + 1 > len(tar_act_req):
+        return False
+    return True
+
 
 
 location_rules_permit = [
-
+    rule_move_subactions_targetable_distance,
+    rule_no_unaddressed_location_series,
 ]

@@ -8,17 +8,30 @@ from DFS_Functions import adjacent_locations, adjacent_locations_entities, cheby
 
  
 
-def check_rules_for_reward(any_one_series,ruleset,acting_entity):
+def check_rules_for_reward(any_one_series,ruleset,stage,acting_entity):
     #print(any_one_series)
 
-    if len(any_one_series) in [0,1]:
+    if stage == 'action':
         reward = 0
-    else:
-        reward = any_one_series[-1]
-
-    for rule in ruleset:
-        reward += rule(any_one_series, acting_entity)
+        
+        for rule in ruleset:
+            reward += rule(any_one_series, acting_entity)
     
+    elif stage == 'action_location_reward':
+        #print(f'elif {any_one_series}')
+        if any_one_series == []:
+            return -10
+
+        else:
+            action_series = any_one_series[0]
+            reward = any_one_series[1]
+
+            for rule in ruleset:
+                reward += rule(any_one_series, acting_entity)
+    
+    elif stage == 'action_location_object_reward':
+        pass
+
     return reward
 
 
@@ -30,27 +43,36 @@ def calc_new_reward(any_series_full_list, acting_entity, stage):
         ruleset = acting_entity.dfs_rules['action_rules']['reward']
 
         for any_one_series in any_series_full_list:
+            #print(f'calc_new_reward for any_one_series loop any_one_series: {any_one_series}')
 
             if any_one_series == []:
                 action_series = any_one_series
 
-                new_reward = check_rules_for_reward(action_series, ruleset, acting_entity)
-                same_series_new_reward = (action_series, new_reward)
+                new_reward = check_rules_for_reward(action_series, ruleset,'action', acting_entity)
+                same_series_new_reward = [action_series, new_reward]
                 #print(f'action series, new reward: {action_series} {new_reward}')
                 results.append(same_series_new_reward)
             else:
-                action_series = any_one_series[0]
-                new_reward = check_rules_for_reward(any_one_series, ruleset, acting_entity)
-                same_series_new_reward = (any_one_series[0], new_reward)
+                action_series = any_one_series
+                new_reward = check_rules_for_reward(any_one_series, ruleset,'action',acting_entity)
+                same_series_new_reward = [any_one_series, new_reward]
                 results.append(same_series_new_reward)
+                #print(f'action series, new reward: {same_series_new_reward}')
 
     elif stage == 'action_location_reward':
         ruleset = action_location_reward_rules_reward
+        #print(f'full list: {any_series_full_list}')
 
         for any_one_series in any_series_full_list:
-            new_reward = check_rules_for_reward(any_one_series, ruleset, acting_entity)
-            same_series_new_reward = [any_one_series[0], any_one_series[1], new_reward]
-            results.append(same_series_new_reward)
+            #print(f'act_loc_rew loop: {any_one_series}')
+            if any_one_series == []:
+              continue
+
+            else:
+
+                new_reward = check_rules_for_reward(any_one_series, ruleset, 'action_location_reward', acting_entity)
+                same_series_new_reward = [any_one_series[0], any_one_series[1], new_reward]
+                results.append(same_series_new_reward)
 
     elif stage == 'action_location_object_reward':
         ruleset = action_location_object_reward_rules_reward
@@ -58,6 +80,7 @@ def calc_new_reward(any_series_full_list, acting_entity, stage):
         for any_one_series in any_series_full_list:
             new_reward = check_rules_for_reward(any_one_series, ruleset, acting_entity)
             same_series_new_reward = [any_one_series[0], any_one_series[1], any_one_series[2], new_reward]
+            
             results.append(same_series_new_reward)
             
     else:
@@ -267,8 +290,11 @@ action_rules_reward = [
     # dropping items should be punished
     # if a subaction is taken, followed by disengage, followed by movement, reward
     # if shove-push is taken, followed by movement, reward
-    # if mount subaction is taken twice, punish
     # if you mount and dismount in the same turn, punish
+
+    # if you start the turn grappled, you should grapple sooner rather than later
+
+    # 
 
 ]
 

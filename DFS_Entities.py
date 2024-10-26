@@ -89,6 +89,7 @@ class entity:
 
             'target_distance_scores': {}, 
             'move_cost_dict': {},
+            'free_subaction_groups': [],
 
         }
 
@@ -756,6 +757,10 @@ class entity:
         self.subaction_catalog['action_subactions_reps'].append(feed_potion)
         self.subaction_catalog['action_subactions_sources'].append(feed_potion)
 
+
+        self.subaction_catalog['free_subaction_groups'].append([object_free_ground_pickup, object_free_ground_drop_from_inventory, object_free_ground_drop_main_hand, object_free_ground_drop_off_hand, object_free_ground_drop_both_hands, object_free_self_equip_main_hand, object_free_self_equip_off_hand, object_free_self_equip_both_hands, object_free_self_unequip_main_hand, object_free_self_unequip_off_hand, object_free_self_unequip_both_hands])
+
+
     def subactions_attack(self):
         # attack (action) with weapon in main hand
         attack_main_hand = len(self.subactions)
@@ -878,6 +883,8 @@ class entity:
         self.subaction_catalog['action_subactions_sources'].append(['basic rules'])
         self.subaction_catalog['action_subactions_reps'].append(shove_prone)
 
+
+
     def subactions_teamwork(self):
         # help (attack)
         help_attack = len(self.subactions)
@@ -947,6 +954,22 @@ class entity:
         self.subaction_catalog['free_subactions_sources'].append(['basic rules'])
         self.subaction_catalog['free_subactions_reps'].append([end_concentration])
         self.subactions.append(end_concentration)
+
+        self.subaction_catalog['free_subaction_groups'].append([end_concentration])
+
+    def subactions_escape(self):
+        # escape_grapple
+        escape_grapple = len(self.subactions)
+        self.subaction_catalog['action_subactions_text'].append('escape_grapple')
+        self.subaction_catalog['action_subactions_sources'].append(['basic rules'])
+        self.subaction_catalog['action_subactions_reps'].append(escape_grapple)
+        self.subaction_catalog['subactions_req_targets'].append(escape_grapple)
+        self.subaction_catalog['subactions_req_location'].append(escape_grapple)
+        self.subaction_catalog['subactions_req_entity'].append(escape_grapple)
+        self.subactions.append(escape_grapple)
+        self.subaction_catalog['target_distance_scores'][escape_grapple] = 1
+
+        
 
 
     def add_rules_for_dfs(self, rules, target, type):

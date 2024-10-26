@@ -417,8 +417,8 @@ class ParallelizedRuleBasedSequenceDFS:
 class RuleBasedSequenceDFS2:
     def __init__(self, acting_entity):
         self.acting_entity = acting_entity
-        self.min_length = 0
-        self.max_length = len(acting_entity.subaction_catalog['free_subactions_reps']) + acting_entity.speed + 1 + 1
+        self.min_length = 1
+        self.max_length = len(acting_entity.subaction_catalog['free_subaction_groups']) + acting_entity.speed + 1 + 1
         self.start = 0
         self.end = len(acting_entity.subactions)
         self.rules = acting_entity.dfs_rules['action_rules']['permit']
@@ -461,10 +461,177 @@ def rule_only_one_bonus_action2(sequence, next_num, acting_entity):
     return True
 
 def rule_no_redundant_moves2(sequence, next_num, acting_entity):
+    # this is to prevent sequential subactions that have an equivalent representative
+    # for example, move one space, then move one space again
+    # or move one space, then move two spaces
+
+    if len(sequence) > 0:
+        if next_num == acting_entity.subaction_catalog['move_subactions_reps'].index(acting_entity.subaction_catalog['move_subactions_text']['move one space']) and sequence[-1] == acting_entity.subaction_catalog['move_subactions_reps'].index(acting_entity.subaction_catalog['move_subactions_text']['move one space']):
+            return False
+        if next_num == acting_entity.subaction_catalog['move_subactions_reps'].index(acting_entity.subaction_catalog['move_subactions_text']['move two spaces']) and sequence[-1] == acting_entity.subaction_catalog['move_subactions_reps'].index(acting_entity.subaction_catalog['move_subactions_text']['move one space']):
+            return False
+        if next_num == acting_entity.subaction_catalog['move_subactions_reps'].index(acting_entity.subaction_catalog['move_subactions_text']['move one space']) and sequence[-1] == acting_entity.subaction_catalog['move_subactions_reps'].index(acting_entity.subaction_catalog['move_subactions_text']['move two spaces']):
+            return False
+        if next_num == acting_entity.subaction_catalog['move_subactions_reps'].index(acting_entity.subaction_catalog['move_subactions_text']['move two spaces']) and sequence[-1] == acting_entity.subaction_catalog['move_subactions_reps'].index(acting_entity.subaction_catalog['move_subactions_text']['move two spaces']):
+            return False
+    return True
+
+
+def rule_limited_move_speed2(sequence, next_num, acting_entity):
+    move_speed = acting_entity.speed
+    move_points = acting_entity.subaction_catalog['move_points']
+    speed_spent = 0
+
+    if 'prone' not in acting_entity.conditions:
+        prone = 1
+    else:
+        prone = 2
+
+    move_series = [x for x in sequence if x in acting_entity.subaction_catalog['move_subactions_reps']]
+
+    prone_rep = acting_entity.subaction_catalog['move_subactions_reps'].index(acting_entity.subaction_catalog['move_subactions_text']['go prone'])
+    stand_rep = acting_entity.subaction_catalog['move_subactions_reps'].index(acting_entity.subaction_catalog['move_subactions_text']['stand up'])
+
+
+    for i in move_series:
+        if i == prone_rep and prone == 1:
+            prone = 2
+        
+        if i == stand_rep and prone == 2:
+            prone = 1
+
+        speed_spent += move_points[i] * prone
+
+    if next_num in acting_entity.subaction_catalog['move_subactions_reps']:
+        if move_points[next_num] + (speed_spent * prone) > move_speed:
+            return False
+        
+    return True
+
+def rule_one_of_each_free_action2(sequence, next_num, acting_entity):
+    # free_subactions = [[4,25,27,29,31],[14]] # can do one of each list
     pass
+
+def rule_shield_actions_need_shields2(sequence, next_num, acting_entity):
+    pass
+
+def rule_concentration2(sequence, next_num, acting_entity):
+    # by using 
+    end_concentration_index = acting_entity.subaction_catalog['free_subactions_text'].index('end_concentration')
+    end_concentration_rep = acting_entity.subaction_catalog['free_subactions_reps'][end_concentration_index]
+
+    casting_index = acting_entity.subaction_catalog['action_subactions_text'].index('cast')
+    casting_rep = acting_entity.subaction_catalog['action_subactions_reps'][casting_index]
+
+
+    # acting_entity.subaction_catalog['free_subaction_groups']
+
+    if acting_entity.concentration == False and casting_rep not in sequence:
+        if next_num == end_concentration_rep:
+            return False
+    return True
+
+
+def rule_actions_requiring_allies2(sequence, next_num, acting_entity):
+    if next_num in acting_entity.subaction_catalog['subactions_req_allies']:
+        if acting_entity.allies == []:
+            return False
+    return True
+
+def rule_off_hand_two_weapons_requirement2(sequence, next_num, acting_entity):
+    pass
+
+def rule_condition_rules2(sequence, next_num, acting_entity):
+    # escape grappled
+    escape_grapple_index = acting_entity.subaction_catalog['action_subactions_text'].index('escape_grapple')
+    escape_grapple_rep = acting_entity.subaction_catalog['action_subactions_reps'][escape_grapple_index]
+
+    # if you're not grappled, you can't escape the grapple
+    if next_num == escape_grapple_rep and 'grappled' not in acting_entity.conditions:
+        return False
+
+    # perhaps this type of rule should be handled during a more advanced stage
+    # because a pseudo-history may need to be generated...
+    # however, if you start the round grappled, and escape the grapple, 
+    # you theoretically shouldn't become grappled again in the same round,
+    # at least more times than not
+
+    # go prone
+    go_prone_index = acting_entity.subaction_catalog['move_subactions_text'].index('go prone')
+    go_prone_rep = acting_entity.subaction_catalog['move_subactions_reps'][go_prone_index]
+
+    move_series = [x for x in sequence if x in acting_entity.subaction_catalog['move_subactions_reps']]
+
+    prone_rep = acting_entity.subaction_catalog['move_subactions_reps'].index(acting_entity.subaction_catalog['move_subactions_text']['go prone'])
+    stand_rep = acting_entity.subaction_catalog['move_subactions_reps'].index(acting_entity.subaction_catalog['move_subactions_text']['stand up'])
+
+    # if you're prone, you can't go prone again
+    for i in move_series:
+        if i == prone_rep and prone == 1:
+            prone = 2
+        
+        if i == stand_rep and prone == 2:
+            prone = 1
+
+    if next_num == go_prone_rep and prone == 2:
+        return False
+
+    
+    # stand up
+    # if you're grappled, you can't stand up
+    # and if you're not prone, you can't stand up
+    stand_up_index = acting_entity.subaction_catalog['move_subactions_text'].index('stand up')
+    stand_up_rep = acting_entity.subaction_catalog['move_subactions_reps'][stand_up_index]
+
+    if next_num == stand_up_rep and 'grappled' in acting_entity.conditions:
+        return False
+    
+    if next_num == stand_up_rep and prone == 1:
+        return False
+
+    return True
+
+
+
+def rule_remove_redundant_prones2(sequence, next_num, acting_entity):
+    prone_index = acting_entity.subaction_catalog['move_subactions_text'].index('go prone')
+    prone_rep = acting_entity.subaction_catalog['move_subactions_reps'][prone_index]
+    
+    if len(sequence)>0:
+        if next_num == prone_rep and sequence[-1] == prone_rep:
+            return False
+        if prone_rep in sequence:
+            # if between the last time 19 was called, there isn't a 20, false
+            last_prone_index = len(sequence) - 1 - sequence[::-1].index(prone_rep)
+            stand_index = acting_entity.subaction_catalog['move_subactions_reps'].index(acting_entity.subaction_catalog['move_subactions_text']['stand up'])
+            if stand_index not in sequence[last_prone_index:] and next_num == prone_rep:
+                return False
+    return True
+
+def rule_remove_redundant_objects2(sequence, next_num, acting_entity):
+    pass
+
+def rule_mount_once_per_turn2(sequence, next_num, acting_entity):
+    mount_index = acting_entity.subaction_catalog['free_subactions_text'].index('mount')
+    mount_rep = acting_entity.subaction_catalog['free_subactions_reps'][mount_index]
+
+    if mount_rep in sequence and mount_rep == next_num:
+        return False
+    
+    return True
 
 action_rules_permit2 = [
     rule_only_one_action2,
-    rule_only_one_bonus_action2
+    rule_only_one_bonus_action2,
+    rule_no_redundant_moves2,
+    rule_limited_move_speed2,
+    #rule_one_of_each_free_action2,
+    #rule_shield_actions_need_shields2,
+    rule_concentration2,
+    rule_actions_requiring_allies2,
+    rule_remove_redundant_prones2,
+    #rule_remove_redundant_objects2,
+    rule_mount_once_per_turn2
+
 
 ]
