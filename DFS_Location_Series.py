@@ -520,11 +520,19 @@ class RuleBasedLocationSequenceDFS3:
                 )
 
                 self.location_series_list.append(sequences)
+            
+        for action_index in range(len(self.action_reward_series_full_list)):
+            action_series = self.action_reward_series_full_list[action_index][0]
+            reward = self.action_reward_series_full_list[action_index][1]
+            sequences = self.location_series_list[action_index]
 
-            else: 
-                self.location_series_list.append([])
+            if len(sequences) > 0:
+                for sequence in sequences:
+                    action_location_reward_series_list.append([action_series, sequences, reward])
+                    print(f'{action_series}, {reward}, {sequence}')
+            #else: 
+            #    self.location_series_list.append([])
 
-            action_location_reward_series_list.append([action_series, self.location_series_list[-1], reward])
         
         #print(f'Finished generate sequences: {self.location_series_list}')
         return action_location_reward_series_list

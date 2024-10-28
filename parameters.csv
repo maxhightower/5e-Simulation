@@ -1,0 +1,6 @@
+1,,,,,
+,10,,,,
+,,0,,,
+,,,55,,
+,,,,"[<function rule_only_one_action at 0x0000014BB9CA4680>, <function rule_only_one_bonus_action at 0x0000014BB9CA4AE0>, <function rule_no_redundant_moves at 0x0000014BB9CA4C20>, <function rule_limited_move_speed at 0x0000014BB9CA4CC0>, <function rule_one_of_each_free_action at 0x0000014BB9CA4D60>, <function rule_shield at 0x0000014BB9CA4B80>, <function rule_concentration at 0x0000014BB9CA4E00>, <function rule_actions_requiring_allies at 0x0000014BB9CA4EA0>, <function rule_off_hand_two_weapons_requirement at 0x0000014BB9CA4F40>, <function rule_condition_rules at 0x0000014BB9CA4FE0>, <function rule_standing_up_rules at 0x0000014BB9CA5080>, <function rule_remove_redundant_prones at 0x0000014BB9CA5120>, <function rule_remove_redundant_objects at 0x0000014BB9CA51C0>, <function rule_unequip_weapon at 0x0000014BB9CA5260>, <function rule_equip_weapon at 0x0000014BB9CA5300>, <function rule_object_number_limitation at 0x0000014BB9CA53A0>, <function rule_mount_once_per_turn at 0x0000014BB9CA54E0>]",
+,,,,,<DFS_Entities.entity object at 0x0000014BB995ADB0>

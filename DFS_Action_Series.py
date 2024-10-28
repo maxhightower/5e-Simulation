@@ -620,6 +620,15 @@ def rule_mount_once_per_turn2(sequence, next_num, acting_entity):
     
     return True
 
+def rule_no_spells_known(sequence, next_num, acting_entity):
+    # if there are no spells known, then the cast spell subactions are invalid
+    cast_index = acting_entity.subaction_catalog['action_subactions_text'].index('cast')
+    cast_rep = acting_entity.subaction_catalog['action_subactions_reps'][cast_index]
+
+    if cast_rep == next_num and acting_entity.spells_known == []:
+        return False
+    return True
+
 action_rules_permit2 = [
     rule_only_one_action2,
     rule_only_one_bonus_action2,
@@ -631,7 +640,7 @@ action_rules_permit2 = [
     rule_actions_requiring_allies2,
     rule_remove_redundant_prones2,
     #rule_remove_redundant_objects2,
-    rule_mount_once_per_turn2
-
+    rule_mount_once_per_turn2,
+    rule_condition_rules2,
 
 ]
